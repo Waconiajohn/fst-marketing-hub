@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FST Marketing Hub</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap');
+
+  :root {
+    --blue: #1f40cb;
+    --navy: #12212f;
+    --offwhite: #f0ede8;
+    --blue-pale: #e8ecfa;
+    --blue-mid: #6b82e0;
+    --navy-soft: #1e3347;
+    --ink: #0f1923;
+    --muted: #6b7a8a;
+    --border: #d4d0c8;
+    --success: #1a7a4a;
+    --success-pale: #e6f4ec;
+    --warn: #b05a00;
+    --warn-pale: #fdf0e0;
+    --danger: #9b1f1f;
+    --danger-pale: #fceaea;
+    --radius: 10px;
+    --shadow: 0 1px 3px rgba(18,33,47,0.08), 0 4px 16px rgba(18,33,47,0.06);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Instrument Sans', sans-serif;
+    background: var(--offwhite);
+    color: var(--ink);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--navy);
+    color: white;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 58px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    letter-spacing: -0.3px;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo-dot {
+    width: 8px; height: 8px;
+    background: var(--blue-mid);
+    border-radius: 50%;
+  }
+  .header-nav {
+    display: flex;
+    gap: 4px;
+  }
+  .header-nav button {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.6);
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.01em;
+  }
+  .header-nav button:hover { color: white; background: rgba(255,255,255,0.08); }
+  .header-nav button.active { color: white; background: var(--blue); }
+
+  /* MAIN */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 24px;
+  }
+
+  /* PAGE TITLES */
+  .page-header {
+    margin-bottom: 28px;
+  }
+  .page-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--navy);
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+  }
+  .page-sub {
+    color: var(--muted);
+    font-size: 14px;
+    margin-top: 4px;
+  }
+
+  /* TABS (within a page) */
+  .tab-row {
+    display: flex;
+    gap: 2px;
+    background: rgba(18,33,47,0.06);
+    padding: 3px;
+    border-radius: 9px;
+    margin-bottom: 24px;
+    width: fit-content;
+  }
+  .tab-btn {
+    background: none;
+    border: none;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 7px 18px;
+    border-radius: 7px;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all 0.15s;
+  }
+  .tab-btn.active {
+    background: white;
+    color: var(--navy);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+
+  /* CARDS */
+  .card {
+    background: white;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+  }
+  .card-pad { padding: 24px; }
+  .card-header {
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .card-title {
+    font-weight: 600;
+    font-size: 15px;
+    color: var(--navy);
+  }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+  /* FORM ELEMENTS */
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  input, select, textarea {
+    width: 100%;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 14px;
+    padding: 10px 13px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: white;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.15s;
+    -webkit-appearance: none;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(31,64,203,0.1);
+  }
+  textarea { resize: vertical; min-height: 80px; }
+  .field { margin-bottom: 16px; }
+
+  /* BUTTONS */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .btn-primary { background: var(--blue); color: white; }
+  .btn-primary:hover { background: #1836b0; }
+  .btn-secondary { background: white; color: var(--navy); border: 1px solid var(--border); }
+  .btn-secondary:hover { background: var(--offwhite); }
+  .btn-ghost { background: none; color: var(--blue); padding: 8px 12px; font-size: 13px; }
+  .btn-ghost:hover { background: var(--blue-pale); }
+  .btn-sm { padding: 6px 14px; font-size: 13px; }
+  .btn-danger { background: var(--danger); color: white; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* STATUS BADGES */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 3px 9px;
+    border-radius: 20px;
+  }
+  .badge-draft { background: #eee; color: var(--muted); }
+  .badge-pending { background: var(--warn-pale); color: var(--warn); }
+  .badge-approved { background: var(--success-pale); color: var(--success); }
+  .badge-rejected { background: var(--danger-pale); color: var(--danger); }
+  .badge-new { background: var(--blue-pale); color: var(--blue); }
+
+  /* OUTPUT AREA */
+  .ai-output {
+    background: var(--offwhite);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px;
+    font-size: 14px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    font-family: 'DM Mono', monospace;
+    color: var(--ink);
+    min-height: 120px;
+    max-height: 480px;
+    overflow-y: auto;
+  }
+  .ai-output.loading {
+    color: var(--muted);
+    font-style: italic;
+    font-family: 'Instrument Sans', sans-serif;
+  }
+
+  /* SPINNER */
+  .spinner {
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: none;
+  }
+  .btn.loading .spinner { display: block; }
+  .btn.loading .btn-text { opacity: 0.7; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ASSET TRACKER */
+  .asset-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 120px;
+    gap: 12px;
+    align-items: center;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    transition: background 0.1s;
+  }
+  .asset-row:last-child { border-bottom: none; }
+  .asset-row:hover { background: var(--offwhite); }
+  .asset-row-header {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 120px;
+    gap: 12px;
+  }
+  .asset-title { font-weight: 500; color: var(--navy); }
+  .asset-meta { color: var(--muted); font-size: 13px; }
+
+  /* APPROVAL PANEL */
+  .approval-card {
+    background: white;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .approval-body {
+    padding: 20px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--ink);
+    white-space: pre-wrap;
+    background: var(--offwhite);
+    border-top: 1px solid var(--border);
+    max-height: 200px;
+    overflow-y: auto;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+  }
+  .approval-actions {
+    padding: 14px 20px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    border-top: 1px solid var(--border);
+    background: white;
+  }
+
+  /* STAT CARDS */
+  .stat-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow);
+  }
+  .stat-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .stat-value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    color: var(--navy);
+    line-height: 1;
+  }
+  .stat-sub { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+  /* SECTION SPACING */
+  .section { margin-bottom: 28px; }
+  .section-title {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  /* AGENT CHIP */
+  .agent-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    background: var(--blue-pale);
+    color: var(--blue);
+    border-radius: 20px;
+  }
+
+  /* DIVIDER */
+  hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+
+  /* COPY BTN */
+  .copy-btn {
+    font-size: 12px;
+    padding: 5px 12px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Instrument Sans', sans-serif;
+    font-weight: 500;
+    color: var(--muted);
+    transition: all 0.15s;
+  }
+  .copy-btn:hover { color: var(--navy); border-color: var(--navy); }
+
+  /* EMPTY STATE */
+  .empty {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--muted);
+  }
+  .empty-icon { font-size: 32px; margin-bottom: 12px; }
+  .empty-title { font-weight: 600; color: var(--navy); margin-bottom: 4px; }
+
+  /* TOOLTIP NOTE */
+  .note {
+    font-size: 13px;
+    color: var(--muted);
+    background: var(--blue-pale);
+    border-left: 3px solid var(--blue);
+    padding: 10px 14px;
+    border-radius: 0 6px 6px 0;
+    margin-bottom: 16px;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 700px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    main { padding: 20px 16px; }
+    header { padding: 0 16px; }
+    .asset-row, .asset-row-header { grid-template-columns: 1fr 1fr; }
+    .asset-row .asset-meta:nth-child(3),
+    .asset-row .asset-meta:nth-child(4),
+    .asset-row-header span:nth-child(3),
+    .asset-row-header span:nth-child(4) { display: none; }
+  }
+
+  /* PAGE TRANSITIONS */
+  .page { display: none; }
+  .page.active { display: block; animation: fadeIn 0.2s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+  /* COMMENT BOX */
+  .comment-box {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 13px;
+    font-size: 14px;
+    font-family: 'Instrument Sans', sans-serif;
+    width: 100%;
+    outline: none;
+    margin-right: 8px;
+  }
+  .comment-box:focus { border-color: var(--blue); }
+
+  .flex { display: flex; gap: 12px; align-items: flex-start; }
+  .flex-center { display: flex; gap: 12px; align-items: center; }
+  .ml-auto { margin-left: auto; }
+  .mt-16 { margin-top: 16px; }
+  .mt-8 { margin-top: 8px; }
+  .mb-16 { margin-bottom: 16px; }
+  .gap-8 { gap: 8px; }
+  .w-full { width: 100%; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-dot"></div>
+    FST Marketing Hub
+  </div>
+  <nav class="header-nav">
+    <button class="active" onclick="showPage('briefs')">Brief Generator</button>
+    <button onclick="showPage('tracker')">Asset Tracker</button>
+    <button onclick="showPage('approvals')">Approvals</button>
+    <button onclick="showPage('dashboard')">Dashboard</button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ==================== BRIEF GENERATOR ==================== -->
+  <div class="page active" id="page-briefs">
+    <div class="page-header">
+      <div class="page-title">Brief Generator</div>
+      <div class="page-sub">AI creates a production-ready brief. Send it to whoever's executing.</div>
+    </div>
+
+    <div class="tab-row">
+      <button class="tab-btn active" onclick="switchTab('briefs', 'video')">Video / Reel</button>
+      <button class="tab-btn" onclick="switchTab('briefs', 'social')">Social Post</button>
+      <button class="tab-btn" onclick="switchTab('briefs', 'email')">Email</button>
+      <button class="tab-btn" onclick="switchTab('briefs', 'visual')">Still / Carousel</button>
+    </div>
+
+    <!-- VIDEO BRIEF -->
+    <div class="brief-tab active" id="brief-video">
+      <div class="grid-2" style="gap:24px">
+        <div>
+          <div class="card card-pad">
+            <div class="field">
+              <label>Brand</label>
+              <select id="v-brand">
+                <option value="FST">First Source Team (FST)</option>
+                <option value="CareerIQ">CareerIQ</option>
+                <option value="Outplacement">Outplacement Enterprise</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Format</label>
+              <select id="v-format">
+                <option value="short reel (30-60 sec)">Short reel (30–60 sec) — TikTok / Reels / Shorts</option>
+                <option value="medium video (2-4 min)">Medium video (2–4 min) — LinkedIn / Facebook</option>
+                <option value="long form (8-12 min)">Long form (8–12 min) — YouTube</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Topic / Framework</label>
+              <select id="v-topic">
+                <option value="The 1% Insight — professional amnesia">The 1% Insight (professional amnesia)</option>
+                <option value="The Super Bowl Story — wrong lens problem">The Super Bowl Story (wrong lens)</option>
+                <option value="The Broken System — ATS, hidden jobs, LinkedIn invisibility">The Broken System (ATS, hidden jobs)</option>
+                <option value="The Benchmark Candidate — stop being good, start being the standard">The Benchmark Candidate</option>
+                <option value="The Interpreter Mandate — translate your experience">The Interpreter Mandate</option>
+                <option value="The 30-Minute Rewrite — sustainable application practice">The 30-Minute Rewrite</option>
+                <option value="The 3-of-6 Rule — 8/10 interview advancement">The 3-of-6 Rule (interview)</option>
+                <option value="Designed Retirement — Floor, Guard, Growth">Designed Retirement (financial)</option>
+                <option value="The Rule of Four — multi-channel application">The Rule of Four (application)</option>
+                <option value="Custom topic (see notes)">Custom (see notes)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Hook style</label>
+              <select id="v-hook">
+                <option value="bold provocative claim">Bold claim (stops the scroll)</option>
+                <option value="counterintuitive stat">Counterintuitive stat</option>
+                <option value="direct audience callout">Direct callout to the audience</option>
+                <option value="story opening">Story opening (Tom Brady / client example)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Notes / Custom instructions</label>
+              <textarea id="v-notes" placeholder="e.g. John on camera, reference the medical device executive story, end with workshop CTA..."></textarea>
+            </div>
+            <button class="btn btn-primary w-full" id="v-btn" onclick="generateBrief('video')">
+              <span class="spinner"></span>
+              <span class="btn-text">Generate Brief</span>
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Generated Brief</span>
+              <div class="flex-center gap-8">
+                <button class="copy-btn" onclick="copyOutput('v-output')">Copy</button>
+                <button class="btn btn-sm btn-secondary" onclick="sendToTracker('v-output', 'video')">+ Add to Tracker</button>
+              </div>
+            </div>
+            <div style="padding:20px">
+              <div class="ai-output loading" id="v-output">Brief will appear here after you click Generate.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOCIAL BRIEF -->
+    <div class="brief-tab" id="brief-social" style="display:none">
+      <div class="grid-2" style="gap:24px">
+        <div>
+          <div class="card card-pad">
+            <div class="field">
+              <label>Brand</label>
+              <select id="s-brand">
+                <option value="FST">First Source Team (FST)</option>
+                <option value="CareerIQ">CareerIQ</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Platform</label>
+              <select id="s-platform">
+                <option value="LinkedIn">LinkedIn</option>
+                <option value="Facebook">Facebook</option>
+                <option value="Instagram">Instagram</option>
+                <option value="TikTok">TikTok</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Theme</label>
+              <select id="s-theme">
+                <option value="The broken system (hidden jobs, ATS, LinkedIn invisibility)">The broken system</option>
+                <option value="Age discrimination — acknowledge it directly">Age discrimination (name it)</option>
+                <option value="Financial runway — the clock is ticking">Financial runway</option>
+                <option value="Benchmark Candidate — stop being good, be the standard">Benchmark Candidate</option>
+                <option value="Four Pain Dials — Age, Financial Runway, Re-Employability, Options">Four Pain Dials</option>
+                <option value="Workshop social proof and testimonials">Workshop proof / testimonials</option>
+                <option value="The 1% Insight — professional amnesia">The 1% Insight</option>
+                <option value="Designed Retirement — Floor, Guard, Growth">Designed Retirement</option>
+                <option value="Stop Applying — Start Getting Hired positioning">Stop Applying positioning</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Number of posts</label>
+              <select id="s-count">
+                <option value="1 post">1 post</option>
+                <option value="3 posts">3 posts</option>
+                <option value="5 posts (full week)">5 posts — full week</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Notes</label>
+              <textarea id="s-notes" placeholder="e.g. reference the Tom Brady story, include stat about ATS, drive to Wednesday workshop..."></textarea>
+            </div>
+            <button class="btn btn-primary w-full" id="s-btn" onclick="generateBrief('social')">
+              <span class="spinner"></span>
+              <span class="btn-text">Generate Posts</span>
+            </button>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Generated Posts</span>
+              <div class="flex-center gap-8">
+                <button class="copy-btn" onclick="copyOutput('s-output')">Copy</button>
+                <button class="btn btn-sm btn-secondary" onclick="sendToTracker('s-output', 'social')">+ Add to Tracker</button>
+              </div>
+            </div>
+            <div style="padding:20px">
+              <div class="ai-output loading" id="s-output">Posts will appear here after you click Generate.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EMAIL BRIEF -->
+    <div class="brief-tab" id="brief-email" style="display:none">
+      <div class="grid-2" style="gap:24px">
+        <div>
+          <div class="card card-pad">
+            <div class="field">
+              <label>Brand</label>
+              <select id="e-brand">
+                <option value="FST">First Source Team (FST)</option>
+                <option value="CareerIQ">CareerIQ</option>
+                <option value="Outplacement Enterprise">Outplacement Enterprise</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Email type</label>
+              <select id="e-type">
+                <option value="workshop registration invite">Workshop registration invite</option>
+                <option value="workshop reminder (day before)">Workshop reminder (day before)</option>
+                <option value="post-workshop follow-up">Post-workshop follow-up</option>
+                <option value="CareerIQ onboarding sequence (email 1 of 7)">CareerIQ onboarding — Email 1</option>
+                <option value="CareerIQ Pro upgrade offer">CareerIQ Pro upgrade</option>
+                <option value="CareerIQ churn save / cancel flow">CareerIQ churn save</option>
+                <option value="Outplacement Enterprise cold outreach to CHRO">Outplacement cold email (CHRO)</option>
+                <option value="Outplacement follow-up #2 (value add)">Outplacement follow-up #2</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Subject line direction</label>
+              <input type="text" id="e-subject" placeholder='e.g. "Why you\'re not getting interviews" or "This Wednesday only"'>
+            </div>
+            <div class="field">
+              <label>Notes</label>
+              <textarea id="e-notes" placeholder="Specific angle, personalization, CTA, tone notes..."></textarea>
+            </div>
+            <button class="btn btn-primary w-full" id="e-btn" onclick="generateBrief('email')">
+              <span class="spinner"></span>
+              <span class="btn-text">Generate Email</span>
+            </button>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Generated Email</span>
+              <div class="flex-center gap-8">
+                <button class="copy-btn" onclick="copyOutput('e-output')">Copy</button>
+                <button class="btn btn-sm btn-secondary" onclick="sendToTracker('e-output', 'email')">+ Add to Tracker</button>
+              </div>
+            </div>
+            <div style="padding:20px">
+              <div class="ai-output loading" id="e-output">Email will appear here after you click Generate.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VISUAL BRIEF -->
+    <div class="brief-tab" id="brief-visual" style="display:none">
+      <div class="grid-2" style="gap:24px">
+        <div>
+          <div class="card card-pad">
+            <div class="field">
+              <label>Brand</label>
+              <select id="vis-brand">
+                <option value="FST">First Source Team (FST)</option>
+                <option value="CareerIQ">CareerIQ</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Asset type</label>
+              <select id="vis-type">
+                <option value="carousel (5-7 slides)">Carousel (5–7 slides)</option>
+                <option value="single still / quote card">Single still / quote card</option>
+                <option value="LinkedIn header banner">LinkedIn header banner</option>
+                <option value="workshop registration graphic">Workshop registration graphic</option>
+                <option value="infographic">Infographic</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Theme / message</label>
+              <input type="text" id="vis-theme" placeholder='e.g. "80% of jobs are never posted" stat visual'>
+            </div>
+            <div class="field">
+              <label>Destination platform</label>
+              <select id="vis-dest">
+                <option value="Instagram">Instagram</option>
+                <option value="LinkedIn">LinkedIn</option>
+                <option value="Facebook">Facebook</option>
+                <option value="Email">Email</option>
+                <option value="Website">Website</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Notes</label>
+              <textarea id="vis-notes" placeholder="Brand colors: Blue #1f40cb, Navy #12212f, Off-white #f0ede8. Include specific text, layout direction..."></textarea>
+            </div>
+            <button class="btn btn-primary w-full" id="vis-btn" onclick="generateBrief('visual')">
+              <span class="spinner"></span>
+              <span class="btn-text">Generate Brief</span>
+            </button>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Generated Brief</span>
+              <div class="flex-center gap-8">
+                <button class="copy-btn" onclick="copyOutput('vis-output')">Copy</button>
+                <button class="btn btn-sm btn-secondary" onclick="sendToTracker('vis-output', 'visual')">+ Add to Tracker</button>
+              </div>
+            </div>
+            <div style="padding:20px">
+              <div class="ai-output loading" id="vis-output">Brief will appear here after you click Generate.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== ASSET TRACKER ==================== -->
+  <div class="page" id="page-tracker">
+    <div class="page-header flex-center">
+      <div>
+        <div class="page-title">Asset Tracker</div>
+        <div class="page-sub">Every piece of content, its status, and who's responsible.</div>
+      </div>
+      <div class="ml-auto">
+        <button class="btn btn-primary btn-sm" onclick="showAddAsset()">+ Add Asset</button>
+      </div>
+    </div>
+
+    <!-- Add asset form (hidden by default) -->
+    <div class="card card-pad mb-16" id="add-asset-form" style="display:none">
+      <div class="grid-2">
+        <div class="field">
+          <label>Title</label>
+          <input type="text" id="new-asset-title" placeholder="e.g. Super Bowl Story — 60sec reel">
+        </div>
+        <div class="field">
+          <label>Type</label>
+          <select id="new-asset-type">
+            <option>Video / Reel</option>
+            <option>Social Post</option>
+            <option>Email</option>
+            <option>Still / Carousel</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Brand</label>
+          <select id="new-asset-brand">
+            <option>FST</option>
+            <option>CareerIQ</option>
+            <option>Outplacement</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Owner</label>
+          <select id="new-asset-owner">
+            <option>John</option>
+            <option>Ian</option>
+            <option>Video editor</option>
+            <option>Designer</option>
+          </select>
+        </div>
+      </div>
+      <div class="flex-center gap-8">
+        <button class="btn btn-primary btn-sm" onclick="addAsset()">Add Asset</button>
+        <button class="btn btn-secondary btn-sm" onclick="hideAddAsset()">Cancel</button>
+      </div>
+    </div>
+
+    <div class="tab-row">
+      <button class="tab-btn active" onclick="filterAssets('all')">All</button>
+      <button class="tab-btn" onclick="filterAssets('draft')">Draft</button>
+      <button class="tab-btn" onclick="filterAssets('pending')">Pending review</button>
+      <button class="tab-btn" onclick="filterAssets('approved')">Approved</button>
+    </div>
+
+    <div class="card" id="asset-list">
+      <div class="asset-row-header">
+        <span>Title</span>
+        <span>Type</span>
+        <span>Brand</span>
+        <span>Owner</span>
+        <span>Status</span>
+      </div>
+      <div id="asset-rows"></div>
+    </div>
+  </div>
+
+  <!-- ==================== APPROVALS ==================== -->
+  <div class="page" id="page-approvals">
+    <div class="page-header">
+      <div class="page-title">Approvals</div>
+      <div class="page-sub">Review content before it goes anywhere. Approve, reject, or request changes.</div>
+    </div>
+
+    <div id="approval-list"></div>
+  </div>
+
+  <!-- ==================== DASHBOARD ==================== -->
+  <div class="page" id="page-dashboard">
+    <div class="page-header">
+      <div class="page-title">Dashboard</div>
+      <div class="page-sub">What's in the pipeline right now.</div>
+    </div>
+
+    <div class="grid-3 section">
+      <div class="stat-card">
+        <div class="stat-label">Total assets</div>
+        <div class="stat-value" id="stat-total">0</div>
+        <div class="stat-sub">across all brands</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Pending approval</div>
+        <div class="stat-value" id="stat-pending" style="color:var(--warn)">0</div>
+        <div class="stat-sub">waiting on John or Ian</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Approved this week</div>
+        <div class="stat-value" id="stat-approved" style="color:var(--success)">0</div>
+        <div class="stat-sub">ready to publish</div>
+      </div>
+    </div>
+
+    <div class="grid-2 section">
+      <div class="card card-pad">
+        <div class="section-title">By brand</div>
+        <div id="dash-by-brand"></div>
+      </div>
+      <div class="card card-pad">
+        <div class="section-title">By type</div>
+        <div id="dash-by-type"></div>
+      </div>
+    </div>
+
+    <div class="card card-pad section">
+      <div class="section-title">Content priorities this week</div>
+      <div style="font-size:14px;line-height:1.9;color:var(--ink)">
+        <div style="display:flex;gap:10px;align-items:baseline;margin-bottom:4px"><span style="color:var(--blue);font-weight:700">1.</span> Record John's Direct Invite video (MacBook QuickTime)</div>
+        <div style="display:flex;gap:10px;align-items:baseline;margin-bottom:4px"><span style="color:var(--blue);font-weight:700">2.</span> FST workshop to 50+ registrants — social push this week</div>
+        <div style="display:flex;gap:10px;align-items:baseline;margin-bottom:4px"><span style="color:var(--blue);font-weight:700">3.</span> CareerIQ first 100 Pro subscribers from workshop cohort</div>
+        <div style="display:flex;gap:10px;align-items:baseline"><span style="color:var(--blue);font-weight:700">4.</span> Executive Job Search Readiness Score free tool</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ============================================================
+// STATE
+// ============================================================
+let assets = JSON.parse(localStorage.getItem('fst_assets') || '[]');
+let currentBriefTab = 'video';
+let currentPage = 'briefs';
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.header-nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.querySelectorAll('.header-nav button')[['briefs','tracker','approvals','dashboard'].indexOf(page)].classList.add('active');
+  currentPage = page;
+  if (page === 'tracker') renderAssets('all');
+  if (page === 'approvals') renderApprovals();
+  if (page === 'dashboard') renderDashboard();
+}
+
+function switchTab(page, tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  if (page === 'briefs') {
+    document.querySelectorAll('.brief-tab').forEach(t => t.style.display = 'none');
+    document.getElementById('brief-' + tab).style.display = 'block';
+    currentBriefTab = tab;
+  }
+}
+
+// ============================================================
+// SYSTEM PROMPT (the methodology intelligence)
+// ============================================================
+const SYSTEM_PROMPT = `You are the Content & Copywriting Agent for First Source Team (FST), CareerIQ, and Outplacement Enterprise.
+
+ABOUT FST:
+- 19-year career coaching + financial advisory practice in Minnesota
+- Free career coaching monetized through financial planning referrals
+- Weekly Wednesday 11am CT workshop (GoToWebinar) — PRIMARY CTA for all FST marketing
+- 5.0 stars, 174 reviews, 100K+ jobseekers placed, 3x faster than national average
+- Clients landed at IBM, Google, Boeing, Siemens, Wells Fargo, DoD
+
+AUDIENCE (45-65, executives, involuntarily displaced):
+- Was earning $120K-$250K+, unemployed ~4 months on average
+- Applied to dozens/hundreds of positions with silence
+- Feels invisible, angry, frustrated, increasingly worried
+- Has been burned by generic career advice, paid resume writers, fake jobs
+- Age discrimination is real. Name it. Don't hide from it.
+
+PROPRIETARY FRAMEWORKS (use the names):
+- The 1% Insight: Executives have forgotten 99% of what they're capable of — professional amnesia
+- The Super Bowl Story: Tom Brady at 42, only 2 teams interested. Executives are evaluated through the wrong lens — age vs. trophies. Tampa Bay won the Super Bowl.
+- The Benchmark Candidate: Position clients as the standard everyone else is measured against
+- The Interpreter Mandate: Translate your past experience into the hiring company's present needs, in their language
+- The Hiring Manager Gauntlet: Resume must survive a hypercritical review from someone looking for reasons to reject it
+- The Four Pillars: Surface the 99%, Become the Interpreter, Find the Super Bowl, Survive the Gauntlet
+- The 3-of-6 Rule: Deliver 3 examples matching 3 of top 6 role requirements = advance 8/10 times (tested with 40+ candidates)
+- The 30-Minute Rewrite: Full resume rewrite per application, sustainable practice
+- The Rule of Four: Apply on original platform + company site + network to 4 people + track + follow up
+- Designed Retirement: Floor (guaranteed income) + Guard (institutional capability) + Growth Engine (stay aggressive)
+- Four Pain Dials: Age + Financial Runway + Re-Employability + Options
+
+KEY FACTS:
+- ATS average resume match: 35%. Need 90%+ to advance.
+- 80% of executive hiring happens via LinkedIn Recruiter seat, not job boards
+- LinkedIn engagement results: 20,000-40,000 impressions/week within 3-5 weeks of following the content strategy
+- 8 targeted applications outperform 100 generic ones
+
+BRAND COLORS: Blue #1f40cb, Navy #12212f, Off-white #f0ede8
+
+VOICE (NON-NEGOTIABLE):
+- Blunt. Experienced. Credible.
+- Direct observation, not motivational fluff
+- Name specific mechanisms, not vague promises
+- NEVER use: "game-changing", "thrilled", "excited to share", "innovative", "empower", "synergy", "journey"
+- Sound like a 19-year veteran, not a LinkedIn influencer
+
+COMPLIANCE:
+- No financial performance claims
+- No investment guarantees
+- All FST content drives to workshop registration only
+
+ABOUT CareerIQ:
+- AI-powered executive career platform (SaaS)
+- Free ($0), Pro ($79/mo), Concierge (financial planning partnership), Enterprise ($29-49/seat)
+- Honest metrics only — no vanity claims
+- Positioned as: "AI acts as a prepared collaborator surfacing the executive's real story"`;
+
+// ============================================================
+// BRIEF GENERATION
+// ============================================================
+async function generateBrief(type) {
+  const btnId = type === 'video' ? 'v-btn' : type === 'social' ? 's-btn' : type === 'email' ? 'e-btn' : 'vis-btn';
+  const outputId = type === 'video' ? 'v-output' : type === 'social' ? 's-output' : type === 'email' ? 'e-output' : 'vis-output';
+  const btn = document.getElementById(btnId);
+  const output = document.getElementById(outputId);
+
+  btn.classList.add('loading');
+  btn.disabled = true;
+  output.classList.add('loading');
+  output.textContent = 'Generating…';
+
+  let prompt = '';
+
+  if (type === 'video') {
+    const brand = document.getElementById('v-brand').value;
+    const format = document.getElementById('v-format').value;
+    const topic = document.getElementById('v-topic').value;
+    const hook = document.getElementById('v-hook').value;
+    const notes = document.getElementById('v-notes').value;
+    prompt = `Generate a complete video production brief for a ${format} for ${brand}.
+
+Topic/Framework: ${topic}
+Hook style: ${hook}
+Additional notes: ${notes || 'None'}
+
+The brief must include:
+1. CONCEPT (2-3 sentences — what this video is about and why it matters to the audience)
+2. HOOK (first 3 seconds — exact words/action to stop the scroll)
+3. SCRIPT OUTLINE (beat-by-beat structure with timing)
+4. FULL SCRIPT (spoken word, John's voice — direct, credible, no fluff)
+5. B-ROLL / VISUAL DIRECTION (what to show on screen at each moment)
+6. CALL TO ACTION (exact words and what they drive to)
+7. PRODUCTION NOTES (location, lighting, any on-screen text, captions)
+8. THUMBNAIL CONCEPT (if applicable)
+
+Write the script in John's authentic voice — blunt, experienced, 19-year veteran. Not motivational speaker energy. Real talk.`;
+  }
+
+  else if (type === 'social') {
+    const brand = document.getElementById('s-brand').value;
+    const platform = document.getElementById('s-platform').value;
+    const theme = document.getElementById('s-theme').value;
+    const count = document.getElementById('s-count').value;
+    const notes = document.getElementById('s-notes').value;
+    prompt = `Write ${count} for ${brand} on ${platform}.
+
+Theme: ${theme}
+Notes: ${notes || 'None'}
+
+Requirements:
+- Every post drives to FST workshop registration (Wednesday 11am CT)
+- One audience, one feeling, one ask — no competing CTAs
+- Opens with a direct observation or provocative truth (not a question)
+- John's voice: blunt, experienced, 19-year veteran. No AI-speak.
+- Platform-appropriate format and length
+- Maximum 2-3 hashtags if LinkedIn, none if other platforms need natural feel
+- Never use: "game-changing", "thrilled", "excited", "innovative", "empower"
+
+Format each post clearly numbered. Include suggested image/visual direction for each.`;
+  }
+
+  else if (type === 'email') {
+    const brand = document.getElementById('e-brand').value;
+    const emailType = document.getElementById('e-type').value;
+    const subjectDir = document.getElementById('e-subject').value;
+    const notes = document.getElementById('e-notes').value;
+    prompt = `Write a ${emailType} email for ${brand}.
+
+Subject line direction: ${subjectDir || 'Generate the best subject line for this type'}
+Notes: ${notes || 'None'}
+
+Requirements:
+- Subject line: direct, specific, no clickbait
+- Opening: speaks to their reality immediately — no warm-up
+- Voice: John's authentic voice — blunt, credible, experienced. Not a sales email.
+- Single CTA only
+- No fluff, no filler sentences
+- Length appropriate to type (invites: short; sequences: medium; cold outreach: very short)
+
+Output:
+SUBJECT LINE: [subject]
+PREVIEW TEXT: [preview]
+---
+[Full email body]`;
+  }
+
+  else if (type === 'visual') {
+    const brand = document.getElementById('vis-brand').value;
+    const assetType = document.getElementById('vis-type').value;
+    const theme = document.getElementById('vis-theme').value;
+    const dest = document.getElementById('vis-dest').value;
+    const notes = document.getElementById('vis-notes').value;
+    prompt = `Write a complete visual production brief for a ${assetType} for ${brand}, destined for ${dest}.
+
+Theme/message: ${theme || 'Based on brand voice and frameworks'}
+Notes: ${notes || 'None'}
+
+The brief must include:
+1. CONCEPT (what this visual communicates and why)
+2. HEADLINE / PRIMARY TEXT (exact copy)
+3. SUPPORTING COPY (subheadline, body text if applicable)
+4. VISUAL DIRECTION (layout, imagery, color usage — use brand colors: Blue #1f40cb, Navy #12212f, Off-white #f0ede8)
+5. FOR CAROUSEL: each slide numbered with its own headline, copy, and visual direction
+6. CANVA INSTRUCTIONS (specific guidance for execution in Canva)
+7. SIZE SPECS (for destination platform)
+8. CTA TEXT (if applicable)
+
+Be specific enough that a designer or VA can execute this without a briefing call.`;
+  }
+
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: SYSTEM_PROMPT,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const data = await response.json();
+    const text = data.content?.[0]?.text || 'Error generating brief. Please try again.';
+    output.classList.remove('loading');
+    output.textContent = text;
+  } catch (err) {
+    output.classList.remove('loading');
+    output.textContent = 'Network error. Check your connection and try again.';
+  }
+
+  btn.classList.remove('loading');
+  btn.disabled = false;
+}
+
+// ============================================================
+// ASSET TRACKER
+// ============================================================
+function saveAssets() {
+  localStorage.setItem('fst_assets', JSON.stringify(assets));
+}
+
+function showAddAsset() {
+  document.getElementById('add-asset-form').style.display = 'block';
+}
+
+function hideAddAsset() {
+  document.getElementById('add-asset-form').style.display = 'none';
+}
+
+function addAsset() {
+  const title = document.getElementById('new-asset-title').value.trim();
+  if (!title) return;
+  const asset = {
+    id: Date.now(),
+    title,
+    type: document.getElementById('new-asset-type').value,
+    brand: document.getElementById('new-asset-brand').value,
+    owner: document.getElementById('new-asset-owner').value,
+    status: 'draft',
+    content: '',
+    created: new Date().toLocaleDateString('en-US', {month:'short',day:'numeric'}),
+    comment: ''
+  };
+  assets.unshift(asset);
+  saveAssets();
+  hideAddAsset();
+  document.getElementById('new-asset-title').value = '';
+  renderAssets('all');
+}
+
+function sendToTracker(outputId, type) {
+  const content = document.getElementById(outputId).textContent;
+  if (!content || content.includes('will appear here')) return;
+  const typeMap = {video:'Video / Reel', social:'Social Post', email:'Email', visual:'Still / Carousel'};
+  const brandEl = document.getElementById(type === 'video' ? 'v-brand' : type === 'social' ? 's-brand' : type === 'email' ? 'e-brand' : 'vis-brand');
+  const asset = {
+    id: Date.now(),
+    title: `Generated ${typeMap[type]} — ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'})}`,
+    type: typeMap[type],
+    brand: brandEl ? brandEl.value : 'FST',
+    owner: 'John',
+    status: 'pending',
+    content,
+    created: new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'}),
+    comment: ''
+  };
+  assets.unshift(asset);
+  saveAssets();
+  showPage('tracker');
+}
+
+function renderAssets(filter) {
+  const rows = document.getElementById('asset-rows');
+  const filtered = filter === 'all' ? assets : assets.filter(a => a.status === filter);
+
+  if (filtered.length === 0) {
+    rows.innerHTML = `<div class="empty"><div class="empty-icon">📋</div><div class="empty-title">No assets yet</div><div>Generate a brief and add it to the tracker, or add manually.</div></div>`;
+    return;
+  }
+
+  rows.innerHTML = filtered.map(a => `
+    <div class="asset-row" onclick="openAsset(${a.id})" style="cursor:pointer">
+      <div>
+        <div class="asset-title">${a.title}</div>
+        <div class="asset-meta">${a.created}</div>
+      </div>
+      <div class="asset-meta">${a.type}</div>
+      <div><span class="agent-chip">${a.brand}</span></div>
+      <div class="asset-meta">${a.owner}</div>
+      <div>${statusBadge(a.status)}</div>
+    </div>
+  `).join('');
+}
+
+function filterAssets(filter) {
+  document.querySelectorAll('#page-tracker .tab-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  renderAssets(filter);
+}
+
+function openAsset(id) {
+  const asset = assets.find(a => a.id === id);
+  if (!asset) return;
+  showPage('approvals');
+  renderApprovals(id);
+}
+
+function statusBadge(status) {
+  const map = {draft:'badge-draft',pending:'badge-pending',approved:'badge-approved',rejected:'badge-rejected'};
+  const labels = {draft:'Draft',pending:'Pending',approved:'Approved',rejected:'Rejected'};
+  return `<span class="badge ${map[status]||'badge-draft'}">${labels[status]||status}</span>`;
+}
+
+// ============================================================
+// APPROVALS
+// ============================================================
+function renderApprovals(highlightId) {
+  const list = document.getElementById('approval-list');
+  const pending = assets.filter(a => a.status === 'pending' || a.status === 'draft');
+
+  if (pending.length === 0) {
+    list.innerHTML = `<div class="empty"><div class="empty-icon">✅</div><div class="empty-title">All clear</div><div>Nothing waiting for review right now.</div></div>`;
+    return;
+  }
+
+  list.innerHTML = pending.map(a => `
+    <div class="approval-card" id="approval-${a.id}">
+      <div class="card-header">
+        <div>
+          <div style="font-weight:600;color:var(--navy);margin-bottom:4px">${a.title}</div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <span class="agent-chip">${a.brand}</span>
+            <span style="font-size:13px;color:var(--muted)">${a.type} · ${a.owner} · ${a.created}</span>
+            ${statusBadge(a.status)}
+          </div>
+        </div>
+      </div>
+      ${a.content ? `<div class="approval-body">${a.content}</div>` : '<div style="padding:16px 20px;color:var(--muted);font-size:13px">No content yet — generate a brief and add it to the tracker.</div>'}
+      <div class="approval-actions">
+        <button class="btn btn-primary btn-sm" onclick="approveAsset(${a.id})">Approve</button>
+        <button class="btn btn-secondary btn-sm" onclick="rejectAsset(${a.id})">Request changes</button>
+        <input class="comment-box" id="comment-${a.id}" placeholder="Add a note (optional)..." style="flex:1;padding:7px 12px;font-size:13px">
+      </div>
+    </div>
+  `).join('');
+}
+
+function approveAsset(id) {
+  const asset = assets.find(a => a.id === id);
+  if (!asset) return;
+  const comment = document.getElementById('comment-' + id)?.value;
+  asset.status = 'approved';
+  if (comment) asset.comment = comment;
+  saveAssets();
+  renderApprovals();
+  renderDashboard();
+}
+
+function rejectAsset(id) {
+  const asset = assets.find(a => a.id === id);
+  if (!asset) return;
+  const comment = document.getElementById('comment-' + id)?.value;
+  asset.status = 'rejected';
+  if (comment) asset.comment = comment;
+  saveAssets();
+  renderApprovals();
+}
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+function renderDashboard() {
+  document.getElementById('stat-total').textContent = assets.length;
+  document.getElementById('stat-pending').textContent = assets.filter(a => a.status === 'pending').length;
+  document.getElementById('stat-approved').textContent = assets.filter(a => a.status === 'approved').length;
+
+  const byBrand = {};
+  const byType = {};
+  assets.forEach(a => {
+    byBrand[a.brand] = (byBrand[a.brand] || 0) + 1;
+    byType[a.type] = (byType[a.type] || 0) + 1;
+  });
+
+  const brandDiv = document.getElementById('dash-by-brand');
+  const typeDiv = document.getElementById('dash-by-type');
+
+  if (Object.keys(byBrand).length === 0) {
+    brandDiv.innerHTML = '<div style="color:var(--muted);font-size:14px">No assets yet.</div>';
+    typeDiv.innerHTML = '<div style="color:var(--muted);font-size:14px">No assets yet.</div>';
+    return;
+  }
+
+  brandDiv.innerHTML = Object.entries(byBrand).map(([k,v]) => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px">
+      <span class="agent-chip">${k}</span>
+      <span style="font-weight:600;color:var(--navy)">${v}</span>
+    </div>`).join('');
+
+  typeDiv.innerHTML = Object.entries(byType).map(([k,v]) => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px">
+      <span style="color:var(--ink)">${k}</span>
+      <span style="font-weight:600;color:var(--navy)">${v}</span>
+    </div>`).join('');
+}
+
+// ============================================================
+// UTILS
+// ============================================================
+function copyOutput(id) {
+  const text = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 1500);
+  });
+}
+
+// Init
+renderDashboard();
+</script>
+</body>
+</html>

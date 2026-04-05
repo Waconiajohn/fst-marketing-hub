@@ -755,7 +755,6 @@
                   <option value="FST vs. legacy outplacement — the world's largest outplacement firm rates 1.7/5 with participants. FST rates 5.0/5. Box-checking vs. a system that actually gets people hired. Built for the participant, not the person signing the invoice.">FST vs. Legacy Outplacement</option>
                   <option value="The workshop — what happens in the free Wednesday 11am workshop and why executives who attend leave with a framework they can execute immediately. Workshop registration CTA.">The Workshop Invitation</option>
                 </optgroup>
-                <option value="Custom topic — see notes field for specific direction">Custom (see notes)</option>
               </select>
             </div>
             <div class="field">
@@ -768,10 +767,6 @@
                 <option value="blunt diagnosis — name the exact problem most people won't name out loud">Blunt diagnosis</option>
                 <option value="pattern interrupt — open with something unexpected that forces the viewer to pay attention">Pattern interrupt</option>
               </select>
-            </div>
-            <div class="field">
-              <label>Notes / Custom instructions</label>
-              <textarea id="v-notes" placeholder="e.g. John on camera, reference the medical device executive story, end with workshop CTA..."></textarea>
             </div>
             <button class="btn btn-primary w-full" id="v-btn" onclick="generateBrief('video')">
               <span class="spinner"></span>
@@ -795,7 +790,7 @@
                 <span class="voice-badge" id="v-voice-badge" style="display:none"></span>
                 <button class="copy-btn" onclick="copyAllSections('v')">Copy all</button>
                 <button class="btn btn-sm btn-secondary" onclick="openAiPanel('v')">AI Assistant</button>
-                <button class="btn btn-sm btn-primary" onclick="sendToTracker('v-output', 'videmailo')">+ Add to Tracker</button>
+                <button class="btn btn-sm btn-primary" onclick="sendToTracker('v-output', 'video')">+ Add to Tracker</button>
               </div>
             </div>
             <div style="padding:16px 20px 20px" id="v-output-container">
@@ -917,10 +912,6 @@
                 <option value="5 posts (full week)">5 posts — full week</option>
               </select>
             </div>
-            <div class="field">
-              <label>Notes</label>
-              <textarea id="s-notes" placeholder="e.g. reference the Tom Brady story, include stat about ATS, drive to Wednesday workshop..."></textarea>
-            </div>
             <button class="btn btn-primary w-full" id="s-btn" onclick="generateBrief('social')">
               <span class="spinner"></span>
               <span class="btn-text">Generate Posts</span>
@@ -1018,10 +1009,6 @@
               <label>Subject line direction</label>
               <input type="text" id="e-subject" placeholder='e.g. "Why you\'re not getting interviews" or "This Wednesday only"'>
             </div>
-            <div class="field">
-              <label>Notes</label>
-              <textarea id="e-notes" placeholder="Specific angle, personalization, CTA, tone notes..."></textarea>
-            </div>
             <button class="btn btn-primary w-full" id="e-btn" onclick="generateBrief('email')">
               <span class="spinner"></span>
               <span class="btn-text">Generate Email</span>
@@ -1065,13 +1052,13 @@
               <button class="ai-panel-close" onclick="closeAiPanel('e')">×</button>
             </div>
             <div class="ai-quick-actions">
-              <button class="ai-quick-btn" onclick="quickAction('e', 'Make the hook stronger — give me 3 alternative hooks that are more direct and stop the scroll faster')">3 hook alternatives</button>
-              <button class="ai-quick-btn" onclick="quickAction('e', 'Check the voice — read this and identify any lines that sound like generic AI content or marketing speak instead of John Schrup. List each flagged line and suggest a rewrite.')">Check voice</button>
-              <button class="ai-quick-btn" onclick="quickAction('e', 'Tighten this — cut 20% without losing meaning. Be ruthless. Every sentence must earn its place.')">Tighten 20%</button>
+              <button class="ai-quick-btn" onclick="quickAction('e', 'Rewrite the subject line — give me 5 alternative subject lines that are more specific, direct, and compelling. No questions. No clickbait.')">5 subject lines</button>
+              <button class="ai-quick-btn" onclick="quickAction('e', 'Check the voice — identify any lines that sound like generic marketing speak instead of John Schrup. Flag each one and suggest a rewrite.')">Check voice</button>
+              <button class="ai-quick-btn" onclick="quickAction('e', 'Tighten this email — cut 20% without losing meaning. Every sentence must earn its place. No filler.')">Tighten 20%</button>
+              <button class="ai-quick-btn" onclick="quickAction('e', 'Rewrite the opening line — the first sentence must speak directly to the reader reality without any warm-up. No greetings, no context-setting.')">Stronger opening</button>
               <button class="ai-quick-btn" onclick="quickAction('e', 'Rewrite the CTA — make it more specific and direct. What exactly should they do, when, and why now.')">Stronger CTA</button>
               <button class="ai-quick-btn" onclick="quickAction('e', 'Check compliance — flag any claims that could be interpreted as financial performance guarantees, investment advice, or promises about job search outcomes that we cannot verify.')">Compliance check</button>
-              <button class="ai-quick-btn" onclick="quickAction('e', 'Adapt for TikTok — reformat this for a 15-30 second TikTok. Hook in 3 seconds. Direct camera. Bold and fast.')">→ TikTok version</button>
-              <button class="ai-quick-btn" onclick="quickAction('e', 'Write the social caption — take this content and write a LinkedIn caption that stands alone, drives to workshop registration, John voice.')">Write caption</button>
+              <button class="ai-quick-btn" onclick="quickAction('e', 'Write a follow-up email — based on this email, write a follow-up for 5-7 days later if no response. Different angle, adds value, short.')">Write follow-up</button>
             </div>
             <div class="ai-chat-area">
               <div class="ai-response" id="e-ai-response"></div>
@@ -1125,10 +1112,6 @@
                 <option value="Website">Website</option>
               </select>
             </div>
-            <div class="field">
-              <label>Notes</label>
-              <textarea id="vis-notes" placeholder="Brand colors: Blue #1f40cb, Navy #12212f, Off-white #f0ede8. Include specific text, layout direction..."></textarea>
-            </div>
             <button class="btn btn-primary w-full" id="vis-btn" onclick="generateBrief('visual')">
               <span class="spinner"></span>
               <span class="btn-text">Generate Brief</span>
@@ -1150,7 +1133,7 @@
                 <span class="voice-badge" id="vis-voice-badge" style="display:none"></span>
                 <button class="copy-btn" onclick="copyAllSections('vis')">Copy all</button>
                 <button class="btn btn-sm btn-secondary" onclick="openAiPanel('vis')">AI Assistant</button>
-                <button class="btn btn-sm btn-primary" onclick="sendToTracker('vis-output', 'videmailoisocial')">+ Add to Tracker</button>
+                <button class="btn btn-sm btn-primary" onclick="sendToTracker('vis-output', 'visual')">+ Add to Tracker</button>
               </div>
             </div>
             <div style="padding:16px 20px 20px" id="vis-output-container">
@@ -1172,13 +1155,13 @@
               <button class="ai-panel-close" onclick="closeAiPanel('vis')">×</button>
             </div>
             <div class="ai-quick-actions">
-              <button class="ai-quick-btn" onclick="quickAction('vis', 'Make the hook stronger — give me 3 alternative hooks that are more direct and stop the scroll faster')">3 hook alternatives</button>
-              <button class="ai-quick-btn" onclick="quickAction('vis', 'Check the voice — read this and identify any lines that sound like generic AI content or marketing speak instead of John Schrup. List each flagged line and suggest a rewrite.')">Check voice</button>
-              <button class="ai-quick-btn" onclick="quickAction('vis', 'Tighten this — cut 20% without losing meaning. Be ruthless. Every sentence must earn its place.')">Tighten 20%</button>
+              <button class="ai-quick-btn" onclick="quickAction('vis', 'Give me 3 alternative headlines for this visual — more direct, more specific, more stopping power.')">3 headline alternatives</button>
+              <button class="ai-quick-btn" onclick="quickAction('vis', 'Check the voice — identify any copy that sounds like generic marketing speak instead of John Schrup. Flag it and suggest rewrites.')">Check voice</button>
+              <button class="ai-quick-btn" onclick="quickAction('vis', 'Rewrite the Canva instructions — make them more specific and step-by-step so a VA can execute this without any questions.')">Clearer Canva instructions</button>
+              <button class="ai-quick-btn" onclick="quickAction('vis', 'Adapt this brief for a different platform — rewrite the size specs, layout direction, and caption for LinkedIn instead.')">→ LinkedIn version</button>
               <button class="ai-quick-btn" onclick="quickAction('vis', 'Rewrite the CTA — make it more specific and direct. What exactly should they do, when, and why now.')">Stronger CTA</button>
               <button class="ai-quick-btn" onclick="quickAction('vis', 'Check compliance — flag any claims that could be interpreted as financial performance guarantees, investment advice, or promises about job search outcomes that we cannot verify.')">Compliance check</button>
-              <button class="ai-quick-btn" onclick="quickAction('vis', 'Adapt for TikTok — reformat this for a 15-30 second TikTok. Hook in 3 seconds. Direct camera. Bold and fast.')">→ TikTok version</button>
-              <button class="ai-quick-btn" onclick="quickAction('vis', 'Write the social caption — take this content and write a LinkedIn caption that stands alone, drives to workshop registration, John voice.')">Write caption</button>
+              <button class="ai-quick-btn" onclick="quickAction('vis', 'Write the caption — take this visual concept and write the social media caption that goes with it. John voice, drives to workshop.')">Write caption</button>
             </div>
             <div class="ai-chat-area">
               <div class="ai-response" id="vis-ai-response"></div>
@@ -1263,6 +1246,7 @@
         <span>Brand</span>
         <span>Owner</span>
         <span>Status</span>
+        <span></span>
       </div>
       <div id="asset-rows"></div>
     </div>
@@ -1586,10 +1570,11 @@ function showTopicContext(typeId, topicValue) {
 
 // Hook topic selects to context display
 document.addEventListener('DOMContentLoaded', () => {
-  const topicSel = document.getElementById('v-topic');
-  if (topicSel) {
-    topicSel.addEventListener('change', () => showTopicContext('v', topicSel.value));
-  }
+  const vTopic = document.getElementById('v-topic');
+  if (vTopic) vTopic.addEventListener('change', () => showTopicContext('v', vTopic.value));
+  
+  const sTheme = document.getElementById('s-theme');
+  if (sTheme) sTheme.addEventListener('change', () => showTopicContext('s', sTheme.value));
 });
 
 // ============================================================
@@ -1679,9 +1664,19 @@ function toggleEdit(typeId, idx) {
   const body = document.getElementById(typeId + '-sec-body-' + idx);
   const isEditing = body.contentEditable === 'true';
   body.contentEditable = isEditing ? 'false' : 'true';
+  
+  // Find the Edit button for this section and update its label
+  const section = document.getElementById(typeId + '-sec-' + idx);
+  if (section) {
+    const editBtn = section.querySelector('.section-btn:not(.ai)');
+    if (editBtn && editBtn.textContent !== '↻ Rewrite') {
+      editBtn.textContent = isEditing ? 'Edit' : 'Done editing';
+      editBtn.style.color = isEditing ? '' : 'var(--blue)';
+    }
+  }
+  
   if (!isEditing) {
     body.focus();
-    // Move cursor to end
     const range = document.createRange();
     range.selectNodeContents(body);
     range.collapse(false);
@@ -1876,7 +1871,7 @@ async function generateBrief(type) {
     const format = document.getElementById('v-format').value;
     const topic = document.getElementById('v-topic').value;
     const hook = document.getElementById('v-hook').value;
-    const notes = document.getElementById('v-notes').value;
+    const notes = '';
 
     const platformInstructions = format.includes('TikTok') 
       ? `PLATFORM: TikTok. Hook must land in the FIRST 3 SECONDS. Pattern interrupt — unexpected opening, bold statement, direct camera address. Text overlays throughout. No polished corporate feel. Authenticity beats production value. First frame is everything. Script should feel like someone grabbed their phone because they couldn't not say this.`
@@ -1939,7 +1934,7 @@ The single frame that makes someone click. What it shows and what text it includ
     const platform = document.getElementById('s-platform').value;
     const theme = document.getElementById('s-theme').value;
     const count = document.getElementById('s-count').value;
-    const notes = document.getElementById('s-notes').value;
+    const notes = '';
 
     const socialPlatformRules = platform === 'LinkedIn'
       ? `LINKEDIN: Text-first. First 2-3 lines must earn the "see more" click. 2-3 hashtags max at the end. Short paragraphs, line breaks between every 1-2 sentences. Open with a direct observation or uncomfortable truth — not a question, not a greeting, not "I've been thinking about..."`
@@ -1975,7 +1970,7 @@ VISUAL DIRECTION: [What to pair with this]`;
     const brand = document.getElementById('e-brand').value;
     const emailType = document.getElementById('e-type').value;
     const subjectDir = document.getElementById('e-subject').value;
-    const notes = document.getElementById('e-notes').value;
+    const notes = '';
 
     const emailLengthGuide = emailType.includes('invite') || emailType.includes('reminder')
       ? 'LENGTH: Short. Under 150 words. Every sentence earns its place. No warm-up.'
@@ -2021,7 +2016,7 @@ PREVIEW TEXT: [preview]
     const assetType = document.getElementById('vis-type').value;
     const theme = document.getElementById('vis-theme').value;
     const dest = document.getElementById('vis-dest').value;
-    const notes = document.getElementById('vis-notes').value;
+    const notes = '';
 
     prompt = `Write a complete visual production brief for a ${assetType} for ${brand}, destined for ${dest}.
 
@@ -2168,7 +2163,13 @@ async function sendToTracker(outputId, type) {
   const el = document.getElementById(outputId);
   if (!el) return;
   const content = el.tagName === 'TEXTAREA' ? el.value : el.textContent;
-  if (!content || content.includes('will appear here') || content.trim().length < 10) return;
+  if (!content || content.includes('will appear here') || content.trim().length < 10) {
+    alert('Generate a brief first, then add it to the tracker.');
+    return;
+  }
+  // Button feedback
+  const btn = event?.target;
+  if (btn) { btn.textContent = 'Saving…'; btn.disabled = true; }
   const typeMap = {
     'video':'Video / Reel', 'v-output':'Video / Reel',
     'social':'Social Post', 's-output':'Social Post', 
@@ -2186,6 +2187,7 @@ async function sendToTracker(outputId, type) {
     comment: ''
   };
   await saveAsset(asset);
+  if (btn) { btn.textContent = 'Saved ✓'; setTimeout(() => { btn.textContent = '+ Add to Tracker'; btn.disabled = false; }, 1500); }
   showPage('tracker');
 }
 
@@ -2260,8 +2262,8 @@ function renderApprovals(highlightId) {
       </div>
       ${a.content ? `<div class="approval-body">${a.content}</div>` : '<div style="padding:16px 20px;color:var(--muted);font-size:13px">No content yet — generate a brief and add it to the tracker.</div>'}
       <div class="approval-actions">
-        <button class="btn btn-primary btn-sm" onclick="approveAsset(${a.id})">Approve</button>
-        <button class="btn btn-secondary btn-sm" onclick="rejectAsset(${a.id})">Request changes</button>
+        <button class="btn btn-primary btn-sm" onclick="approveAsset('${a.id}')">Approve</button>
+        <button class="btn btn-secondary btn-sm" onclick="rejectAsset('${a.id}')">Request changes</button>
         <input class="comment-box" id="comment-${a.id}" placeholder="Add a note (optional)..." style="flex:1;padding:7px 12px;font-size:13px">
       </div>
     </div>
@@ -2269,7 +2271,7 @@ function renderApprovals(highlightId) {
 }
 
 async function approveAsset(id) {
-  const comment = document.getElementById('comment-' + id)?.value;
+  const comment = document.getElementById('comment-' + String(id))?.value;
   const updates = { status: 'approved' };
   if (comment) updates.comment = comment;
   await updateAsset(id, updates);
@@ -2278,7 +2280,7 @@ async function approveAsset(id) {
 }
 
 async function rejectAsset(id) {
-  const comment = document.getElementById('comment-' + id)?.value;
+  const comment = document.getElementById('comment-' + String(id))?.value;
   const updates = { status: 'rejected' };
   if (comment) updates.comment = comment;
   await updateAsset(id, updates);

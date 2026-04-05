@@ -1355,16 +1355,8 @@ function copyOutput(id) {
   });
 }
 
-// Init handled by supabase CDN load below
+// Init on DOMContentLoaded after all scripts have run
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-// Start Supabase after CDN loads
-if (window.supabase) {
-  initSupabase();
-} else {
-  document.querySelector('script[src*="supabase"]').addEventListener('load', initSupabase);
-}
-</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" onload="initSupabase()"></script>
 </body>
 </html>

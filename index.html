@@ -640,22 +640,27 @@
   }
 
   /* AI ALTERNATIVE CARDS */
-  .ai-alternatives { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+  .ai-alternatives { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
   .ai-alt-card {
     border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 12px 14px;
+    border-radius: 7px;
+    padding: 9px 12px;
     font-size: 13px;
-    line-height: 1.65;
+    line-height: 1.5;
     color: var(--ink);
     background: white;
     cursor: pointer;
     transition: all 0.15s;
-    white-space: pre-wrap;
+    white-space: normal;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
   }
   .ai-alt-card:hover { border-color: var(--blue); background: var(--blue-pale); }
   .ai-alt-card.selected { border-color: var(--blue); background: var(--blue-pale); box-shadow: 0 0 0 2px rgba(31,64,203,0.15); }
-  .ai-alt-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 6px; }
+  .ai-alt-label { font-size: 11px; font-weight: 700; color: var(--blue); white-space: nowrap; flex-shrink: 0; min-width: 16px; }
+  .ai-alt-text { flex: 1; }
+  .ai-alt-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); white-space: nowrap; flex-shrink: 0; }
   .ai-alt-actions { display: flex; gap: 8px; margin-top: 10px; }
   .ai-plain-response {
     background: var(--offwhite);
@@ -1822,15 +1827,12 @@ async function sendAiRequest(typeId, instruction) {
     if (alts) {
       // Render as selectable cards
       responseDiv.innerHTML = `
-        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:10px">
-          Click an option to select it, then use it below
+        <div style="font-size:11px;font-weight:600;color:var(--muted);margin-bottom:8px">
+          Click one to select, then hit Use selected option
         </div>
         <div class="ai-alternatives" id="${typeId}-alts">
           ${alts.map((alt, i) => `
-            <div class="ai-alt-card" id="${typeId}-alt-${i}" onclick="selectAlt('${typeId}', ${i})">
-              <div class="ai-alt-label">Option ${i + 1}</div>
-              ${escapeHtml(alt.replace(/^\*+|\*+$/g, '').replace(/\[.*?\]/g, '').trim())}
-            </div>
+            <div class="ai-alt-card" id="${typeId}-alt-${i}" onclick="selectAlt('${typeId}', ${i})"><span class="ai-alt-label">${i + 1}.</span><span class="ai-alt-text">${escapeHtml(alt.replace(/^[*#\s]+|[*#\s]+$/g, '').replace(/\[.*?\]/g, '').trim())}</span></div>
           `).join('')}
         </div>
       `;

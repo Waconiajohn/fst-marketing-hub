@@ -1183,6 +1183,20 @@ async function updateAsset(id, updates) {
   if (asset) Object.assign(asset, updates);
 }
 
+async function deleteAsset(id) {
+  if (!confirm('Delete this asset? This cannot be undone.')) return;
+  if (!db) return;
+  const { error } = await db.from('marketing_assets').delete().eq('id', id);
+  if (!error) {
+    assets = assets.filter(a => String(a.id) !== String(id));
+    renderAssets(document.querySelector('#page-tracker .tab-btn.active')?.textContent?.toLowerCase().trim() === 'all' ? 'all' : 
+      document.querySelector('#page-tracker .tab-btn.active')?.textContent?.toLowerCase().trim() || 'all');
+    renderDashboard();
+  } else {
+    console.error('[FST] Delete error:', error);
+  }
+}
+
 function showAddAsset() {
   document.getElementById('add-asset-form').style.display = 'block';
 }
@@ -1237,7 +1251,7 @@ function renderAssets(filter) {
   }
 
   rows.innerHTML = filtered.map(a => `
-    <div class="asset-row" onclick="openAsset(${a.id})" style="cursor:pointer">
+    <div class="asset-row" onclick="openAsset('${a.id}')" style="cursor:pointer">
       <div>
         <div class="asset-title">${a.title}</div>
         <div class="asset-meta">${a.created}</div>
@@ -1246,6 +1260,9 @@ function renderAssets(filter) {
       <div><span class="agent-chip">${a.brand}</span></div>
       <div class="asset-meta">${a.owner}</div>
       <div>${statusBadge(a.status)}</div>
+      <div onclick="event.stopPropagation()" style="display:flex;align-items:center;justify-content:center">
+        <button onclick="deleteAsset('${a.id}')" title="Delete" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:18px;padding:4px 6px;border-radius:4px;line-height:1" onmouseover="this.style.color='var(--danger)'" onmouseout="this.style.color='var(--muted)'">🗑</button>
+      </div>
     </div>
   `).join('');
 }

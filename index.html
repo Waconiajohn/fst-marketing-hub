@@ -895,13 +895,18 @@ let currentPage = 'briefs';
 // ============================================================
 async function initSupabase() {
   try {
+    console.log('[FST] Fetching config...');
     const res = await fetch('/api/config');
-    const { supabaseUrl, supabaseKey } = await res.json();
-    db = window.supabase.createClient(supabaseUrl, supabaseKey);
+    if (!res.ok) { console.error('[FST] Config fetch failed:', res.status); return; }
+    const cfg = await res.json();
+    console.log('[FST] Config received. URL present:', !!cfg.supabaseUrl, 'Key present:', !!cfg.supabaseKey);
+    if (!cfg.supabaseUrl || !cfg.supabaseKey) { console.error('[FST] Missing Supabase credentials'); return; }
+    db = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseKey);
+    console.log('[FST] Supabase client created:', !!db);
     await loadAssets();
     renderDashboard();
   } catch (err) {
-    console.error('Supabase init failed:', err);
+    console.error('[FST] Supabase init failed:', err);
   }
 }
 
@@ -1143,7 +1148,11 @@ Be specific enough that a designer or VA can execute this without a briefing cal
 // ASSET TRACKER
 // ============================================================
 async function saveAsset(asset) {
-  if (!db) return;
+  if (!db) {
+    console.error('[FST] saveAsset called but db is null — Supabase not initialized');
+    return;
+  }
+  console.log('[FST] Saving asset:', asset.title);
   const { data, error } = await db
     .from('marketing_assets')
     .insert([{
@@ -1157,7 +1166,12 @@ async function saveAsset(asset) {
     }])
     .select()
     .single();
-  if (!error && data) {
+  if (error) {
+    console.error('[FST] Supabase insert error:', error);
+    return;
+  }
+  console.log('[FST] Asset saved successfully:', data.id);
+  if (data) {
     assets.unshift({ ...data, created: new Date(data.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) });
   }
 }

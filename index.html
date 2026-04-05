@@ -886,7 +886,7 @@
 // STATE
 // ============================================================
 let assets = [];
-let supabase = null;
+let db = null;
 let currentBriefTab = 'video';
 let currentPage = 'briefs';
 
@@ -897,7 +897,7 @@ async function initSupabase() {
   try {
     const res = await fetch('/api/config');
     const { supabaseUrl, supabaseKey } = await res.json();
-    supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+    db = window.supabase.createClient(supabaseUrl, supabaseKey);
     await loadAssets();
     renderDashboard();
   } catch (err) {
@@ -906,8 +906,8 @@ async function initSupabase() {
 }
 
 async function loadAssets() {
-  if (!supabase) return;
-  const { data, error } = await supabase
+  if (!db) return;
+  const { data, error } = await db
     .from('marketing_assets')
     .select('*')
     .order('created_at', { ascending: false });
@@ -1143,8 +1143,8 @@ Be specific enough that a designer or VA can execute this without a briefing cal
 // ASSET TRACKER
 // ============================================================
 async function saveAsset(asset) {
-  if (!supabase) return;
-  const { data, error } = await supabase
+  if (!db) return;
+  const { data, error } = await db
     .from('marketing_assets')
     .insert([{
       title: asset.title,
@@ -1163,8 +1163,8 @@ async function saveAsset(asset) {
 }
 
 async function updateAsset(id, updates) {
-  if (!supabase) return;
-  await supabase.from('marketing_assets').update(updates).eq('id', id);
+  if (!db) return;
+  await db.from('marketing_assets').update(updates).eq('id', id);
   const asset = assets.find(a => a.id === id);
   if (asset) Object.assign(asset, updates);
 }

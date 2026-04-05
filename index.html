@@ -454,6 +454,190 @@
   .mb-16 { margin-bottom: 16px; }
   .gap-8 { gap: 8px; }
   .w-full { width: 100%; }
+
+  /* ── SMART OUTPUT PANEL ── */
+  .output-panel { display: flex; flex-direction: column; gap: 0; }
+
+  .topic-context {
+    background: var(--blue-pale);
+    border: 1px solid #c5d0f5;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: var(--navy);
+    display: none;
+  }
+  .topic-context strong { font-weight: 600; display: block; margin-bottom: 4px; }
+  .topic-context .angle { color: var(--muted); font-style: italic; margin-top: 6px; }
+
+  .output-section {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    background: white;
+  }
+  .output-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: var(--offwhite);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+  }
+  .output-section-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--navy);
+  }
+  .section-actions { display: flex; gap: 6px; align-items: center; }
+  .section-btn {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    background: white;
+    color: var(--muted);
+    cursor: pointer;
+    font-family: 'Instrument Sans', sans-serif;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .section-btn:hover { color: var(--navy); border-color: var(--navy); }
+  .section-btn.ai { color: var(--blue); border-color: #c5d0f5; background: var(--blue-pale); }
+  .section-btn.ai:hover { background: #d5e0ff; }
+
+  .output-section-body {
+    padding: 14px 16px;
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--ink);
+    white-space: pre-wrap;
+    min-height: 48px;
+    outline: none;
+    font-family: 'Instrument Sans', sans-serif;
+  }
+  .output-section-body[contenteditable="true"] {
+    background: #fffef5;
+    border-top: 2px solid var(--blue);
+  }
+  .output-section-body[contenteditable="true"]:focus {
+    box-shadow: inset 0 0 0 2px rgba(31,64,203,0.15);
+  }
+
+  /* AI ASSISTANT PANEL */
+  .ai-assistant-panel {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-top: 16px;
+    overflow: hidden;
+    display: none;
+  }
+  .ai-assistant-panel.visible { display: block; }
+  .ai-panel-header {
+    padding: 12px 16px;
+    background: var(--navy);
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .ai-panel-close { background: none; border: none; color: rgba(255,255,255,0.6); cursor: pointer; font-size: 18px; line-height: 1; padding: 0; }
+  .ai-panel-close:hover { color: white; }
+  .ai-quick-actions {
+    padding: 12px 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .ai-quick-btn {
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: white;
+    color: var(--ink);
+    cursor: pointer;
+    font-family: 'Instrument Sans', sans-serif;
+    transition: all 0.15s;
+  }
+  .ai-quick-btn:hover { background: var(--blue-pale); border-color: var(--blue); color: var(--blue); }
+  .ai-chat-area { padding: 12px 16px; }
+  .ai-chat-input-row { display: flex; gap: 8px; margin-top: 8px; }
+  .ai-chat-input {
+    flex: 1;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 13px;
+    padding: 9px 13px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    outline: none;
+  }
+  .ai-chat-input:focus { border-color: var(--blue); }
+  .ai-response {
+    background: var(--offwhite);
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--ink);
+    white-space: pre-wrap;
+    margin-top: 10px;
+    display: none;
+    font-family: 'Instrument Sans', sans-serif;
+  }
+  .ai-response.visible { display: block; }
+  .ai-response-actions { display: flex; gap: 8px; margin-top: 10px; }
+
+  /* OVERALL BRIEF ACTIONS */
+  .brief-actions-bar {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    padding: 14px 0 0;
+    border-top: 1px solid var(--border);
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+
+  /* VOICE CHECK BADGE */
+  .voice-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .voice-ok { background: var(--success-pale); color: var(--success); }
+  .voice-warn { background: var(--warn-pale); color: var(--warn); }
+
+  .output-loading-state {
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .output-placeholder {
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 14px;
+    border: 2px dashed var(--border);
+    border-radius: 8px;
+  }
 </style>
 </head>
 <body>
@@ -597,16 +781,60 @@
         </div>
 
         <div>
+          <!-- TOPIC CONTEXT -->
+          <div class="topic-context" id="v-context">
+            <strong id="v-context-title"></strong>
+            <div id="v-context-body"></div>
+            <div class="angle" id="v-context-angle"></div>
+          </div>
+
           <div class="card">
             <div class="card-header">
               <span class="card-title">Generated Brief</span>
               <div class="flex-center gap-8">
-                <button class="copy-btn" onclick="copyOutput('v-output')">Copy</button>
-                <button class="btn btn-sm btn-secondary" onclick="sendToTracker('v-output', 'video')">+ Add to Tracker</button>
+                <span class="voice-badge" id="v-voice-badge" style="display:none"></span>
+                <button class="copy-btn" onclick="copyAllSections('v')">Copy all</button>
+                <button class="btn btn-sm btn-secondary" onclick="openAiPanel('v')">AI Assistant</button>
+                <button class="btn btn-sm btn-primary" onclick="sendToTracker('v-output', 'videmailo')">+ Add to Tracker</button>
               </div>
             </div>
-            <div style="padding:20px">
-              <div class="ai-output loading" id="v-output">Brief will appear here after you click Generate.</div>
+            <div style="padding:16px 20px 20px" id="v-output-container">
+              <div class="output-placeholder" id="v-placeholder">Brief will appear here after you click Generate.</div>
+              <div class="output-panel" id="v-sections" style="display:none"></div>
+              <div class="output-loading-state" id="v-loading" style="display:none">
+                <div style="font-size:24px;margin-bottom:8px">⚡</div>
+                Generating your brief…
+              </div>
+            </div>
+            <!-- hidden raw output for tracker compatibility -->
+            <textarea id="v-output" style="display:none"></textarea>
+          </div>
+          
+          <!-- AI ASSISTANT PANEL -->
+          <div class="ai-assistant-panel" id="v-ai-panel">
+            <div class="ai-panel-header">
+              <span>AI Assistant</span>
+              <button class="ai-panel-close" onclick="closeAiPanel('v')">×</button>
+            </div>
+            <div class="ai-quick-actions">
+              <button class="ai-quick-btn" onclick="quickAction('v', 'Make the hook stronger — give me 3 alternative hooks that are more direct and stop the scroll faster')">3 hook alternatives</button>
+              <button class="ai-quick-btn" onclick="quickAction('v', 'Check the voice — read this and identify any lines that sound like generic AI content or marketing speak instead of John Schrup. List each flagged line and suggest a rewrite.')">Check voice</button>
+              <button class="ai-quick-btn" onclick="quickAction('v', 'Tighten this — cut 20% without losing meaning. Be ruthless. Every sentence must earn its place.')">Tighten 20%</button>
+              <button class="ai-quick-btn" onclick="quickAction('v', 'Rewrite the CTA — make it more specific and direct. What exactly should they do, when, and why now.')">Stronger CTA</button>
+              <button class="ai-quick-btn" onclick="quickAction('v', 'Check compliance — flag any claims that could be interpreted as financial performance guarantees, investment advice, or promises about job search outcomes that we cannot verify.')">Compliance check</button>
+              <button class="ai-quick-btn" onclick="quickAction('v', 'Adapt for TikTok — reformat this for a 15-30 second TikTok. Hook in 3 seconds. Direct camera. Bold and fast.')">→ TikTok version</button>
+              <button class="ai-quick-btn" onclick="quickAction('v', 'Write the social caption — take this content and write a LinkedIn caption that stands alone, drives to workshop registration, John voice.')">Write caption</button>
+            </div>
+            <div class="ai-chat-area">
+              <div class="ai-response" id="v-ai-response"></div>
+              <div class="ai-response-actions" id="v-ai-response-actions" style="display:none">
+                <button class="btn btn-sm btn-primary" onclick="applyAiResponse('v')">Apply to brief</button>
+                <button class="btn btn-sm btn-secondary" onclick="clearAiResponse('v')">Discard</button>
+              </div>
+              <div class="ai-chat-input-row">
+                <input class="ai-chat-input" id="v-ai-input" placeholder="Ask anything — make the hook more aggressive, remove the third paragraph, add a specific stat..." onkeydown="if(event.key==='Enter')sendAiMessage('v')">
+                <button class="btn btn-primary btn-sm" onclick="sendAiMessage('v')">Ask</button>
+              </div>
             </div>
           </div>
         </div>
@@ -700,16 +928,60 @@
           </div>
         </div>
         <div>
+          <!-- TOPIC CONTEXT -->
+          <div class="topic-context" id="s-context">
+            <strong id="s-context-title"></strong>
+            <div id="s-context-body"></div>
+            <div class="angle" id="s-context-angle"></div>
+          </div>
+
           <div class="card">
             <div class="card-header">
               <span class="card-title">Generated Posts</span>
               <div class="flex-center gap-8">
-                <button class="copy-btn" onclick="copyOutput('s-output')">Copy</button>
-                <button class="btn btn-sm btn-secondary" onclick="sendToTracker('s-output', 'social')">+ Add to Tracker</button>
+                <span class="voice-badge" id="s-voice-badge" style="display:none"></span>
+                <button class="copy-btn" onclick="copyAllSections('s')">Copy all</button>
+                <button class="btn btn-sm btn-secondary" onclick="openAiPanel('s')">AI Assistant</button>
+                <button class="btn btn-sm btn-primary" onclick="sendToTracker('s-output', 'social')">+ Add to Tracker</button>
               </div>
             </div>
-            <div style="padding:20px">
-              <div class="ai-output loading" id="s-output">Posts will appear here after you click Generate.</div>
+            <div style="padding:16px 20px 20px" id="s-output-container">
+              <div class="output-placeholder" id="s-placeholder">Brief will appear here after you click Generate.</div>
+              <div class="output-panel" id="s-sections" style="display:none"></div>
+              <div class="output-loading-state" id="s-loading" style="display:none">
+                <div style="font-size:24px;margin-bottom:8px">⚡</div>
+                Generating your brief…
+              </div>
+            </div>
+            <!-- hidden raw output for tracker compatibility -->
+            <textarea id="s-output" style="display:none"></textarea>
+          </div>
+          
+          <!-- AI ASSISTANT PANEL -->
+          <div class="ai-assistant-panel" id="s-ai-panel">
+            <div class="ai-panel-header">
+              <span>AI Assistant</span>
+              <button class="ai-panel-close" onclick="closeAiPanel('s')">×</button>
+            </div>
+            <div class="ai-quick-actions">
+              <button class="ai-quick-btn" onclick="quickAction('s', 'Make the hook stronger — give me 3 alternative hooks that are more direct and stop the scroll faster')">3 hook alternatives</button>
+              <button class="ai-quick-btn" onclick="quickAction('s', 'Check the voice — read this and identify any lines that sound like generic AI content or marketing speak instead of John Schrup. List each flagged line and suggest a rewrite.')">Check voice</button>
+              <button class="ai-quick-btn" onclick="quickAction('s', 'Tighten this — cut 20% without losing meaning. Be ruthless. Every sentence must earn its place.')">Tighten 20%</button>
+              <button class="ai-quick-btn" onclick="quickAction('s', 'Rewrite the CTA — make it more specific and direct. What exactly should they do, when, and why now.')">Stronger CTA</button>
+              <button class="ai-quick-btn" onclick="quickAction('s', 'Check compliance — flag any claims that could be interpreted as financial performance guarantees, investment advice, or promises about job search outcomes that we cannot verify.')">Compliance check</button>
+              <button class="ai-quick-btn" onclick="quickAction('s', 'Adapt for TikTok — reformat this for a 15-30 second TikTok. Hook in 3 seconds. Direct camera. Bold and fast.')">→ TikTok version</button>
+              <button class="ai-quick-btn" onclick="quickAction('s', 'Write the social caption — take this content and write a LinkedIn caption that stands alone, drives to workshop registration, John voice.')">Write caption</button>
+            </div>
+            <div class="ai-chat-area">
+              <div class="ai-response" id="s-ai-response"></div>
+              <div class="ai-response-actions" id="s-ai-response-actions" style="display:none">
+                <button class="btn btn-sm btn-primary" onclick="applyAiResponse('s')">Apply to brief</button>
+                <button class="btn btn-sm btn-secondary" onclick="clearAiResponse('s')">Discard</button>
+              </div>
+              <div class="ai-chat-input-row">
+                <input class="ai-chat-input" id="s-ai-input" placeholder="Ask anything — make the hook more aggressive, remove the third paragraph, add a specific stat..." onkeydown="if(event.key==='Enter')sendAiMessage('s')">
+                <button class="btn btn-primary btn-sm" onclick="sendAiMessage('s')">Ask</button>
+              </div>
             </div>
           </div>
         </div>
@@ -757,16 +1029,60 @@
           </div>
         </div>
         <div>
+          <!-- TOPIC CONTEXT -->
+          <div class="topic-context" id="e-context">
+            <strong id="e-context-title"></strong>
+            <div id="e-context-body"></div>
+            <div class="angle" id="e-context-angle"></div>
+          </div>
+
           <div class="card">
             <div class="card-header">
               <span class="card-title">Generated Email</span>
               <div class="flex-center gap-8">
-                <button class="copy-btn" onclick="copyOutput('e-output')">Copy</button>
-                <button class="btn btn-sm btn-secondary" onclick="sendToTracker('e-output', 'email')">+ Add to Tracker</button>
+                <span class="voice-badge" id="e-voice-badge" style="display:none"></span>
+                <button class="copy-btn" onclick="copyAllSections('e')">Copy all</button>
+                <button class="btn btn-sm btn-secondary" onclick="openAiPanel('e')">AI Assistant</button>
+                <button class="btn btn-sm btn-primary" onclick="sendToTracker('e-output', 'email')">+ Add to Tracker</button>
               </div>
             </div>
-            <div style="padding:20px">
-              <div class="ai-output loading" id="e-output">Email will appear here after you click Generate.</div>
+            <div style="padding:16px 20px 20px" id="e-output-container">
+              <div class="output-placeholder" id="e-placeholder">Brief will appear here after you click Generate.</div>
+              <div class="output-panel" id="e-sections" style="display:none"></div>
+              <div class="output-loading-state" id="e-loading" style="display:none">
+                <div style="font-size:24px;margin-bottom:8px">⚡</div>
+                Generating your brief…
+              </div>
+            </div>
+            <!-- hidden raw output for tracker compatibility -->
+            <textarea id="e-output" style="display:none"></textarea>
+          </div>
+          
+          <!-- AI ASSISTANT PANEL -->
+          <div class="ai-assistant-panel" id="e-ai-panel">
+            <div class="ai-panel-header">
+              <span>AI Assistant</span>
+              <button class="ai-panel-close" onclick="closeAiPanel('e')">×</button>
+            </div>
+            <div class="ai-quick-actions">
+              <button class="ai-quick-btn" onclick="quickAction('e', 'Make the hook stronger — give me 3 alternative hooks that are more direct and stop the scroll faster')">3 hook alternatives</button>
+              <button class="ai-quick-btn" onclick="quickAction('e', 'Check the voice — read this and identify any lines that sound like generic AI content or marketing speak instead of John Schrup. List each flagged line and suggest a rewrite.')">Check voice</button>
+              <button class="ai-quick-btn" onclick="quickAction('e', 'Tighten this — cut 20% without losing meaning. Be ruthless. Every sentence must earn its place.')">Tighten 20%</button>
+              <button class="ai-quick-btn" onclick="quickAction('e', 'Rewrite the CTA — make it more specific and direct. What exactly should they do, when, and why now.')">Stronger CTA</button>
+              <button class="ai-quick-btn" onclick="quickAction('e', 'Check compliance — flag any claims that could be interpreted as financial performance guarantees, investment advice, or promises about job search outcomes that we cannot verify.')">Compliance check</button>
+              <button class="ai-quick-btn" onclick="quickAction('e', 'Adapt for TikTok — reformat this for a 15-30 second TikTok. Hook in 3 seconds. Direct camera. Bold and fast.')">→ TikTok version</button>
+              <button class="ai-quick-btn" onclick="quickAction('e', 'Write the social caption — take this content and write a LinkedIn caption that stands alone, drives to workshop registration, John voice.')">Write caption</button>
+            </div>
+            <div class="ai-chat-area">
+              <div class="ai-response" id="e-ai-response"></div>
+              <div class="ai-response-actions" id="e-ai-response-actions" style="display:none">
+                <button class="btn btn-sm btn-primary" onclick="applyAiResponse('e')">Apply to brief</button>
+                <button class="btn btn-sm btn-secondary" onclick="clearAiResponse('e')">Discard</button>
+              </div>
+              <div class="ai-chat-input-row">
+                <input class="ai-chat-input" id="e-ai-input" placeholder="Ask anything — make the hook more aggressive, remove the third paragraph, add a specific stat..." onkeydown="if(event.key==='Enter')sendAiMessage('e')">
+                <button class="btn btn-primary btn-sm" onclick="sendAiMessage('e')">Ask</button>
+              </div>
             </div>
           </div>
         </div>
@@ -820,16 +1136,60 @@
           </div>
         </div>
         <div>
+          <!-- TOPIC CONTEXT -->
+          <div class="topic-context" id="vis-context">
+            <strong id="vis-context-title"></strong>
+            <div id="vis-context-body"></div>
+            <div class="angle" id="vis-context-angle"></div>
+          </div>
+
           <div class="card">
             <div class="card-header">
               <span class="card-title">Generated Brief</span>
               <div class="flex-center gap-8">
-                <button class="copy-btn" onclick="copyOutput('vis-output')">Copy</button>
-                <button class="btn btn-sm btn-secondary" onclick="sendToTracker('vis-output', 'visual')">+ Add to Tracker</button>
+                <span class="voice-badge" id="vis-voice-badge" style="display:none"></span>
+                <button class="copy-btn" onclick="copyAllSections('vis')">Copy all</button>
+                <button class="btn btn-sm btn-secondary" onclick="openAiPanel('vis')">AI Assistant</button>
+                <button class="btn btn-sm btn-primary" onclick="sendToTracker('vis-output', 'videmailoisocial')">+ Add to Tracker</button>
               </div>
             </div>
-            <div style="padding:20px">
-              <div class="ai-output loading" id="vis-output">Brief will appear here after you click Generate.</div>
+            <div style="padding:16px 20px 20px" id="vis-output-container">
+              <div class="output-placeholder" id="vis-placeholder">Brief will appear here after you click Generate.</div>
+              <div class="output-panel" id="vis-sections" style="display:none"></div>
+              <div class="output-loading-state" id="vis-loading" style="display:none">
+                <div style="font-size:24px;margin-bottom:8px">⚡</div>
+                Generating your brief…
+              </div>
+            </div>
+            <!-- hidden raw output for tracker compatibility -->
+            <textarea id="vis-output" style="display:none"></textarea>
+          </div>
+          
+          <!-- AI ASSISTANT PANEL -->
+          <div class="ai-assistant-panel" id="vis-ai-panel">
+            <div class="ai-panel-header">
+              <span>AI Assistant</span>
+              <button class="ai-panel-close" onclick="closeAiPanel('vis')">×</button>
+            </div>
+            <div class="ai-quick-actions">
+              <button class="ai-quick-btn" onclick="quickAction('vis', 'Make the hook stronger — give me 3 alternative hooks that are more direct and stop the scroll faster')">3 hook alternatives</button>
+              <button class="ai-quick-btn" onclick="quickAction('vis', 'Check the voice — read this and identify any lines that sound like generic AI content or marketing speak instead of John Schrup. List each flagged line and suggest a rewrite.')">Check voice</button>
+              <button class="ai-quick-btn" onclick="quickAction('vis', 'Tighten this — cut 20% without losing meaning. Be ruthless. Every sentence must earn its place.')">Tighten 20%</button>
+              <button class="ai-quick-btn" onclick="quickAction('vis', 'Rewrite the CTA — make it more specific and direct. What exactly should they do, when, and why now.')">Stronger CTA</button>
+              <button class="ai-quick-btn" onclick="quickAction('vis', 'Check compliance — flag any claims that could be interpreted as financial performance guarantees, investment advice, or promises about job search outcomes that we cannot verify.')">Compliance check</button>
+              <button class="ai-quick-btn" onclick="quickAction('vis', 'Adapt for TikTok — reformat this for a 15-30 second TikTok. Hook in 3 seconds. Direct camera. Bold and fast.')">→ TikTok version</button>
+              <button class="ai-quick-btn" onclick="quickAction('vis', 'Write the social caption — take this content and write a LinkedIn caption that stands alone, drives to workshop registration, John voice.')">Write caption</button>
+            </div>
+            <div class="ai-chat-area">
+              <div class="ai-response" id="vis-ai-response"></div>
+              <div class="ai-response-actions" id="vis-ai-response-actions" style="display:none">
+                <button class="btn btn-sm btn-primary" onclick="applyAiResponse('vis')">Apply to brief</button>
+                <button class="btn btn-sm btn-secondary" onclick="clearAiResponse('vis')">Discard</button>
+              </div>
+              <div class="ai-chat-input-row">
+                <input class="ai-chat-input" id="vis-ai-input" placeholder="Ask anything — make the hook more aggressive, remove the third paragraph, add a specific stat..." onkeydown="if(event.key==='Enter')sendAiMessage('vis')">
+                <button class="btn btn-primary btn-sm" onclick="sendAiMessage('vis')">Ask</button>
+              </div>
             </div>
           </div>
         </div>
@@ -1180,18 +1540,334 @@ The world's largest outplacement firm: 1.7/5 participant rating. FST: 5.0/5.
 "Built for the participant, not the person signing the invoice."`;
 
 // ============================================================
+// TOPIC CONTEXT DEFINITIONS
+// ============================================================
+const TOPIC_CONTEXTS = {
+  '1% Insight': { title: 'The 1% Insight (Professional Amnesia)', body: 'Executives have accomplished so much over 25-35 year careers that individual achievements blur. They discount adjacent experience. They forget how good they are. AI is better at seeing their full qualification than they are.', angle: 'Suggested angle: Speak directly to someone who just said "I'm not qualified for that" — and show them they are.' },
+  'Resume Redefinition': { title: 'The Resume Redefinition', body: 'A resume is NOT a career history. It is your explanation to the hiring company of why you are a perfect fit for their specific needs, using their words. Most executives arrive with a fundamentally flawed definition that sabotages everything.', angle: 'Suggested angle: Open with the wrong definition, then give the right one. Watch it land.' },
+  'Interpreter Mandate': { title: 'The Interpreter Mandate', body: 'You must become the interpreter of your past experience. Nobody figures out on their own how your 2018 work maps to what they need today. The translation gap is the most common and most fixable failure in executive resumes.', angle: 'Suggested angle: Show a before/after — duties vs. interpreted outcome for the same role.' },
+  'Benchmark Candidate': { title: 'The Benchmark Candidate', body: 'For every job targeted, we construct the profile of the ideal candidate. Then we map the executive against that benchmark. The goal: position them not just as qualified, but as the standard everyone else is measured against.', angle: 'Suggested angle: Stop applying, start being the standard. The reframe is everything.' },
+  'Hiring Manager Gauntlet': { title: 'The Hiring Manager Gauntlet', body: 'Every resume must survive review from a hypercritical hiring manager actively looking for reasons to reject it. Hidden gaps, language mismatches, credibility questions. Done when a hostile reviewer cannot find a reason to say no.', angle: 'Suggested angle: Most people submit when they're satisfied. You should submit when your worst critic can't find a flaw.' },
+  'ATS Reality': { title: 'ATS Reality (The 35% Problem)', body: 'Average resume scores 35% match against job descriptions. You need 90%+ to advance. If you're not repeating back exactly what they want to hear in their exact terminology, you are invisible before any human sees you.', angle: 'Suggested angle: Lead with the 35% stat — most people have no idea. Then explain what 90% actually means.' },
+  'Hidden Job Market': { title: 'The Hidden Job Market (80%)', body: '80% of companies use LinkedIn's Recruiter seat — not job boards — to source executive candidates. The jobs on LinkedIn Jobs and Indeed represent roughly 20% of the market. The other 80% is happening in searches you don't appear in.', angle: 'Suggested angle: You're fishing in the wrong pond. The fish are somewhere else entirely.' },
+  'LinkedIn Invisibility': { title: 'LinkedIn Invisibility', body: 'A dormant profile is a dead profile. LinkedIn deprioritizes dormant users in recruiter search results. Most executives arrive with zero engagement and have been effectively invisible for years.', angle: 'Suggested angle: The problem isn't your resume. It's that nobody can find you.' },
+  'Google Job Board': { title: 'The Google Job Board (Buried in Plain Sight)', body: 'Google absorbed its job board into Search itself. It scrapes everything — job boards, corporate career pages, staffing agencies. Almost nobody knows it's there. Search a job title on Google and look for the filter bar.', angle: 'Suggested angle: "There's a job board almost nobody is using. Here's where it's hiding."' },
+  'Three Ways Power Move': { title: 'The Three Ways Power Move', body: 'Identify the hiring manager. Identify the primary problem they're hiring for. Send them three specific ways you'd attack that problem — as a freebie, before asking for anything. Close with: "Let me know if you'd like to have a further conversation." Probably the single most effective job search tactic in the methodology.', angle: 'Suggested angle: Most candidates send "I'm interested." You send a custom strategic brief. Show the contrast.' },
+  'Rule of Four': { title: 'The Rule of Four', body: 'For every application: network to four people at the company — HR contact, recruiter, likely hiring manager, functional leader. Then track and follow up at 3-5 days, again at 5-7 days. One outreach attempt is noise. Three catches the vast majority of people who missed the first.', angle: 'Suggested angle: "Most people apply and wait. Here's what our clients do instead."' },
+  '3-of-6 Rule': { title: 'The 3-of-6 Rule (Interview)', body: 'In every interview conversation, deliver 3 specific examples showing how your recent experience addresses 3 of the top 6 role requirements. Tested with 40+ candidates: 8 out of 10 advance to the next round. The success rate is that consistent.', angle: 'Suggested angle: Lead with the 8/10 stat — nobody believes it until you explain exactly why it works.' },
+  '30-Minute Rewrite': { title: 'The 30-Minute Rewrite Standard', body: 'A full resume rewrite for a specific position must be completable in 30 minutes or less. Not tweaked. Not keyword-sprinkled. Fully rewritten. For every application. If it takes longer, the candidate will never sustain the practice.', angle: 'Suggested angle: Most executives spend 3-4 hours on a resume. Our clients spend 30 minutes and get better results.' },
+  'Age Discrimination': { title: 'Age Discrimination — The Truth', body: 'AARP data: ~95% of people 50+ face age discrimination at some point. But when your resume scores 28-32%, no human has ever seen you. You can't be age-discriminated against by someone who doesn't know you exist. Fix visibility first.', angle: 'Suggested angle: Name the thing everyone is afraid to say — then reframe it with agency.' },
+  'Designed Retirement': { title: 'Designed Retirement (Financial — Compliance Required)', body: 'Floor (guaranteed income covering essential expenses) + Guard (institutional tactical management, 100% cash capability) + Growth Engine (stay appropriately aggressive). Safety of an 80-year-old with growth of a 30-year-old.', angle: 'Suggested angle: Most people have a 401(k) balance. That's not a plan. It's a hope.' },
+  'Workshop': { title: 'The Workshop Invitation', body: 'Free Wednesday 11am CT workshop via GoToWebinar. No pitch. No gimmick. Executives walk away with a framework they can execute immediately. 5.0 stars, 174 reviews, clients at IBM, Google, Boeing, DoD.', angle: 'Suggested angle: Drive to registration. One CTA. Make it feel like the obvious next step.' },
+};
+
+function showTopicContext(typeId, topicValue) {
+  const ctx = document.getElementById(typeId + '-context');
+  if (!ctx) return;
+  
+  // Find matching context by checking if topic value contains a key
+  let matched = null;
+  for (const [key, val] of Object.entries(TOPIC_CONTEXTS)) {
+    if (topicValue.toLowerCase().includes(key.toLowerCase().replace(/[()]/g, '').split(' ')[0])) {
+      matched = val;
+      break;
+    }
+  }
+  
+  if (matched) {
+    document.getElementById(typeId + '-context-title').textContent = matched.title;
+    document.getElementById(typeId + '-context-body').textContent = matched.body;
+    document.getElementById(typeId + '-context-angle').textContent = matched.angle;
+    ctx.style.display = 'block';
+  } else {
+    ctx.style.display = 'none';
+  }
+}
+
+// Hook topic selects to context display
+document.addEventListener('DOMContentLoaded', () => {
+  const topicSel = document.getElementById('v-topic');
+  if (topicSel) {
+    topicSel.addEventListener('change', () => showTopicContext('v', topicSel.value));
+  }
+});
+
+// ============================================================
+// SECTION PARSING — split AI output into labeled sections
+// ============================================================
+function parseIntoSections(text, type) {
+  // For video, split on numbered headings like "1. CONCEPT" or "HOOK" etc.
+  const sectionPatterns = [
+    /^\d+\.\s+([A-Z][A-Z\s\/\-]+)$/m,
+    /^([A-Z][A-Z\s\/\-]{3,})$/m,
+    /^([A-Z][A-Z\s\/\-]+):/m,
+  ];
+  
+  // Try to find section headers
+  const lines = text.split('\n');
+  const sections = [];
+  let currentSection = null;
+  let currentLines = [];
+  
+  for (const line of lines) {
+    const isSectionHeader = 
+      /^\d+\.\s+[A-Z][A-Z\s\/\-—]+$/.test(line.trim()) ||
+      /^[A-Z][A-Z\s\/\-—]{4,}:?$/.test(line.trim()) ||
+      /^(CONCEPT|HOOK|SCRIPT|OUTLINE|B-ROLL|VISUAL|CTA|CALL TO ACTION|PRODUCTION|THUMBNAIL|SUBJECT|PREVIEW|POST \d|EMAIL BODY|HEADLINE|COPY|CANVA|SIZE|NOTES|PLATFORM|FORMAT):?\s*$/i.test(line.trim());
+    
+    if (isSectionHeader && line.trim().length > 0) {
+      if (currentSection !== null) {
+        sections.push({ label: currentSection, content: currentLines.join('\n').trim() });
+      }
+      currentSection = line.trim().replace(/^\d+\.\s+/, '').replace(/:$/, '');
+      currentLines = [];
+    } else {
+      currentLines.push(line);
+    }
+  }
+  
+  if (currentSection !== null && currentLines.length > 0) {
+    sections.push({ label: currentSection, content: currentLines.join('\n').trim() });
+  }
+  
+  // If no sections found, return as single block
+  if (sections.length === 0) {
+    return [{ label: 'Content', content: text.trim() }];
+  }
+  
+  return sections.filter(s => s.content.trim().length > 0);
+}
+
+function renderSections(typeId, text) {
+  const container = document.getElementById(typeId + '-sections');
+  const placeholder = document.getElementById(typeId + '-placeholder');
+  const loading = document.getElementById(typeId + '-loading');
+  const rawOutput = document.getElementById(typeId + '-output');
+  
+  if (placeholder) placeholder.style.display = 'none';
+  if (loading) loading.style.display = 'none';
+  if (container) container.style.display = 'flex';
+  if (rawOutput) rawOutput.value = text;
+  
+  const type = typeId === 'v' ? 'video' : typeId === 's' ? 'social' : typeId === 'e' ? 'email' : 'visual';
+  const sections = parseIntoSections(text, type);
+  
+  container.innerHTML = sections.map((sec, i) => `
+    <div class="output-section" id="${typeId}-sec-${i}">
+      <div class="output-section-header">
+        <span class="output-section-label">${sec.label}</span>
+        <div class="section-actions">
+          <button class="section-btn ai" onclick="askAboutSection('${typeId}', ${i}, '${sec.label}')">AI Help</button>
+          <button class="section-btn" onclick="toggleEdit('${typeId}', ${i})">Edit</button>
+          <button class="section-btn" onclick="regenSection('${typeId}', ${i}, '${sec.label}')">↻ Rewrite</button>
+        </div>
+      </div>
+      <div class="output-section-body" id="${typeId}-sec-body-${i}" contenteditable="false" onblur="syncRawOutput('${typeId}')">${escapeHtml(sec.content)}</div>
+    </div>
+  `).join('');
+}
+
+function escapeHtml(text) {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function toggleEdit(typeId, idx) {
+  const body = document.getElementById(typeId + '-sec-body-' + idx);
+  const isEditing = body.contentEditable === 'true';
+  body.contentEditable = isEditing ? 'false' : 'true';
+  if (!isEditing) {
+    body.focus();
+    // Move cursor to end
+    const range = document.createRange();
+    range.selectNodeContents(body);
+    range.collapse(false);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  } else {
+    syncRawOutput(typeId);
+  }
+}
+
+function syncRawOutput(typeId) {
+  const container = document.getElementById(typeId + '-sections');
+  if (!container) return;
+  const bodies = container.querySelectorAll('.output-section-body');
+  const labels = container.querySelectorAll('.output-section-label');
+  let full = '';
+  bodies.forEach((body, i) => {
+    const label = labels[i] ? labels[i].textContent : '';
+    full += label + '\n' + body.innerText + '\n\n';
+  });
+  const raw = document.getElementById(typeId + '-output');
+  if (raw) raw.value = full.trim();
+}
+
+function copyAllSections(typeId) {
+  syncRawOutput(typeId);
+  const raw = document.getElementById(typeId + '-output');
+  if (!raw) return;
+  navigator.clipboard.writeText(raw.value).then(() => {
+    const btn = event.target;
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy all', 1500);
+  });
+}
+
+// ============================================================
+// AI ASSISTANT PANEL
+// ============================================================
+function openAiPanel(typeId) {
+  const panel = document.getElementById(typeId + '-ai-panel');
+  if (panel) panel.classList.add('visible');
+}
+
+function closeAiPanel(typeId) {
+  const panel = document.getElementById(typeId + '-ai-panel');
+  if (panel) panel.classList.remove('visible');
+}
+
+function askAboutSection(typeId, idx, label) {
+  openAiPanel(typeId);
+  const input = document.getElementById(typeId + '-ai-input');
+  if (input) {
+    input.value = `Improve the ${label} section — make it stronger, more specific, and more authentically in John's voice.`;
+    input.focus();
+  }
+}
+
+async function quickAction(typeId, instruction) {
+  await sendAiRequest(typeId, instruction);
+}
+
+async function sendAiMessage(typeId) {
+  const input = document.getElementById(typeId + '-ai-input');
+  if (!input || !input.value.trim()) return;
+  await sendAiRequest(typeId, input.value.trim());
+  input.value = '';
+}
+
+async function sendAiRequest(typeId, instruction) {
+  syncRawOutput(typeId);
+  const currentContent = document.getElementById(typeId + '-output')?.value || '';
+  const responseDiv = document.getElementById(typeId + '-ai-response');
+  const actionsDiv = document.getElementById(typeId + '-ai-response-actions');
+  
+  if (!responseDiv) return;
+  responseDiv.classList.add('visible');
+  responseDiv.textContent = 'Working…';
+  if (actionsDiv) actionsDiv.style.display = 'none';
+  
+  try {
+    const res = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        system: SYSTEM_PROMPT,
+        max_tokens: 1500,
+        messages: [{
+          role: 'user',
+          content: `Here is the current brief:\n\n${currentContent}\n\n---\n\nInstruction: ${instruction}\n\nProvide your response directly. If rewriting a section, provide just that section's content. If giving alternatives, number them clearly.`
+        }]
+      })
+    });
+    const data = await res.json();
+    const text = data.content?.[0]?.text || 'Could not generate response.';
+    responseDiv.textContent = text;
+    if (actionsDiv) actionsDiv.style.display = 'flex';
+  } catch (err) {
+    responseDiv.textContent = 'Error — check your connection and try again.';
+  }
+}
+
+function applyAiResponse(typeId) {
+  const response = document.getElementById(typeId + '-ai-response')?.textContent;
+  if (!response || response === 'Working…') return;
+  
+  // Append to end of sections as a new "AI Suggestion" section
+  const container = document.getElementById(typeId + '-sections');
+  if (!container) return;
+  
+  const idx = container.querySelectorAll('.output-section').length;
+  const div = document.createElement('div');
+  div.className = 'output-section';
+  div.id = typeId + '-sec-' + idx;
+  div.innerHTML = `
+    <div class="output-section-header">
+      <span class="output-section-label">AI REVISION</span>
+      <div class="section-actions">
+        <button class="section-btn" onclick="toggleEdit('${typeId}', ${idx})">Edit</button>
+        <button class="section-btn" style="color:var(--danger)" onclick="this.closest('.output-section').remove();syncRawOutput('${typeId}')">Remove</button>
+      </div>
+    </div>
+    <div class="output-section-body" id="${typeId}-sec-body-${idx}" contenteditable="false" onblur="syncRawOutput('${typeId}')">${escapeHtml(response)}</div>
+  `;
+  container.appendChild(div);
+  syncRawOutput(typeId);
+  clearAiResponse(typeId);
+  div.scrollIntoView({ behavior: 'smooth' });
+}
+
+function clearAiResponse(typeId) {
+  const responseDiv = document.getElementById(typeId + '-ai-response');
+  const actionsDiv = document.getElementById(typeId + '-ai-response-actions');
+  if (responseDiv) { responseDiv.textContent = ''; responseDiv.classList.remove('visible'); }
+  if (actionsDiv) actionsDiv.style.display = 'none';
+}
+
+async function regenSection(typeId, idx, label) {
+  const body = document.getElementById(typeId + '-sec-body-' + idx);
+  if (!body) return;
+  
+  const currentText = body.innerText;
+  body.textContent = 'Rewriting…';
+  
+  try {
+    syncRawOutput(typeId);
+    const fullContent = document.getElementById(typeId + '-output')?.value || '';
+    const res = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        system: SYSTEM_PROMPT,
+        max_tokens: 800,
+        messages: [{
+          role: 'user',
+          content: `Here is the full brief:\n\n${fullContent}\n\n---\n\nRewrite ONLY the "${label}" section. Make it stronger, more specific, more authentically in John Schrup's voice. Return only the rewritten section content, no label.`
+        }]
+      })
+    });
+    const data = await res.json();
+    const text = data.content?.[0]?.text || currentText;
+    body.textContent = text;
+    syncRawOutput(typeId);
+  } catch (err) {
+    body.textContent = currentText;
+  }
+}
+
+// ============================================================
 // BRIEF GENERATION
 // ============================================================
 async function generateBrief(type) {
-  const btnId = type === 'video' ? 'v-btn' : type === 'social' ? 's-btn' : type === 'email' ? 'e-btn' : 'vis-btn';
-  const outputId = type === 'video' ? 'v-output' : type === 'social' ? 's-output' : type === 'email' ? 'e-output' : 'vis-output';
+  const typeId = type === 'video' ? 'v' : type === 'social' ? 's' : type === 'email' ? 'e' : 'vis';
+  const btnId = typeId + '-btn';
   const btn = document.getElementById(btnId);
-  const output = document.getElementById(outputId);
+
+  // Show loading state
+  const placeholder = document.getElementById(typeId + '-placeholder');
+  const sections = document.getElementById(typeId + '-sections');
+  const loading = document.getElementById(typeId + '-loading');
+  if (placeholder) placeholder.style.display = 'none';
+  if (sections) sections.style.display = 'none';
+  if (loading) loading.style.display = 'block';
 
   btn.classList.add('loading');
   btn.disabled = true;
-  output.classList.add('loading');
-  output.textContent = 'Generating…';
 
   let prompt = '';
 
@@ -1201,61 +1877,60 @@ async function generateBrief(type) {
     const topic = document.getElementById('v-topic').value;
     const hook = document.getElementById('v-hook').value;
     const notes = document.getElementById('v-notes').value;
-    const platformInstructions = format.includes('TikTok') 
-      ? `PLATFORM: TikTok. Hook must land in the FIRST 3 SECONDS or viewers scroll. Use pattern interrupt — unexpected opening, bold statement, direct camera address. Text overlays on screen throughout. No polished corporate feel. Authenticity beats production value. First frame is everything. Script should feel like someone just grabbed their phone and started talking because they couldn't not say this.`
-      : format.includes('Instagram Reel') || format.includes('YouTube Short')
-      ? `PLATFORM: Instagram Reel / YouTube Short. Hook in 3 seconds. Vertical format. Slightly more produced than TikTok but still direct and fast-paced. Bold text overlays. Caption should standalone without audio.`
-      : format.includes('LinkedIn')
-      ? `PLATFORM: LinkedIn. Professional but direct. Thought leadership angle. Can be horizontal or vertical. Slightly slower pace than social reels — viewers expect more substance. Open with a specific observation or counterintuitive claim, not a greeting.`
-      : format.includes('Facebook')
-      ? `PLATFORM: Facebook. Community and story-driven. Slightly longer format acceptable. Captions essential — 85% watch without sound. Emotional resonance matters here — connect to the audience's real experience.`
-      : `PLATFORM: YouTube. Deep educational content. Chapter markers in description. SEO-optimized title. Viewers opted in for depth — give it to them. Don't pad, but don't rush.`;
 
-    prompt = `Generate a complete video production brief for the following:
+    const platformInstructions = format.includes('TikTok') 
+      ? `PLATFORM: TikTok. Hook must land in the FIRST 3 SECONDS. Pattern interrupt — unexpected opening, bold statement, direct camera address. Text overlays throughout. No polished corporate feel. Authenticity beats production value. First frame is everything. Script should feel like someone grabbed their phone because they couldn't not say this.`
+      : format.includes('Instagram Reel') || format.includes('YouTube Short')
+      ? `PLATFORM: Instagram Reel / YouTube Short. Hook in 3 seconds. Vertical format. Bold text overlays. Caption should standalone without audio. Slightly more produced than TikTok but still direct and fast.`
+      : format.includes('LinkedIn')
+      ? `PLATFORM: LinkedIn. Professional but direct. Thought leadership angle. Open with a specific observation or counterintuitive claim, not a greeting. Viewers expect more substance — give it to them without padding.`
+      : format.includes('Facebook')
+      ? `PLATFORM: Facebook. Community and story-driven. Captions essential — 85% watch without sound. Emotional resonance matters — connect to the audience's real experience.`
+      : `PLATFORM: YouTube. Deep educational content. SEO-optimized. Chapter markers in description. Viewers opted in for depth — don't pad, but don't rush.`;
+
+    prompt = `Generate a complete video production brief.
 
 FORMAT: ${format}
 BRAND: ${brand}
 TOPIC/FRAMEWORK: ${topic}
 HOOK STYLE: ${hook}
-ADDITIONAL NOTES: ${notes || 'None'}
+ADDITIONAL NOTES: ${notes || 'None — generate a complete brief based on the selections above'}
 
 ${platformInstructions}
 
-VOICE ANCHORS — John's authentic voice sounds like this:
+VOICE ANCHORS — sounds like:
 ✓ "I know that. But it's not in your resume."
-✓ "Hope is not a strategy."  
+✓ "Hope is not a strategy."
 ✓ "You are invisible in a stack of 300. Submitting to more stacks of 300 doesn't help."
-✓ "8 precisely targeted applications will outperform 100 generic ones. Every time."
-✓ "A dormant profile is a dead profile."
-✗ NEVER: "game-changing", "excited to share", "empower", "innovative solution", "unlock your potential"
+✗ NEVER: "game-changing", "excited to share", "empower", "innovative solution"
 
-THE BRIEF MUST INCLUDE:
+THE BRIEF MUST INCLUDE THESE LABELED SECTIONS:
 
-1. CONCEPT
-What this video is about and exactly why it stops this specific audience (executives 45-65, unemployed 4 months on average, applied to hundreds of positions with silence, wary and skeptical).
+CONCEPT
+What this video is about and exactly why it stops executives 45-65 who have applied to hundreds of positions with silence.
 
-2. HOOK — FIRST 3 SECONDS
-Exact words or action. This is the most important part. If it doesn't stop the scroll, nothing else matters.
+HOOK
+First 3 seconds. Exact words or action. Most important part of the brief.
 
-3. SCRIPT OUTLINE
+SCRIPT OUTLINE
 Beat-by-beat with timing. Every beat serves a purpose.
 
-4. FULL SCRIPT
-Every word John says, in his voice. Spoken word — write it the way someone talks, not the way someone writes. Include [PAUSE], [LOOK DIRECTLY AT CAMERA], [HOLD UP HAND] cues where they add emphasis.
+FULL SCRIPT
+Every word John says, in his voice. Written the way someone talks. Include [PAUSE], [LOOK AT CAMERA] cues where they add emphasis.
 
-5. ON-SCREEN TEXT / CAPTIONS
+ON-SCREEN TEXT
 Key phrases to display as text overlays timed to the script.
 
-6. B-ROLL / VISUAL DIRECTION
-What appears on screen at each moment (for edited versions).
+B-ROLL / VISUAL DIRECTION
+What appears on screen at each moment.
 
-7. CALL TO ACTION
+CALL TO ACTION
 Exact words. What it drives to. How it's delivered.
 
-8. PRODUCTION NOTES
-John films this himself (MacBook QuickTime or phone). Location. Lighting. Anything technical that affects quality.
+PRODUCTION NOTES
+John films himself (MacBook QuickTime or phone). Location. Lighting. Technical notes.
 
-9. THUMBNAIL / COVER FRAME
+THUMBNAIL
 The single frame that makes someone click. What it shows and what text it includes.`;
   }
 
@@ -1265,34 +1940,35 @@ The single frame that makes someone click. What it shows and what text it includ
     const theme = document.getElementById('s-theme').value;
     const count = document.getElementById('s-count').value;
     const notes = document.getElementById('s-notes').value;
+
     const socialPlatformRules = platform === 'LinkedIn'
-      ? `LINKEDIN FORMAT: Text-first platform. 1,300 character limit visible before "see more" — first 2-3 lines must earn the click. No hashtag farms — 2-3 relevant hashtags maximum at the end. Line breaks between every 1-2 sentences. Short paragraphs. Open with a direct observation or a specific uncomfortable truth — not a question, not a greeting, not "I've been thinking about...". Professional but not corporate. Thought leadership beats inspiration every time.`
+      ? `LINKEDIN: Text-first. First 2-3 lines must earn the "see more" click. 2-3 hashtags max at the end. Short paragraphs, line breaks between every 1-2 sentences. Open with a direct observation or uncomfortable truth — not a question, not a greeting, not "I've been thinking about..."`
       : platform === 'TikTok'
-      ? `TIKTOK FORMAT: Caption is secondary — the video hook is everything. Caption should be short (under 150 chars), add context or a punchline, include 3-5 relevant hashtags (#executivejobs #jobsearch #careertips #over50 #layoff). Write a separate suggested spoken hook for the video itself — this is what gets the view. No polish. Authenticity beats production.`
+      ? `TIKTOK: Caption is secondary — write a suggested spoken hook for the video separately. Caption: under 150 chars, add context or punchline, 3-5 hashtags (#executivejobs #jobsearch #careertips #over50 #layoff). Authenticity beats production.`
       : platform === 'Instagram'
-      ? `INSTAGRAM FORMAT: Caption can be long but first line must hook before the "more" cutoff. Storytelling captions perform well. 5-10 hashtags in first comment (not caption). Suggest a visual concept — carousel, quote card, or reel. Emotional resonance matters more than information density.`
-      : `FACEBOOK FORMAT: Facebook favors longer, story-driven posts. Personal narrative outperforms corporate announcements. Can be 200-500 words. Engagement prompt at the end (but not manufactured). Suggest sharing the post to relevant groups for reach.`;
+      ? `INSTAGRAM: First line hooks before the "more" cutoff. Storytelling captions work. Suggest a visual concept — carousel, quote card, or reel. Emotional resonance matters more than information density. 5-10 hashtags in first comment suggestion.`
+      : `FACEBOOK: Story-driven. Personal narrative outperforms corporate. 200-400 words. Natural engagement prompt at end. Suggest relevant groups to share to.`;
 
     prompt = `Write ${count} for ${brand} on ${platform}.
 
 THEME: ${theme}
-NOTES: ${notes || 'None'}
+NOTES: ${notes || 'None — generate complete posts based on the theme and platform selected'}
 
 ${socialPlatformRules}
 
 CONTENT RULES:
 - One audience (executives 45-65, involuntarily displaced), one feeling, one ask — no competing CTAs
-- Every FST post drives to workshop registration (Wednesday 11am CT) — this is the only CTA
-- Open with a direct observation, a specific uncomfortable truth, or a counterintuitive claim — never a question, never "I've been thinking about"
-- Use specific numbers and mechanisms, not vague claims ("ATS average match is 35%" not "your resume may not be optimized")
-- Reference specific frameworks by name when relevant (The 1% Insight, The Rule of Four, etc.)
-- Voice: John Schrup, 19-year veteran who has coached thousands of executives in this exact situation. Blunt. Credible. Not inspirational. Not corporate. Like someone who has seen this a thousand times and speaks plainly about what's actually happening.
-- NEVER: "game-changing", "excited to share", "innovative", "empower", "journey", "unlock your potential", "passionate about"
+- Every FST post drives to workshop registration (Wednesday 11am CT) — only CTA
+- Open with a direct observation, uncomfortable truth, or counterintuitive claim — never a question, never a greeting
+- Use specific numbers: "ATS average match is 35%" not "your resume may not be optimized"
+- Reference frameworks by name when relevant
+- Voice: John Schrup, 19-year veteran. Blunt. Credible. Not inspirational. Not corporate.
+- NEVER: "game-changing", "excited to share", "innovative", "empower", "journey", "passionate about"
 
-Format each post clearly numbered with:
+Format each post:
 POST [N]:
 [Post content]
-VISUAL DIRECTION: [What image/graphic/video to pair with this]`;
+VISUAL DIRECTION: [What to pair with this]`;
   }
 
   else if (type === 'email') {
@@ -1300,10 +1976,11 @@ VISUAL DIRECTION: [What image/graphic/video to pair with this]`;
     const emailType = document.getElementById('e-type').value;
     const subjectDir = document.getElementById('e-subject').value;
     const notes = document.getElementById('e-notes').value;
+
     const emailLengthGuide = emailType.includes('invite') || emailType.includes('reminder')
       ? 'LENGTH: Short. Under 150 words. Every sentence earns its place. No warm-up.'
       : emailType.includes('cold')
-      ? 'LENGTH: Very short. Under 100 words. 3-4 sentences max. The shorter the cold email, the higher the response rate.'
+      ? 'LENGTH: Very short. Under 100 words. 3-4 sentences. The shorter the cold email, the higher the response rate.'
       : emailType.includes('onboard') || emailType.includes('sequence')
       ? 'LENGTH: Medium. 200-300 words. Educational and valuable — earns the next email.'
       : emailType.includes('churn') || emailType.includes('save')
@@ -1313,27 +1990,26 @@ VISUAL DIRECTION: [What image/graphic/video to pair with this]`;
     prompt = `Write a ${emailType} email for ${brand}.
 
 SUBJECT LINE DIRECTION: ${subjectDir || 'Generate the best subject line — specific, direct, no clickbait, no question marks'}
-NOTES: ${notes || 'None'}
+NOTES: ${notes || 'None — generate a complete email based on the type and brand selected'}
 
 ${emailLengthGuide}
 
 REQUIREMENTS:
-- Subject line: specific and direct. Never a question. Never clickbait. Something a 19-year veteran would actually send.
-- Preview text: 40-90 chars, extends the subject line naturally
-- Opening line: no warm-up, no "I hope this finds you well", no "My name is". Start with the real thing.
-- Voice: John Schrup. Blunt. Credible. 19-year veteran. Not a marketer. Not a salesperson. Someone who has seen this situation thousands of times and speaks plainly.
-- Single CTA only — never two asks in one email
-- No filler sentences. If a sentence doesn't earn its place, cut it.
-- FST emails drive to workshop registration only. CareerIQ emails drive to signup or specific feature.
-- For cold B2B emails: specific observation about their company or role in line 1. Value before ask. Small ask (15-minute call, not a demo).
+- Subject: specific and direct. Never a question. Never clickbait.
+- Preview text: 40-90 chars, extends the subject naturally
+- Opening: no warm-up, no "I hope this finds you well". Start with the real thing.
+- Voice: John Schrup. Blunt. Credible. 19-year veteran. Not a marketer.
+- Single CTA only
+- No filler sentences
+- FST emails drive to workshop registration only
+- Cold B2B emails: specific observation in line 1, value before ask, small ask (15-min call)
 
 VOICE ANCHORS:
-✓ Speaks to their reality immediately — "You've applied to 200 positions. Heard nothing. Here's what's actually happening."
-✓ Specific mechanisms: "ATS scores your resume 35% on average. You need 90% to advance."
-✓ Direct observation: "A dormant LinkedIn profile is a dead LinkedIn profile."
-✗ NEVER: "I'm excited to share", "game-changing", "innovative", "empower", "hope this finds you well"
+✓ "You've applied to 200 positions. Heard nothing. Here's what's actually happening."
+✓ "ATS scores your resume 35% on average. You need 90% to advance."
+✗ NEVER: "I'm excited to share", "game-changing", "empower", "hope this finds you well"
 
-OUTPUT FORMAT:
+OUTPUT:
 SUBJECT LINE: [subject]
 PREVIEW TEXT: [preview]
 ---
@@ -1346,22 +2022,39 @@ PREVIEW TEXT: [preview]
     const theme = document.getElementById('vis-theme').value;
     const dest = document.getElementById('vis-dest').value;
     const notes = document.getElementById('vis-notes').value;
+
     prompt = `Write a complete visual production brief for a ${assetType} for ${brand}, destined for ${dest}.
 
-Theme/message: ${theme || 'Based on brand voice and frameworks'}
-Notes: ${notes || 'None'}
+THEME/MESSAGE: ${theme || 'Select from brand frameworks — the broken system, 1% Insight, Benchmark Candidate, or workshop invitation'}
+NOTES: ${notes || 'None — generate a complete brief based on the asset type and brand selected'}
 
-The brief must include:
-1. CONCEPT (what this visual communicates and why)
-2. HEADLINE / PRIMARY TEXT (exact copy)
-3. SUPPORTING COPY (subheadline, body text if applicable)
-4. VISUAL DIRECTION (layout, imagery, color usage — use brand colors: Blue #1f40cb, Navy #12212f, Off-white #f0ede8)
-5. FOR CAROUSEL: each slide numbered with its own headline, copy, and visual direction
-6. CANVA INSTRUCTIONS (specific guidance for execution in Canva)
-7. SIZE SPECS (for destination platform)
-8. CTA TEXT (if applicable)
+BRAND COLORS: Blue #1f40cb, Navy #12212f, Off-white #f0ede8
 
-Be specific enough that a designer or VA can execute this without a briefing call.`;
+THE BRIEF MUST INCLUDE THESE LABELED SECTIONS:
+
+CONCEPT
+What this visual communicates and exactly why it stops this audience.
+
+HEADLINE
+Exact primary copy. Direct and specific. John's voice.
+
+SUPPORTING COPY
+Subheadline, body text, or caption if applicable.
+
+VISUAL DIRECTION
+Layout, imagery style, color usage. Specific enough that a designer can execute without a briefing call.
+
+SLIDE BREAKDOWN
+For carousels: each slide numbered with its own headline, copy, and visual direction.
+
+CANVA INSTRUCTIONS
+Step-by-step guidance for building this in Canva — template type, color application, font choices, element placement.
+
+SIZE SPECS
+Exact dimensions for the destination platform.
+
+CALL TO ACTION
+Text, placement, and what it drives to.`;
   }
 
   try {
@@ -1377,19 +2070,22 @@ Be specific enough that a designer or VA can execute this without a briefing cal
 
     const data = await response.json();
     const text = data.content?.[0]?.text || 'Error generating brief. Please try again.';
-    output.classList.remove('loading');
-    output.textContent = text;
+    renderSections(typeId, text);
   } catch (err) {
-    output.classList.remove('loading');
-    output.textContent = 'Network error. Check your connection and try again.';
+    const loading = document.getElementById(typeId + '-loading');
+    const placeholder = document.getElementById(typeId + '-placeholder');
+    if (loading) loading.style.display = 'none';
+    if (placeholder) {
+      placeholder.style.display = 'block';
+      placeholder.textContent = 'Network error. Check your connection and try again.';
+    }
   }
 
   btn.classList.remove('loading');
   btn.disabled = false;
 }
 
-// ============================================================
-// ASSET TRACKER
+
 // ============================================================
 async function saveAsset(asset) {
   if (!db) {
@@ -1468,10 +2164,18 @@ async function addAsset() {
 }
 
 async function sendToTracker(outputId, type) {
-  const content = document.getElementById(outputId).textContent;
-  if (!content || content.includes('will appear here')) return;
-  const typeMap = {video:'Video / Reel', social:'Social Post', email:'Email', visual:'Still / Carousel'};
-  const brandEl = document.getElementById(type === 'video' ? 'v-brand' : type === 'social' ? 's-brand' : type === 'email' ? 'e-brand' : 'vis-brand');
+  // Try textarea value first (structured output), fall back to textContent
+  const el = document.getElementById(outputId);
+  if (!el) return;
+  const content = el.tagName === 'TEXTAREA' ? el.value : el.textContent;
+  if (!content || content.includes('will appear here') || content.trim().length < 10) return;
+  const typeMap = {
+    'video':'Video / Reel', 'v-output':'Video / Reel',
+    'social':'Social Post', 's-output':'Social Post', 
+    'email':'Email', 'e-output':'Email',
+    'visual':'Still / Carousel', 'vis-output':'Still / Carousel'
+  };
+  const typeClean = type.replace('-output',''); const brandEl = document.getElementById(typeClean === 'video' ? 'v-brand' : typeClean === 'social' ? 's-brand' : typeClean === 'email' ? 'e-brand' : 'vis-brand');
   const asset = {
     title: `Generated ${typeMap[type]} — ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'})}`,
     type: typeMap[type],
@@ -1622,7 +2326,9 @@ function renderDashboard() {
 // UTILS
 // ============================================================
 function copyOutput(id) {
-  const text = document.getElementById(id).textContent;
+  const el = document.getElementById(id);
+  if (!el) return;
+  const text = el.tagName === 'TEXTAREA' ? el.value : el.textContent;
   navigator.clipboard.writeText(text).then(() => {
     const btn = event.target;
     btn.textContent = 'Copied!';

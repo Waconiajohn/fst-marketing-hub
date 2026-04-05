@@ -638,6 +638,36 @@
     border: 2px dashed var(--border);
     border-radius: 8px;
   }
+
+  /* AI ALTERNATIVE CARDS */
+  .ai-alternatives { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+  .ai-alt-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--ink);
+    background: white;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: pre-wrap;
+  }
+  .ai-alt-card:hover { border-color: var(--blue); background: var(--blue-pale); }
+  .ai-alt-card.selected { border-color: var(--blue); background: var(--blue-pale); box-shadow: 0 0 0 2px rgba(31,64,203,0.15); }
+  .ai-alt-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 6px; }
+  .ai-alt-actions { display: flex; gap: 8px; margin-top: 10px; }
+  .ai-plain-response {
+    background: var(--offwhite);
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--ink);
+    white-space: pre-wrap;
+    margin-top: 4px;
+    font-family: 'Instrument Sans', sans-serif;
+  }
 </style>
 </head>
 <body>
@@ -822,10 +852,7 @@
             </div>
             <div class="ai-chat-area">
               <div class="ai-response" id="v-ai-response"></div>
-              <div class="ai-response-actions" id="v-ai-response-actions" style="display:none">
-                <button class="btn btn-sm btn-primary" onclick="applyAiResponse('v')">Apply to brief</button>
-                <button class="btn btn-sm btn-secondary" onclick="clearAiResponse('v')">Discard</button>
-              </div>
+              <div class="ai-response-actions" id="v-ai-response-actions" style="display:none"></div>
               <div class="ai-chat-input-row">
                 <input class="ai-chat-input" id="v-ai-input" placeholder="Ask anything — make the hook more aggressive, remove the third paragraph, add a specific stat..." onkeydown="if(event.key==='Enter')sendAiMessage('v')">
                 <button class="btn btn-primary btn-sm" onclick="sendAiMessage('v')">Ask</button>
@@ -965,10 +992,7 @@
             </div>
             <div class="ai-chat-area">
               <div class="ai-response" id="s-ai-response"></div>
-              <div class="ai-response-actions" id="s-ai-response-actions" style="display:none">
-                <button class="btn btn-sm btn-primary" onclick="applyAiResponse('s')">Apply to brief</button>
-                <button class="btn btn-sm btn-secondary" onclick="clearAiResponse('s')">Discard</button>
-              </div>
+              <div class="ai-response-actions" id="s-ai-response-actions" style="display:none"></div>
               <div class="ai-chat-input-row">
                 <input class="ai-chat-input" id="s-ai-input" placeholder="Ask anything — make the hook more aggressive, remove the third paragraph, add a specific stat..." onkeydown="if(event.key==='Enter')sendAiMessage('s')">
                 <button class="btn btn-primary btn-sm" onclick="sendAiMessage('s')">Ask</button>
@@ -1062,10 +1086,7 @@
             </div>
             <div class="ai-chat-area">
               <div class="ai-response" id="e-ai-response"></div>
-              <div class="ai-response-actions" id="e-ai-response-actions" style="display:none">
-                <button class="btn btn-sm btn-primary" onclick="applyAiResponse('e')">Apply to brief</button>
-                <button class="btn btn-sm btn-secondary" onclick="clearAiResponse('e')">Discard</button>
-              </div>
+              <div class="ai-response-actions" id="e-ai-response-actions" style="display:none"></div>
               <div class="ai-chat-input-row">
                 <input class="ai-chat-input" id="e-ai-input" placeholder="Ask anything — make the hook more aggressive, remove the third paragraph, add a specific stat..." onkeydown="if(event.key==='Enter')sendAiMessage('e')">
                 <button class="btn btn-primary btn-sm" onclick="sendAiMessage('e')">Ask</button>
@@ -1165,10 +1186,7 @@
             </div>
             <div class="ai-chat-area">
               <div class="ai-response" id="vis-ai-response"></div>
-              <div class="ai-response-actions" id="vis-ai-response-actions" style="display:none">
-                <button class="btn btn-sm btn-primary" onclick="applyAiResponse('vis')">Apply to brief</button>
-                <button class="btn btn-sm btn-secondary" onclick="clearAiResponse('vis')">Discard</button>
-              </div>
+              <div class="ai-response-actions" id="vis-ai-response-actions" style="display:none"></div>
               <div class="ai-chat-input-row">
                 <input class="ai-chat-input" id="vis-ai-input" placeholder="Ask anything — make the hook more aggressive, remove the third paragraph, add a specific stat..." onkeydown="if(event.key==='Enter')sendAiMessage('vis')">
                 <button class="btn btn-primary btn-sm" onclick="sendAiMessage('vis')">Ask</button>
@@ -1746,6 +1764,28 @@ async function sendAiMessage(typeId) {
   input.value = '';
 }
 
+// Parse AI response — detect if it contains numbered alternatives
+function parseAiAlternatives(text) {
+  // Match patterns like "1.", "**1.", "Option 1:", etc.
+  const lines = text.split('\n');
+  const alts = [];
+  let current = null;
+  
+  for (const line of lines) {
+    const match = line.match(/^(?:\*{0,2})(\d+)[.):]\s*(?:\*{0,2})(.*)$/);
+    if (match) {
+      if (current) alts.push(current.trim());
+      current = match[2] || '';
+    } else if (current !== null) {
+      current += '\n' + line;
+    }
+  }
+  if (current) alts.push(current.trim());
+  
+  // Only treat as alternatives if we found 2+ numbered items
+  return alts.length >= 2 ? alts : null;
+}
+
 async function sendAiRequest(typeId, instruction) {
   syncRawOutput(typeId);
   const currentContent = document.getElementById(typeId + '-output')?.value || '';
@@ -1754,8 +1794,11 @@ async function sendAiRequest(typeId, instruction) {
   
   if (!responseDiv) return;
   responseDiv.classList.add('visible');
-  responseDiv.textContent = 'Working…';
+  responseDiv.innerHTML = '<span style="color:var(--muted);font-style:italic">Working…</span>';
   if (actionsDiv) actionsDiv.style.display = 'none';
+  
+  // Track which section this is targeting (for direct replacement)
+  const targetSection = instruction.match(/the "([^"]+)" section/)?.[1] || null;
   
   try {
     const res = await fetch('/api/generate', {
@@ -1766,27 +1809,107 @@ async function sendAiRequest(typeId, instruction) {
         max_tokens: 1500,
         messages: [{
           role: 'user',
-          content: `Here is the current brief:\n\n${currentContent}\n\n---\n\nInstruction: ${instruction}\n\nProvide your response directly. If rewriting a section, provide just that section's content. If giving alternatives, number them clearly.`
+          content: `Here is the current brief:\n\n${currentContent}\n\n---\n\nInstruction: ${instruction}\n\nIMPORTANT: If providing alternatives, number them clearly as 1. 2. 3. with each alternative on its own starting line. Keep each alternative concise and self-contained. Do not include explanatory brackets after each alternative.`
         }]
       })
     });
     const data = await res.json();
     const text = data.content?.[0]?.text || 'Could not generate response.';
-    responseDiv.textContent = text;
-    if (actionsDiv) actionsDiv.style.display = 'flex';
+    
+    // Check if response contains numbered alternatives
+    const alts = parseAiAlternatives(text);
+    
+    if (alts) {
+      // Render as selectable cards
+      responseDiv.innerHTML = `
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:10px">
+          Click an option to select it, then use it below
+        </div>
+        <div class="ai-alternatives" id="${typeId}-alts">
+          ${alts.map((alt, i) => `
+            <div class="ai-alt-card" id="${typeId}-alt-${i}" onclick="selectAlt('${typeId}', ${i})">
+              <div class="ai-alt-label">Option ${i + 1}</div>
+              ${escapeHtml(alt.replace(/^\*+|\*+$/g, '').replace(/\[.*?\]/g, '').trim())}
+            </div>
+          `).join('')}
+        </div>
+      `;
+      if (actionsDiv) {
+        actionsDiv.style.display = 'flex';
+        actionsDiv.innerHTML = `
+          <button class="btn btn-sm btn-primary" onclick="applySelectedAlt('${typeId}', '${targetSection || ''}')">Use selected option</button>
+          <button class="btn btn-sm btn-secondary" onclick="clearAiResponse('${typeId}')">Discard all</button>
+        `;
+      }
+    } else {
+      // Plain response — single rewrite
+      responseDiv.innerHTML = `<div class="ai-plain-response">${escapeHtml(text)}</div>`;
+      if (actionsDiv) {
+        actionsDiv.style.display = 'flex';
+        actionsDiv.innerHTML = `
+          <button class="btn btn-sm btn-primary" onclick="applyAiResponse('${typeId}', '${targetSection || ''}')">Apply to brief</button>
+          <button class="btn btn-sm btn-secondary" onclick="clearAiResponse('${typeId}')">Discard</button>
+        `;
+      }
+    }
   } catch (err) {
-    responseDiv.textContent = 'Error — check your connection and try again.';
+    responseDiv.innerHTML = '<span style="color:var(--danger)">Error — check your connection and try again.</span>';
   }
 }
 
-function applyAiResponse(typeId) {
-  const response = document.getElementById(typeId + '-ai-response')?.textContent;
-  if (!response || response === 'Working…') return;
-  
-  // Append to end of sections as a new "AI Suggestion" section
+function selectAlt(typeId, idx) {
+  // Deselect all, select clicked
+  document.querySelectorAll(`#${typeId}-alts .ai-alt-card`).forEach((card, i) => {
+    card.classList.toggle('selected', i === idx);
+  });
+}
+
+function applySelectedAlt(typeId, targetSection) {
+  const selected = document.querySelector(`#${typeId}-alts .ai-alt-card.selected`);
+  if (!selected) {
+    // Flash the cards to indicate selection needed
+    document.querySelectorAll(`#${typeId}-alts .ai-alt-card`).forEach(c => {
+      c.style.borderColor = 'var(--warn)';
+      setTimeout(() => c.style.borderColor = '', 800);
+    });
+    return;
+  }
+  const text = selected.innerText.replace(/^Option \d+\n/, '').trim();
+  applyTextToBrief(typeId, text, targetSection);
+  clearAiResponse(typeId);
+}
+
+function applyAiResponse(typeId, targetSection) {
+  const plain = document.querySelector(`#${typeId}-ai-response .ai-plain-response`);
+  if (!plain) return;
+  const text = plain.innerText.trim();
+  applyTextToBrief(typeId, text, targetSection);
+  clearAiResponse(typeId);
+}
+
+function applyTextToBrief(typeId, text, targetSection) {
   const container = document.getElementById(typeId + '-sections');
   if (!container) return;
   
+  // If we have a target section, try to find and replace it
+  if (targetSection) {
+    const labels = container.querySelectorAll('.output-section-label');
+    for (const label of labels) {
+      if (label.textContent.toUpperCase().includes(targetSection.toUpperCase())) {
+        const secDiv = label.closest('.output-section');
+        const body = secDiv?.querySelector('.output-section-body');
+        if (body) {
+          body.textContent = text;
+          body.style.background = '#fffacd';
+          setTimeout(() => body.style.background = '', 1500);
+          syncRawOutput(typeId);
+          return;
+        }
+      }
+    }
+  }
+  
+  // No target match — append as new section
   const idx = container.querySelectorAll('.output-section').length;
   const div = document.createElement('div');
   div.className = 'output-section';
@@ -1799,19 +1922,18 @@ function applyAiResponse(typeId) {
         <button class="section-btn" style="color:var(--danger)" onclick="this.closest('.output-section').remove();syncRawOutput('${typeId}')">Remove</button>
       </div>
     </div>
-    <div class="output-section-body" id="${typeId}-sec-body-${idx}" contenteditable="false" onblur="syncRawOutput('${typeId}')">${escapeHtml(response)}</div>
+    <div class="output-section-body" id="${typeId}-sec-body-${idx}" contenteditable="false" onblur="syncRawOutput('${typeId}')">${escapeHtml(text)}</div>
   `;
   container.appendChild(div);
   syncRawOutput(typeId);
-  clearAiResponse(typeId);
   div.scrollIntoView({ behavior: 'smooth' });
 }
 
 function clearAiResponse(typeId) {
   const responseDiv = document.getElementById(typeId + '-ai-response');
   const actionsDiv = document.getElementById(typeId + '-ai-response-actions');
-  if (responseDiv) { responseDiv.textContent = ''; responseDiv.classList.remove('visible'); }
-  if (actionsDiv) actionsDiv.style.display = 'none';
+  if (responseDiv) { responseDiv.innerHTML = ''; responseDiv.classList.remove('visible'); }
+  if (actionsDiv) { actionsDiv.style.display = 'none'; actionsDiv.innerHTML = ''; }
 }
 
 async function regenSection(typeId, idx, label) {

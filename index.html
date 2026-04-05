@@ -881,23 +881,55 @@
 
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 // ============================================================
 // STATE
 // ============================================================
-let assets = JSON.parse(localStorage.getItem('fst_assets') || '[]');
+let assets = [];
+let supabase = null;
 let currentBriefTab = 'video';
 let currentPage = 'briefs';
 
 // ============================================================
+// INIT SUPABASE
+// ============================================================
+async function initSupabase() {
+  try {
+    const res = await fetch('/api/config');
+    const { supabaseUrl, supabaseKey } = await res.json();
+    supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+    await loadAssets();
+    renderDashboard();
+  } catch (err) {
+    console.error('Supabase init failed:', err);
+  }
+}
+
+async function loadAssets() {
+  if (!supabase) return;
+  const { data, error } = await supabase
+    .from('marketing_assets')
+    .select('*')
+    .order('created_at', { ascending: false });
+  if (!error && data) {
+    assets = data.map(a => ({
+      ...a,
+      created: new Date(a.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+    }));
+  }
+}
+
+// ============================================================
 // NAVIGATION
 // ============================================================
-function showPage(page) {
+async function showPage(page) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.header-nav button').forEach(b => b.classList.remove('active'));
   document.getElementById('page-' + page).classList.add('active');
   document.querySelectorAll('.header-nav button')[['briefs','tracker','approvals','dashboard'].indexOf(page)].classList.add('active');
   currentPage = page;
+  await loadAssets();
   if (page === 'tracker') renderAssets('all');
   if (page === 'approvals') renderApprovals();
   if (page === 'dashboard') renderDashboard();
@@ -1111,8 +1143,31 @@ Be specific enough that a designer or VA can execute this without a briefing cal
 // ============================================================
 // ASSET TRACKER
 // ============================================================
-function saveAssets() {
-  localStorage.setItem('fst_assets', JSON.stringify(assets));
+async function saveAsset(asset) {
+  if (!supabase) return;
+  const { data, error } = await supabase
+    .from('marketing_assets')
+    .insert([{
+      title: asset.title,
+      type: asset.type,
+      brand: asset.brand,
+      owner: asset.owner,
+      status: asset.status,
+      content: asset.content || '',
+      comment: asset.comment || ''
+    }])
+    .select()
+    .single();
+  if (!error && data) {
+    assets.unshift({ ...data, created: new Date(data.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) });
+  }
+}
+
+async function updateAsset(id, updates) {
+  if (!supabase) return;
+  await supabase.from('marketing_assets').update(updates).eq('id', id);
+  const asset = assets.find(a => a.id === id);
+  if (asset) Object.assign(asset, updates);
 }
 
 function showAddAsset() {
@@ -1123,45 +1178,39 @@ function hideAddAsset() {
   document.getElementById('add-asset-form').style.display = 'none';
 }
 
-function addAsset() {
+async function addAsset() {
   const title = document.getElementById('new-asset-title').value.trim();
   if (!title) return;
   const asset = {
-    id: Date.now(),
     title,
     type: document.getElementById('new-asset-type').value,
     brand: document.getElementById('new-asset-brand').value,
     owner: document.getElementById('new-asset-owner').value,
     status: 'draft',
     content: '',
-    created: new Date().toLocaleDateString('en-US', {month:'short',day:'numeric'}),
     comment: ''
   };
-  assets.unshift(asset);
-  saveAssets();
+  await saveAsset(asset);
   hideAddAsset();
   document.getElementById('new-asset-title').value = '';
   renderAssets('all');
 }
 
-function sendToTracker(outputId, type) {
+async function sendToTracker(outputId, type) {
   const content = document.getElementById(outputId).textContent;
   if (!content || content.includes('will appear here')) return;
   const typeMap = {video:'Video / Reel', social:'Social Post', email:'Email', visual:'Still / Carousel'};
   const brandEl = document.getElementById(type === 'video' ? 'v-brand' : type === 'social' ? 's-brand' : type === 'email' ? 'e-brand' : 'vis-brand');
   const asset = {
-    id: Date.now(),
     title: `Generated ${typeMap[type]} — ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'})}`,
     type: typeMap[type],
     brand: brandEl ? brandEl.value : 'FST',
     owner: 'John',
     status: 'pending',
     content,
-    created: new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'}),
     comment: ''
   };
-  assets.unshift(asset);
-  saveAssets();
+  await saveAsset(asset);
   showPage('tracker');
 }
 
@@ -1241,24 +1290,20 @@ function renderApprovals(highlightId) {
   `).join('');
 }
 
-function approveAsset(id) {
-  const asset = assets.find(a => a.id === id);
-  if (!asset) return;
+async function approveAsset(id) {
   const comment = document.getElementById('comment-' + id)?.value;
-  asset.status = 'approved';
-  if (comment) asset.comment = comment;
-  saveAssets();
+  const updates = { status: 'approved' };
+  if (comment) updates.comment = comment;
+  await updateAsset(id, updates);
   renderApprovals();
   renderDashboard();
 }
 
-function rejectAsset(id) {
-  const asset = assets.find(a => a.id === id);
-  if (!asset) return;
+async function rejectAsset(id) {
   const comment = document.getElementById('comment-' + id)?.value;
-  asset.status = 'rejected';
-  if (comment) asset.comment = comment;
-  saveAssets();
+  const updates = { status: 'rejected' };
+  if (comment) updates.comment = comment;
+  await updateAsset(id, updates);
   renderApprovals();
 }
 
@@ -1312,7 +1357,7 @@ function copyOutput(id) {
 }
 
 // Init
-renderDashboard();
+initSupabase();
 </script>
 </body>
 </html>

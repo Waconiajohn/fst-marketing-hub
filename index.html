@@ -274,7 +274,7 @@
   /* ASSET TRACKER */
   .asset-row {
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 100px 40px;
+    grid-template-columns: 2fr 1fr 1fr 1fr 100px 76px;
     gap: 12px;
     align-items: center;
     padding: 14px 20px;
@@ -293,7 +293,7 @@
     padding: 10px 20px;
     border-bottom: 1px solid var(--border);
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 100px 40px;
+    grid-template-columns: 2fr 1fr 1fr 1fr 100px 76px;
     gap: 12px;
   }
   .asset-title { font-weight: 500; color: var(--navy); }
@@ -416,9 +416,94 @@
     margin-bottom: 16px;
   }
 
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(15,25,35,0.55);
+    z-index: 200;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .modal {
+    background: white;
+    border-radius: var(--radius);
+    max-width: 640px; width: 100%;
+    max-height: 90vh; overflow-y: auto;
+    box-shadow: 0 12px 48px rgba(0,0,0,0.25);
+  }
+  .modal-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    font-weight: 600; color: var(--navy);
+    display: flex; justify-content: space-between; align-items: center;
+    position: sticky; top: 0; background: white; z-index: 1;
+  }
+  .modal-body { padding: 20px; }
+
+  /* PROSPECT / B2B ROWS */
+  .prospect-row {
+    display: grid;
+    grid-template-columns: 2.2fr 1.6fr 130px 150px;
+    gap: 12px;
+    align-items: center;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+  .prospect-row:hover { background: var(--offwhite); }
+  .prospect-row select { padding: 6px 10px; font-size: 13px; width: auto; }
+  .prospect-panel {
+    padding: 16px 20px;
+    background: var(--blue-pale);
+    border-bottom: 1px solid var(--border);
+  }
+  .msg-block {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .msg-block-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 14px;
+    background: var(--offwhite);
+    border-bottom: 1px solid var(--border);
+    font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--navy);
+  }
+  .msg-block-body {
+    padding: 12px 14px;
+    font-size: 14px; line-height: 1.7;
+    white-space: pre-wrap;
+  }
+  .signal-note { font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+
+  /* PRINT — report card only */
+  @media print {
+    body * { visibility: hidden; }
+    #report-card, #report-card * { visibility: visible; }
+    #report-card { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; border: none; margin: 0; }
+    header, .header-nav { display: none !important; }
+  }
+
+  .rc-row {
+    display: grid;
+    grid-template-columns: 200px 1fr 1fr;
+    gap: 16px;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    align-items: baseline;
+  }
+  .rc-metric { font-weight: 700; color: var(--navy); }
+  .rc-fst { color: var(--ink); }
+  .rc-industry { color: var(--muted); font-size: 13px; }
+
   /* RESPONSIVE */
   @media (max-width: 700px) {
     .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .prospect-row { grid-template-columns: 1fr 1fr; }
     main { padding: 20px 16px; }
     header { padding: 0 16px; }
     .asset-row, .asset-row-header { grid-template-columns: 1fr 1fr; }
@@ -684,6 +769,9 @@
   </div>
   <nav class="header-nav">
     <button class="active" onclick="showPage('briefs')">Brief Generator</button>
+    <button onclick="showPage('outreach')">Outreach</button>
+    <button onclick="showPage('b2b')">B2B Pipeline</button>
+    <button onclick="showPage('calc')">Calculator</button>
     <button onclick="showPage('tracker')">Asset Tracker</button>
     <button onclick="showPage('approvals')">Approvals</button>
     <button onclick="showPage('dashboard')">Dashboard</button>
@@ -704,6 +792,7 @@
       <button class="tab-btn" onclick="switchTab('briefs', 'social')">Social Post</button>
       <button class="tab-btn" onclick="switchTab('briefs', 'email')">Email</button>
       <button class="tab-btn" onclick="switchTab('briefs', 'visual')">Still / Carousel</button>
+      <button class="tab-btn" onclick="switchTab('briefs', 'ads')">Ad Campaign</button>
     </div>
 
     <!-- VIDEO BRIEF -->
@@ -787,8 +876,16 @@
                 </optgroup>
                 <optgroup label="— Workshop & FST —">
                   <option value="Why the coaching is free — FST offers world-class career coaching for free, monetized through retirement and financial planning. Full transparency about this. Like Google: better product, free, monetized through a complementary service that doesn't conflict with user interests.">Why the Coaching Is Free</option>
-                  <option value="FST vs. legacy outplacement — the world's largest outplacement firm rates 1.7/5 with participants. FST rates 5.0/5. Box-checking vs. a system that actually gets people hired. Built for the participant, not the person signing the invoice.">FST vs. Legacy Outplacement</option>
+                  <option value="FST vs. legacy outplacement — the Credibility Delta: the big providers claim 92-98% satisfaction in brochures while participants publicly rate them 1.3-2.8/5. FST rates 4.9/5 — no gap to explain. Built for the participant, not the person signing the invoice.">FST vs. Legacy Outplacement</option>
                   <option value="The workshop — what happens in the free Wednesday 11am workshop and why executives who attend leave with a framework they can execute immediately. Workshop registration CTA.">The Workshop Invitation</option>
+                </optgroup>
+                <optgroup label="— Outplacement / Employers (B2B) —">
+                  <option value="Outplacement was broken, we built the alternative — legacy vendors charge $5,000-$11,000 per head for a few PDFs, five hours of coaching, and a career portal nobody logs into. If you're going to pay for outplacement, pay for a program that leaves your people better off than you left them.">Outplacement was broken ($5-11K for PDFs)</option>
+                  <option value="The Credibility Delta — the four largest providers claim 92-98.5% satisfaction in their brochures; the public reviews written by people who actually went through their programs say 1.3 to 2.8 out of 5. Both numbers are real. Only one of them is told to your face. FST: 4.9/5 — no gap to explain. Root cause: the buyer never uses the product, nobody is accountable for outcomes.">The Credibility Delta (claims vs reviews)</option>
+                  <option value="We started on a factory floor, not in a procurement portal — founded 2006 helping people land when the Ford Twin Cities plant closed. Twenty years and 100,000+ placements later: still family owned, still independent, still measured by whether your people land well and say so. Outplacement is not a line of business bolted onto a staffing empire. It is the business.">Factory floor origin story (2006)</option>
+                  <option value="Positive Decline Refunds — if a laid-off employee declines outplacement services, the employer gets a refund. You never pay for empty seats. No legacy firm offers this, because empty seats ARE their margin.">Positive Decline Refunds (never pay for empty seats)</option>
+                  <option value="Built for the participant, not the person signing the invoice — every decision optimized for the person going through the layoff. How your former employees talk about you after a RIF is your employer brand, and it outlives the severance check.">Built for the participant (protect your brand)</option>
+                  <option value="No MSAs, live in 24 hours — published pricing, self-service one-click checkout, three tiers (Essentials, Extended, Enterprise) or build your own. Legacy vendors need procurement cycles and 2-4 weeks of onboarding. A reduction in force doesn't wait.">No MSAs — live in 24 hours</option>
                 </optgroup>
               </select>
             </div>
@@ -924,10 +1021,18 @@
                   <option value="The false conclusions — my industry is dead. My job is eliminated. Everyone is discriminating. Why these beliefs are almost never true.">False conclusions</option>
                 </optgroup>
                 <optgroup label="— Workshop & FST —">
-                  <option value="Workshop social proof — 5.0 stars, 174 reviews, clients at IBM Google Boeing DoD, 3x faster than national average">Workshop proof / social proof</option>
+                  <option value="Workshop social proof — 4.9 stars, 174 reviews, clients at IBM Google Boeing DoD, 3x faster than national average">Workshop proof / social proof</option>
                   <option value="Why coaching is free — the Google analogy, how the business model actually works">Why coaching is free</option>
-                  <option value="FST vs. legacy outplacement — 1.7/5 vs 5.0/5, built for the participant not the buyer">FST vs. legacy outplacement</option>
+                  <option value="FST vs. legacy outplacement — the Credibility Delta: providers claim 92-98% satisfaction, participants publicly rate them 1.3-2.8/5; FST 4.9/5, built for the participant not the buyer">FST vs. legacy outplacement</option>
                   <option value="Workshop invitation — what happens Wednesday 11am, what attendees walk away with">Workshop invitation</option>
+                </optgroup>
+                <optgroup label="— Outplacement / Employers (B2B) —">
+                  <option value="Outplacement was broken — legacy vendors charge $5,000-$11,000 per head for a few PDFs, five hours of coaching, and a portal nobody logs into. We built the alternative.">Outplacement was broken</option>
+                  <option value="The Credibility Delta — providers claim 92-98.5% satisfaction in brochures, participants publicly rate them 1.3-2.8/5. FST 4.9/5 — no gap to explain. Both numbers are real; only one is told to your face.">The Credibility Delta</option>
+                  <option value="We started on a factory floor, not in a procurement portal — founded 2006 at the Ford Twin Cities plant closing; family owned, 100,000+ placements, measured by whether your people land well and say so.">Factory floor origin story</option>
+                  <option value="Positive Decline Refunds — if a participant declines services, the employer gets a refund. Never pay for empty seats. Empty seats are the legacy firms' margin.">Positive Decline Refunds</option>
+                  <option value="Built for the participant, not the person signing the invoice — how employees talk about you after a RIF is your employer brand.">Built for the participant</option>
+                  <option value="No MSAs, live in 24 hours — published pricing, self-service checkout, Essentials/Extended/Enterprise tiers. A RIF doesn't wait for procurement.">No MSAs — live in 24 hours</option>
                 </optgroup>
                 <optgroup label="— Financial (Compliance Required) —">
                   <option value="Designed Retirement — Floor, Guard, Growth. Safety of an 80-year-old, growth of a 30-year-old.">Designed Retirement</option>
@@ -1030,7 +1135,9 @@
                 <option value="CareerIQ onboarding sequence (email 1 of 7)">CareerIQ onboarding — Email 1</option>
                 <option value="CareerIQ Pro upgrade offer">CareerIQ Pro upgrade</option>
                 <option value="CareerIQ churn save / cancel flow">CareerIQ churn save</option>
-                <option value="Outplacement Enterprise cold outreach to CHRO">Outplacement cold email (CHRO)</option>
+                <option value="Outplacement Enterprise cold outreach to CHRO — Glassdoor/employer-brand argument">Outplacement cold email (CHRO)</option>
+                <option value="Outplacement Enterprise cold outreach to General Counsel — legal consideration argument (ADEA/OWBPA release defensibility)">Outplacement cold email (General Counsel)</option>
+                <option value="Outplacement Enterprise cold outreach to CFO — hidden layoff cost argument (survivor productivity + boomerang rehires)">Outplacement cold email (CFO)</option>
                 <option value="Outplacement follow-up #2 (value add)">Outplacement follow-up #2</option>
               </select>
             </div>
@@ -1201,6 +1308,357 @@
         </div>
       </div>
     </div>
+    <!-- AD CAMPAIGN BRIEF -->
+    <div class="brief-tab" id="brief-ads" style="display:none">
+      <div class="grid-2" style="gap:24px">
+        <div>
+          <div class="card card-pad">
+            <div class="field">
+              <label>Brand</label>
+              <select id="a-brand">
+                <option value="Outplacement Enterprise (B2B)">Outplacement Enterprise (B2B)</option>
+                <option value="FST">First Source Team (B2C workshop)</option>
+                <option value="CareerIQ">CareerIQ</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Ad platform</label>
+              <select id="a-platform">
+                <option value="LinkedIn Sponsored Content">LinkedIn Sponsored Content</option>
+                <option value="LinkedIn Message/InMail Ads">LinkedIn Message Ads</option>
+                <option value="Meta (Facebook + Instagram)">Meta (Facebook + Instagram)</option>
+                <option value="Google Search">Google Search</option>
+                <option value="YouTube pre-roll (15-30s)">YouTube pre-roll</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Campaign angle</label>
+              <select id="a-angle">
+                <optgroup label="— B2B / Outplacement —">
+                  <option value="The Credibility Delta — providers claim 92-98.5% satisfaction in brochures, participants publicly rate them 1.3-2.8/5. FST 4.9/5 — no gap to explain. Both numbers are real; only one is told to your face.">The Credibility Delta</option>
+                  <option value="Positive Decline Refunds — you never pay for empty seats. If a participant declines services, you get a refund. Automatic. No claim form, no negotiation, no fine print. Roughly 1 in 3 legacy outplacement seats go unused, paid anyway.">Never pay for empty seats</option>
+                  <option value="Until Placed — incumbents sell 30-90 days of access, paid regardless of outcome. FST coaches until placement. You're paying for outcomes, not a session limit. Ask your current provider why they can't say that.">The Until-Placed guarantee</option>
+                  <option value="Contract renewal door — ask one question before you renew: what did your people rate it? Not the vendor's survey. The public reviews. If the answer embarrasses the incumbent, the renewal is your easiest moment to fix it.">Renewal: what did your people rate it?</option>
+                  <option value="New people leader door — you just inherited the vendor stack. Outplacement is the easiest line item to upgrade: switching takes days, not quarters, and your people feel the difference immediately.">New CHRO: easiest line item to upgrade</option>
+                  <option value="Glassdoor / employer brand — every person who walks out your door is writing your Glassdoor reviews right now. 86% of candidates check reviews before applying. How you treat leavers is the loudest signal to the people you kept.">Glassdoor / employer brand</option>
+                  <option value="Factory floor origin — founded 2006 at the Ford Twin Cities plant closing. Family owned, 100,000+ placements, measured by whether your people land well and say so. Not a line of business bolted onto a staffing empire.">Factory floor origin story</option>
+                </optgroup>
+                <optgroup label="— B2C / Workshop —">
+                  <option value="Workshop registration — free Wednesday 11am CT workshop. No pitch. Executives 45-65 walk away with a framework they can execute immediately. 4.9 stars, 174 reviews.">Workshop registration</option>
+                  <option value="ATS reality — the average executive resume scores 35% match. You need 90%+ to advance. You are invisible before any human sees you. The workshop shows you how to fix it.">ATS reality (35%)</option>
+                  <option value="The hidden job market — 80% of executive hiring happens in recruiter searches you don't appear in. The jobs you see on job boards are 20% of the market.">Hidden job market (80%)</option>
+                  <option value="The 1% Insight — you've forgotten 99% of what you're capable of. Professional amnesia is the biggest barrier to a search after 45. Executives leave the workshop seeing qualifications they didn't know they had.">The 1% Insight</option>
+                </optgroup>
+              </select>
+            </div>
+            <div class="field">
+              <label>Target audience</label>
+              <select id="a-audience">
+                <option value="CHROs, VPs of People, and HR Directors at US companies with 500-10,000 employees, especially those recently engaging with layoff/restructuring content">CHRO / VP People / HR Director</option>
+                <option value="General Counsel and employment law leaders at mid-market companies planning or executing reductions in force">General Counsel / Legal</option>
+                <option value="CFOs and finance leaders at companies announcing restructuring, cost programs, or layoffs">CFO / Finance</option>
+                <option value="Operating partners and portfolio HR leads at mid-market private equity firms with recurring restructuring events">PE operating partners</option>
+                <option value="Displaced executives and senior professionals age 45-65, recently laid off, 100+ applications with no callbacks">Displaced executives 45-65 (B2C)</option>
+              </select>
+            </div>
+            <button class="btn btn-primary w-full" id="a-btn" onclick="generateBrief('ads')">
+              <span class="spinner"></span>
+              <span class="btn-text">Generate Campaign Brief</span>
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <!-- TOPIC CONTEXT -->
+          <div class="topic-context" id="a-context">
+            <strong id="a-context-title"></strong>
+            <div id="a-context-body"></div>
+            <div class="angle" id="a-context-angle"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Campaign Brief</span>
+              <div class="flex-center gap-8">
+                <span class="voice-badge" id="a-voice-badge" style="display:none"></span>
+                <button class="copy-btn" onclick="copyAllSections('a')">Copy all</button>
+                <button class="btn btn-sm btn-secondary" onclick="openAiPanel('a')">AI Assistant</button>
+                <button class="btn btn-sm btn-primary" onclick="sendToTracker('a-output', 'ads')">+ Add to Tracker</button>
+              </div>
+            </div>
+            <div style="padding:16px 20px 20px" id="a-output-container">
+              <div class="output-placeholder" id="a-placeholder">Campaign brief will appear here after you click Generate.</div>
+              <div class="output-panel" id="a-sections" style="display:none"></div>
+              <div class="output-loading-state" id="a-loading" style="display:none">
+                <div style="font-size:24px;margin-bottom:8px">⚡</div>
+                Generating your campaign brief…
+              </div>
+            </div>
+            <textarea id="a-output" style="display:none"></textarea>
+          </div>
+
+          <!-- AI ASSISTANT PANEL -->
+          <div class="ai-assistant-panel" id="a-ai-panel">
+            <div class="ai-panel-header">
+              <span>AI Assistant</span>
+              <button class="ai-panel-close" onclick="closeAiPanel('a')">×</button>
+            </div>
+            <div class="ai-quick-actions">
+              <button class="ai-quick-btn" onclick="quickAction('a', 'Give me 5 alternative headlines for the strongest variant — more direct, more specific, within the platform character limit')">5 headline alternatives</button>
+              <button class="ai-quick-btn" onclick="quickAction('a', 'Check the voice — flag any ad copy that sounds like generic marketing speak instead of John Schrup. Suggest rewrites.')">Check voice</button>
+              <button class="ai-quick-btn" onclick="quickAction('a', 'Tighten every variant — cut to the character limits with zero filler. Every word earns its place.')">Tighten to limits</button>
+              <button class="ai-quick-btn" onclick="quickAction('a', 'Check compliance — flag anything that could be a financial guarantee, an unverifiable outcome promise, or that would trip employment-ad special category rules on this platform.')">Compliance check</button>
+              <button class="ai-quick-btn" onclick="quickAction('a', 'Adapt this campaign for Meta — rewrite the variants to Meta character limits and note the Special Ad Category targeting constraints for employment-related ads.')">→ Meta version</button>
+              <button class="ai-quick-btn" onclick="quickAction('a', 'Write the organic LinkedIn post version of the best variant — same angle, John voice, standalone post driving to the same landing page.')">Organic version</button>
+            </div>
+            <div class="ai-chat-area">
+              <div class="ai-response" id="a-ai-response"></div>
+              <div class="ai-response-actions" id="a-ai-response-actions" style="display:none"></div>
+              <div class="ai-chat-input-row">
+                <input class="ai-chat-input" id="a-ai-input" placeholder="Ask anything — make variant 2 more aggressive, add a stat, target smaller companies..." onkeydown="if(event.key==='Enter')sendAiMessage('a')">
+                <button class="btn btn-primary btn-sm" onclick="sendAiMessage('a')">Ask</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== CALCULATOR — COST OF TRANSITION ==================== -->
+  <div class="page" id="page-calc">
+    <div class="page-header">
+      <div class="page-title">Calculator &amp; Report Card</div>
+      <div class="page-sub">Run the cost of bad outplacement live on a discovery call, copy the summary into your follow-up — and print the Outcome Report Card as the leave-behind.</div>
+    </div>
+
+    <div class="grid-2" style="gap:24px">
+      <div>
+        <div class="card card-pad">
+          <div class="field">
+            <label>Employees being laid off</label>
+            <input type="number" id="calc-laidoff" min="1" placeholder="e.g. 100" oninput="runCalc()">
+          </div>
+          <div class="field">
+            <label>Average salary of affected employees ($)</label>
+            <input type="number" id="calc-salary" min="0" step="5000" placeholder="e.g. 120000" oninput="runCalc()">
+          </div>
+          <div class="field">
+            <label>Remaining workforce (the survivors)</label>
+            <input type="number" id="calc-remaining" min="0" placeholder="e.g. 900" oninput="runCalc()">
+          </div>
+          <div class="field">
+            <label>Current outplacement spend per head ($ — optional)</label>
+            <input type="number" id="calc-perhead" min="0" step="500" placeholder="e.g. 8000 — leave blank if none" oninput="runCalc()">
+          </div>
+          <div class="note">Estimates use research-cited figures baked into the sales playbook: ~$500/month productivity loss per remaining worker (12-month window), ~5% boomerang rehire rate at a ~5% salary premium plus recruiting/ramp costs, and ~1 in 3 legacy outplacement seats going unused.</div>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">The cost of getting this wrong</span>
+            <button class="copy-btn" onclick="copyCalcSummary(this)">Copy summary</button>
+          </div>
+          <div class="card-pad" id="calc-results">
+            <div class="output-placeholder">Enter the numbers on the left — results update live.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" style="margin-top:28px">
+      <div class="flex-center" style="margin-bottom:12px">
+        <div class="section-title" style="margin-bottom:0">Outcome Report Card — the one-page leave-behind</div>
+        <div class="ml-auto"><button class="btn btn-primary btn-sm" onclick="window.print()">🖨 Print / Save as PDF</button></div>
+      </div>
+
+      <div class="card card-pad" id="report-card">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:3px solid var(--navy);padding-bottom:14px;margin-bottom:6px">
+          <div>
+            <div style="font-family:'DM Serif Display',serif;font-size:26px;color:var(--navy)">FirstSource<span style="color:var(--blue)">Team</span> — Outcome Report Card</div>
+            <div style="font-size:13px;color:var(--muted);margin-top:2px">The only outplacement firm that serves the employee — and can prove it.</div>
+          </div>
+          <div style="text-align:right;font-size:12px;color:var(--muted)">Family owned · Est. 2006<br>Minneapolis, MN</div>
+        </div>
+
+        <div class="rc-row" style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--muted)">
+          <span>Metric</span><span>FirstSourceTeam</span><span>Industry standard</span>
+        </div>
+        <div class="rc-row">
+          <span class="rc-metric">Participant rating</span>
+          <span class="rc-fst"><b style="color:var(--blue);font-size:18px">4.9/5</b> — 174 public Google reviews, on platforms we cannot edit</span>
+          <span class="rc-industry">Brochures claim 92–98% satisfaction; participants publicly rate the four largest providers 1.3–2.8/5 (Trustpilot/Yelp, June 2026)</span>
+        </div>
+        <div class="rc-row">
+          <span class="rc-metric">Program length</span>
+          <span class="rc-fst"><b>Until placed.</b> Unlimited coaching — the engagement ends when your person lands, not when the hours run out</span>
+          <span class="rc-industry">30–90 days of access, paid regardless of outcome</span>
+        </div>
+        <div class="rc-row">
+          <span class="rc-metric">Measurable progress</span>
+          <span class="rc-fst">LinkedIn SSI scores measured per client: from the <b>20s–30s to the high 60s–70s</b>, some into the 80s. Visibility of 20,000–40,000 impressions/week within 3–5 weeks</span>
+          <span class="rc-industry">Most contracts contain no outcome metrics at all</span>
+        </div>
+        <div class="rc-row">
+          <span class="rc-metric">Interview performance</span>
+          <span class="rc-fst">Structured 3-of-6 interview framework — <b>8 of 10 advance</b> to the next round when executed (tested with 40+ candidates)</span>
+          <span class="rc-industry">Generic interview tips from a rotating coach</span>
+        </div>
+        <div class="rc-row">
+          <span class="rc-metric">Landing level</span>
+          <span class="rc-fst">Clients typically land <b>at their level</b> — positioned as the benchmark candidate, not a discount hire</span>
+          <span class="rc-industry">Not tracked, not reported</span>
+        </div>
+        <div class="rc-row">
+          <span class="rc-metric">Empty seats</span>
+          <span class="rc-fst"><b>Refunded automatically.</b> If a participant declines, you get the money back — no claim form, no negotiation</span>
+          <span class="rc-industry">~1 in 3 seats go unused; the provider keeps the fee</span>
+        </div>
+        <div class="rc-row" style="border-bottom:none">
+          <span class="rc-metric">Track record</span>
+          <span class="rc-fst"><b>100,000+</b> jobseekers over 20 years — started at the Ford Twin Cities plant closing, 2006</span>
+          <span class="rc-industry">—</span>
+        </div>
+
+        <div style="background:var(--blue-pale);border-radius:8px;padding:14px 16px;margin-top:16px;font-size:13px;color:var(--navy)">
+          <b>Why no placement-rate percentage?</b> Because nobody audits the ones legacy vendors quote, and their contracts commit to nothing. We publish our public reviews and our clients' measurable progress — and we don't leave until your person lands. Ask your current provider which of those they'll put in writing.
+        </div>
+
+        <div style="display:flex;justify-content:space-between;margin-top:16px;padding-top:12px;border-top:1px solid var(--border);font-size:12px;color:var(--muted)">
+          <span>John Schrup, President · FirstSource Team</span>
+          <span>hello@firstsourceteam.com · (612) 268-0216 · firstsourceteam.com</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== OUTREACH — ENGINE 1: FILL THE WORKSHOP ==================== -->
+  <div class="page" id="page-outreach">
+    <div class="page-header">
+      <div class="page-title">Outreach — Workshop Invites</div>
+      <div class="page-sub">Paste the daily prospects CSV, generate personalized invites, track every touch through to registration.</div>
+    </div>
+
+    <div class="grid-3 section" id="outreach-stats"></div>
+
+    <div class="card card-pad section">
+      <div class="section-title">Import daily prospects CSV</div>
+      <div class="note">Paste the full contents of today's <b>daily_prospects_*.csv</b> from the lead-qualification pipeline (header row included). Duplicates by name + company are skipped automatically.</div>
+      <div class="field">
+        <textarea id="csv-input" placeholder="lead_id,source,name,email,age,salary_indicator,..." style="min-height:90px;font-family:'DM Mono',monospace;font-size:12px"></textarea>
+      </div>
+      <div class="flex-center gap-8">
+        <button class="btn btn-primary btn-sm" id="import-btn" onclick="importProspects()"><span class="spinner"></span><span class="btn-text">Import</span></button>
+        <span style="font-size:13px;color:var(--muted)" id="import-status"></span>
+      </div>
+    </div>
+
+    <div class="tab-row">
+      <button class="tab-btn active" onclick="filterProspects('all')">All</button>
+      <button class="tab-btn" onclick="filterProspects('new')">New</button>
+      <button class="tab-btn" onclick="filterProspects('invited')">Invited</button>
+      <button class="tab-btn" onclick="filterProspects('replied')">Replied</button>
+      <button class="tab-btn" onclick="filterProspects('registered')">Registered</button>
+      <button class="tab-btn" onclick="filterProspects('attended')">Attended</button>
+    </div>
+
+    <div class="card" id="prospect-list">
+      <div id="prospect-rows"></div>
+    </div>
+  </div>
+
+  <!-- ==================== B2B PIPELINE — ENGINE 2: OUTPLACEMENT ==================== -->
+  <div class="page" id="page-b2b">
+    <div class="page-header flex-center">
+      <div>
+        <div class="page-title">B2B Pipeline — Outplacement</div>
+        <div class="page-sub">Trigger-based outreach to companies in active layoffs. Sequence runs cold → follow-up → offer → breakup. John takes every call.</div>
+      </div>
+      <div class="ml-auto">
+        <button class="btn btn-primary btn-sm" onclick="showAddAccount()">+ Add Target Account</button>
+      </div>
+    </div>
+
+    <div class="grid-3 section" id="b2b-stats"></div>
+
+    <div class="card card-pad mb-16" id="add-account-form" style="display:none">
+      <div class="grid-2">
+        <div class="field">
+          <label>Company *</label>
+          <input type="text" id="b2b-company" placeholder="e.g. Medtronic">
+        </div>
+        <div class="field">
+          <label>Company size</label>
+          <select id="b2b-size">
+            <option>500–1,000</option>
+            <option selected>1,000–5,000</option>
+            <option>5,000+</option>
+            <option>Under 500</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Trigger event *</label>
+          <input type="text" id="b2b-trigger" placeholder="e.g. WARN filing — 140 positions, Minneapolis office">
+        </div>
+        <div class="field">
+          <label>Trigger date</label>
+          <input type="date" id="b2b-trigger-date">
+        </div>
+        <div class="field">
+          <label>Trigger source</label>
+          <select id="b2b-source">
+            <option>WARN filing</option>
+            <option>layoffs.fyi</option>
+            <option>News / press</option>
+            <option>Earnings call</option>
+            <option>PE acquisition</option>
+            <option>Contract renewal window</option>
+            <option>New CHRO / people leader</option>
+            <option>LinkedIn intent signal</option>
+            <option>Attorney referral</option>
+            <option>Network intel</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Contact name</label>
+          <input type="text" id="b2b-contact" placeholder="e.g. Sarah Chen">
+        </div>
+        <div class="field">
+          <label>Contact title</label>
+          <input type="text" id="b2b-contact-title" placeholder="e.g. VP People / CHRO">
+        </div>
+        <div class="field">
+          <label>Contact email</label>
+          <input type="text" id="b2b-contact-email" placeholder="optional">
+        </div>
+        <div class="field">
+          <label>Contact LinkedIn</label>
+          <input type="text" id="b2b-contact-li" placeholder="optional — profile URL">
+        </div>
+        <div class="field">
+          <label>Notes</label>
+          <input type="text" id="b2b-notes" placeholder="anything useful">
+        </div>
+      </div>
+      <div class="flex-center gap-8">
+        <button class="btn btn-primary btn-sm" onclick="addB2bAccount()">Add Account</button>
+        <button class="btn btn-secondary btn-sm" onclick="hideAddAccount()">Cancel</button>
+      </div>
+    </div>
+
+    <div class="tab-row">
+      <button class="tab-btn active" onclick="filterB2b('all')">All</button>
+      <button class="tab-btn" onclick="filterB2b('target')">Target</button>
+      <button class="tab-btn" onclick="filterB2b('contacted')">Contacted</button>
+      <button class="tab-btn" onclick="filterB2b('followup')">Follow-up</button>
+      <button class="tab-btn" onclick="filterB2b('conversation')">Conversation</button>
+      <button class="tab-btn" onclick="filterB2b('proposal')">Proposal</button>
+    </div>
+
+    <div class="card" id="b2b-list">
+      <div id="b2b-rows"></div>
+    </div>
   </div>
 
   <!-- ==================== ASSET TRACKER ==================== -->
@@ -1229,6 +1687,7 @@
             <option>Social Post</option>
             <option>Email</option>
             <option>Still / Carousel</option>
+            <option>Ad Campaign</option>
           </select>
         </div>
         <div class="field">
@@ -1322,12 +1781,108 @@
     </div>
 
     <div class="card card-pad section">
+      <div class="section-title">This week — engine scoreboard</div>
+      <div class="grid-3" id="score-auto" style="margin-bottom:16px"></div>
+      <div class="note">Auto counts come from the Outreach and B2B desks. Enter the workshop numbers (from GoToWebinar) and confirmed B2B conversations below — save updates this week's row.</div>
+      <div class="grid-3" style="margin-bottom:12px">
+        <div class="field" style="margin-bottom:0">
+          <label>Workshop registrations</label>
+          <input type="number" id="score-registrations" min="0" placeholder="0">
+        </div>
+        <div class="field" style="margin-bottom:0">
+          <label>Workshop attendees</label>
+          <input type="number" id="score-attendees" min="0" placeholder="0">
+        </div>
+        <div class="field" style="margin-bottom:0">
+          <label>B2B conversations held</label>
+          <input type="number" id="score-conversations" min="0" placeholder="0">
+        </div>
+      </div>
+      <div class="flex-center gap-8" style="margin-bottom:20px">
+        <button class="btn btn-primary btn-sm" onclick="saveWeeklyMetrics()">Save this week</button>
+        <span style="font-size:13px;color:var(--muted)" id="score-save-status"></span>
+      </div>
+      <div class="section-title">Last 8 weeks</div>
+      <div id="score-history" style="font-size:14px"></div>
+    </div>
+
+    <div class="card section">
+      <div class="card-header">
+        <span class="card-title">Scheduled posts (Blotato)</span>
+      </div>
+      <div id="upcoming-posts"></div>
+    </div>
+
+    <div class="card card-pad section">
       <div class="section-title">Content priorities this week</div>
       <div style="font-size:14px;line-height:1.9;color:var(--ink)">
         <div style="display:flex;gap:10px;align-items:baseline;margin-bottom:4px"><span style="color:var(--blue);font-weight:700">1.</span> Record John's Direct Invite video (MacBook QuickTime)</div>
         <div style="display:flex;gap:10px;align-items:baseline;margin-bottom:4px"><span style="color:var(--blue);font-weight:700">2.</span> FST workshop to 50+ registrants — social push this week</div>
         <div style="display:flex;gap:10px;align-items:baseline;margin-bottom:4px"><span style="color:var(--blue);font-weight:700">3.</span> CareerIQ first 100 Pro subscribers from workshop cohort</div>
         <div style="display:flex;gap:10px;align-items:baseline"><span style="color:var(--blue);font-weight:700">4.</span> Executive Job Search Readiness Score free tool</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SCHEDULE MODAL (Blotato) ==================== -->
+  <div class="modal-overlay" id="schedule-modal" style="display:none">
+    <div class="modal">
+      <div class="modal-header">
+        <span id="sm-title">Schedule via Blotato</span>
+        <button class="ai-panel-close" style="color:var(--muted);font-size:22px" onclick="closeScheduleModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="grid-2">
+          <div class="field">
+            <label>Platform</label>
+            <select id="sm-platform" onchange="smPlatformChanged()">
+              <option value="linkedin">LinkedIn</option>
+              <option value="facebook">Facebook</option>
+              <option value="instagram">Instagram</option>
+              <option value="tiktok">TikTok</option>
+              <option value="youtube">YouTube</option>
+              <option value="twitter">Twitter / X</option>
+              <option value="threads">Threads</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Blotato account ID</label>
+            <input type="text" id="sm-account" list="sm-account-list" placeholder="from Blotato dashboard">
+            <datalist id="sm-account-list"></datalist>
+          </div>
+        </div>
+        <div class="field" id="sm-pageid-field" style="display:none">
+          <label id="sm-pageid-label">Page ID</label>
+          <input type="text" id="sm-pageid" placeholder="">
+        </div>
+        <div class="field" id="sm-yttitle-field" style="display:none">
+          <label>YouTube title</label>
+          <input type="text" id="sm-yttitle" placeholder="">
+        </div>
+        <div class="field">
+          <label>Post text</label>
+          <textarea id="sm-text" style="min-height:150px"></textarea>
+        </div>
+        <div class="field">
+          <label>Media URLs — public, comma-separated (optional)</label>
+          <input type="text" id="sm-media" placeholder="https://... , https://...">
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label>Schedule time (blank = publish now)</label>
+            <input type="datetime-local" id="sm-time">
+          </div>
+          <div class="field" style="display:flex;align-items:flex-end">
+            <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:13px;font-weight:500;margin-bottom:10px;color:var(--ink)">
+              <input type="checkbox" id="sm-save-target" style="width:auto"> Remember this account
+            </label>
+          </div>
+        </div>
+        <div id="sm-status" style="font-size:13px;color:var(--muted);min-height:18px;margin-bottom:6px"></div>
+        <div class="flex-center gap-8">
+          <button class="btn btn-primary" id="sm-submit" onclick="submitSchedule()"><span class="spinner"></span><span class="btn-text">Send to Blotato</span></button>
+          <button class="btn btn-secondary" onclick="closeScheduleModal()">Cancel</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1342,6 +1897,12 @@ let assets = [];
 let db = null;
 let currentBriefTab = 'video';
 let currentPage = 'briefs';
+let prospects = [];
+let b2bAccounts = [];
+let publishTargets = [];
+let currentProspectFilter = 'all';
+let currentB2bFilter = 'all';
+let scheduleAssetId = null;
 
 // ============================================================
 // INIT SUPABASE
@@ -1384,12 +1945,14 @@ async function showPage(page) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.header-nav button').forEach(b => b.classList.remove('active'));
   document.getElementById('page-' + page).classList.add('active');
-  document.querySelectorAll('.header-nav button')[['briefs','tracker','approvals','dashboard'].indexOf(page)].classList.add('active');
+  document.querySelectorAll('.header-nav button')[['briefs','outreach','b2b','calc','tracker','approvals','dashboard'].indexOf(page)].classList.add('active');
   currentPage = page;
   await loadAssets();
   if (page === 'tracker') renderAssets('all');
   if (page === 'approvals') renderApprovals();
-  if (page === 'dashboard') renderDashboard();
+  if (page === 'dashboard') { renderDashboard(); renderScoreboard(); renderUpcomingPosts(); }
+  if (page === 'outreach') { await loadProspects(); renderProspects(currentProspectFilter); }
+  if (page === 'b2b') { await loadB2b(); renderB2b(currentB2bFilter); }
 }
 
 function switchTab(page, tab) {
@@ -1405,7 +1968,7 @@ function switchTab(page, tab) {
 // ============================================================
 // SYSTEM PROMPT (the methodology intelligence)
 // ============================================================
-const SYSTEM_PROMPT = `You are the senior content and copywriting agent for First Source Team (FST), CareerIQ, and Outplacement Enterprise. You have absorbed 19 years of coaching methodology and know this material at the level of someone who has coached thousands of executives through career transitions personally.
+const SYSTEM_PROMPT = `You are the senior content and copywriting agent for First Source Team (FST), CareerIQ, and Outplacement Enterprise. You have absorbed 20 years of coaching methodology and know this material at the level of someone who has coached thousands of executives through career transitions personally.
 
 === WHO YOU ARE WRITING FOR ===
 
@@ -1417,12 +1980,12 @@ This audience is 45-65, primarily technology executives but spanning all industr
 
 === FIRST SOURCE TEAM: WHO WE ARE ===
 
-19-year career coaching + financial advisory practice in Minnesota.
-5.0 stars, 174 reviews. 100K+ jobseekers placed. 3x faster placement than national average for executives 45+.
+20-year career coaching + financial advisory practice in Minnesota. Family owned. Founded 2006 — started on a factory floor, helping people land on their feet when the Ford Twin Cities plant closed. "Outplacement is not a line of business we bolted onto a staffing empire. It is the business."
+4.9 stars, 174 reviews (Google). 100K+ jobseekers placed. 3x faster placement than national average for executives 45+.
 Clients landed at IBM, Google, Boeing, Siemens, Wells Fargo, Michelin, Walgreens, Department of Defense.
 Free weekly workshop every Wednesday 11am CT via GoToWebinar — this is the primary CTA for all FST marketing.
 Positioned as: "The first outplacement firm built for the people who use it."
-The competition: the world's largest outplacement firm rates 1.7/5 with participants. FST rates 5.0/5.
+The competition (the Credibility Delta): the four largest providers claim 92-98.5% satisfaction in their brochures; public participant reviews rate them 1.3 to 2.8 out of 5. FST rates 4.9/5 on Google — no gap to explain.
 Coaching is free. Revenue comes from financial planning referrals. Full transparency about this — it builds trust.
 
 === THE BROKEN SYSTEM — SPECIFIC FACTS TO USE ===
@@ -1501,7 +2064,7 @@ Someone in their early 50s wakes up at 5:12am. Not because they need to — but 
 
 === VOICE — THIS IS NON-NEGOTIABLE ===
 
-John's authentic voice. Built over 19 years. Blunt, experienced, credible. The voice of someone who has seen this exact situation thousands of times and speaks plainly about what is actually happening.
+John's authentic voice. Built over 20 years. Blunt, experienced, credible. The voice of someone who has seen this exact situation thousands of times and speaks plainly about what is actually happening.
 
 WHAT IT SOUNDS LIKE — EXAMPLES FROM ACTUAL COACHING:
 "I know that. But it's not in your resume."
@@ -1535,16 +2098,98 @@ All FST content drives to workshop registration only — one CTA.
 Financial content (Designed Retirement, tactical management, FIAs) requires John/Ian review before publishing.
 
 === CAREERIQ ===
-AI-powered executive career platform. Free ($0), Pro ($79/mo), Concierge (via financial planning), Enterprise ($29-49/seat).
+AI-powered executive career platform. Free ($0), Pro ($79/mo), Concierge (via financial planning), Enterprise (via FirstSourceTeam outplacement tiers: Essentials, Extended, Enterprise — published pricing on firstsourceteam.com; never quote seat prices in content).
 Positioned as: "AI acts as a prepared collaborator surfacing the executive's real story to position them as the benchmark candidate."
 Honest metrics only — Momentum Score, Applications in the Right Lane, Agent Work This Week. No vanity stats.
 Built specifically for executives 45-65. Not a generic job platform.
 
-=== OUTPLACEMENT ENTERPRISE ===
+=== OUTPLACEMENT ENTERPRISE (FirstSourceTeam for Employers) ===
 B2B. Target: HR Directors, CHROs, VP People at companies doing reductions in force.
-Legacy outplacement vendors charge $3,000-$15,000 per executive. FST delivers superior outcomes at enterprise pricing.
-The world's largest outplacement firm: 1.7/5 participant rating. FST: 5.0/5.
-"Built for the participant, not the person signing the invoice."`;
+
+Positioning: "The first outplacement firm built for the people who use it." / "Outplacement was broken. We built the alternative."
+
+THE LEGACY PROBLEM — use these exact framings:
+- Legacy vendors charge $5,000-$11,000 per head for a few PDFs, five hours of coaching, and a career portal that nobody logs into.
+- Box-checking: outplacement sold as a line item on a severance package — not as a service anyone expects to work.
+- Misaligned incentives: the buyer never uses the product. The user never chose the provider. Nobody is accountable for outcomes.
+- Legacy pricing: enterprise margins on generic coaching. The same playbook since 2005, at prices that assume nothing has changed.
+- THE CREDIBILITY DELTA (chart on the site, sourced June 2026 from Trustpilot/Yelp vs provider marketing pages): the four largest providers claim 92-98.5% satisfaction; participants publicly rate them 1.3-2.8 out of 5. "Their brochures say 92 to 98 percent satisfied. The public reviews written by the people who actually went through their programs say 1.3 to 2.8 out of 5. Both numbers are real. Only one of them is told to your face." FST: 4.9/5 on Google — "no gap to explain." "We put our public rating on the same chart, because honest and transparent is the whole operating model here." "We turn our clients into fans of us, and you."
+
+THE FST ALTERNATIVE — product facts (all true, all usable):
+- Three tiers: Essentials, Extended, and Enterprise — or a configurator to build a custom package. Published pricing (never quote figures in content; point to the site).
+- No MSAs. No procurement cycles. Self-service one-click checkout, live within 24 hours. Legacy vendors take 2-4 weeks of onboarding. A RIF doesn't wait.
+- Positive Decline Refunds: if a participant declines services, the employer gets a refund. You never pay for empty seats. (Legacy firms' margin IS the empty seats — industry enrollment claims run ~85% but real engagement is a fraction of that.)
+- Live Participant Dashboard: real-time status, engagement, and spend visibility for every participant.
+- Exportable Audit Logs: every key interaction documented — compliance-ready records for legal, HR, and audit teams.
+- Coaches matched by industry and career level — not a rotation of generalists reading from a script. Unlimited 1:1 coaching until placed.
+- AI leverage: "We use AI to scale what legacy firms do with armies of generalists. Better outcomes, lower cost — not one or the other." CareerIQ platform included for every participant. A leader in AI upskilling — participants leave more employable than they arrived.
+- Integrated financial services through FirstSource Wealth — retirement planning and financial strategy for the transition ahead.
+
+CORE B2B LINES (verbatim from the live employer pages — use freely):
+"Do right by the people who got you here."
+"Your people are worth more than a checkbox."
+"Built for the participant, not the person signing the invoice."
+"If you're going to pay for outplacement, pay for a program that will leave your people better off than you left them."
+"Everything you need to protect your brand." (How employees talk about you after a RIF IS your employer brand.)
+"Upload a name. We handle the rest." / "Your team checks a dashboard, not a to-do list."
+"Total transparency for the C-Suite. Every participant, every dollar, every outcome, visible in real-time. No more black-box outplacement reporting."
+"You never pay for empty seats. Nobody quietly pockets the seat, and nobody you paid for walks away with nothing." Refunds are "Automatic. No claim form, no negotiation, no fine print."
+"AI where it multiplies. People where it matters." (CareerIQ rewrites resumes per position, matches live openings, runs interview simulations; a dedicated human coach carries the person the whole way.)
+"We started on a factory floor, not in a procurement portal." (Founded 2006, Ford Twin Cities plant closing. Family owned, independent, "measured by the only number that matters: whether your people land well and say so.")
+Positioning tagline: "Outplacement for employers. Self-service. Transparent. Refundable. Family owned · Est. 2006."
+
+THE THREE ENTRY DOORS — the site segments B2B buyers by moment; match content and outreach to the door:
+1. NO PROGRAM: "Set it up before the day you need it. There is no procurement project here. A program can be standing and ready this week, so the hardest day of your year already has a plan attached." (Peacetime pitch.)
+2. CONTRACT RENEWING: "Ask one question first: what did your people rate it? Not the vendor's survey. The public reviews. If the answer embarrasses the incumbent, the renewal is your easiest moment to fix it."
+3. JUST INHERITED THE VENDOR STACK (new CHRO/people leader): "This is the easiest line item to upgrade. New people leaders review their vendors in the first quarter. Outplacement is the one where switching takes days, not quarters, and your people feel the difference immediately."
+
+Company contact for B2B signatures: John Schrup, President, FirstSource Team — Minneapolis, MN · hello@firstsourceteam.com · (612) 268-0216 (Ian Schrup, Director of Operations)
+
+=== B2B SALES PLAYBOOK — THE FOUR ARGUMENTS ===
+THE PREMISE: The laid-off employee has zero purchasing power — they never chose the vendor. The sale is to the CHRO, the CFO, and the General Counsel, buyers who have never experienced the product and get no report on whether it worked. Every piece of B2B content answers one question: "What does choosing a bad outplacement vendor cost me — and what does a great one protect?" The 4.9-star reviews are not the pitch. They are the proof that the pitch is true.
+
+ARGUMENT 1 — GLASSDOOR (lands with CHRO): After a layoff, Glassdoor ratings drop immediately and stay down for a year+, recovering only if the transition is handled well. 86% of candidates check employer reviews before applying; above-average ratings get ~20% more job clicks and ~16% more applications — a cratered rating raises cost-per-hire for two years. Pitch: "Every person who walked out your door is writing your Glassdoor reviews right now. We deliver 4.9 stars. Participants publicly rate the big providers 1.3 to 2.8. That gap shows up in your Glassdoor score within 90 days of a layoff — and costs you money every quarter."
+
+ARGUMENT 2 — SURVIVOR SYNDROME (lands with CHRO/CFO): Lay off 100 and 900 stay — watching how their colleagues are treated. 65% of remaining employees admit to more costly mistakes after a layoff; 49% report significant morale drops; survivor productivity losses run ~$500 per remaining worker per month. If the leavers tell the stayers "the outplacement was useless," the stayers update their resumes — and the best ones leave first. Pitch: "Your layoff doesn't end on termination day. It runs for 12 months inside the building. How you treat the people walking out is the loudest signal you send to the people still at their desks."
+
+ARGUMENT 3 — BOOMERANG REHIRES (lands with CFO): ~5% of laid-off workers are rehired by the same company, typically within 6-10 months; high performers have a 120% higher rehire rate and return at a ~5% premium; nearly half of mass-layoff companies rehire for cut roles within a year. Pitch: "You will rehire some of these people. Our job is to make sure they land well, think highly of you, and take your call when business rebounds."
+
+ARGUMENT 4 — LEGAL CONSIDERATION (lands with General Counsel; sharpest blade): Outplacement is part of the consideration for the severance release. Under ADEA/OWBPA (employees 40+), the release is only enforceable if the consideration is genuine. Pitch: "A service participants publicly rate 1.3 to 2.8 out of 5 — documented as generic, understaffed, and widely unused — is an argument a plaintiff's attorney will make: that the consideration was illusory. A 4.9-star, unlimited-coaching-until-placed service is defensible consideration. A portal login is not."
+
+THE NUCLEAR DIFFERENTIATOR — UNTIL PLACED: Every major incumbent sells time-boxed programs (30-90 days of access, paid regardless of outcome; then the employee is on their own). FST coaches until placement — the only vendor whose incentives structurally align with the employee's. Say it this way: "You're not paying for platform access or a session limit. You're paying for outcomes. We don't consider the engagement complete until your employee has a new job. No one else in this industry offers that. Ask your current provider why."
+
+COMPETITOR CONTRAST — state plainly, never name the firms; the data does the work. The Credibility Delta chart (live on the site, sourced June 2026 — provider marketing pages for claims, Trustpilot/Yelp for ratings): Provider A claims 97% satisfied, participants rate it 1.6/5. Provider B claims 98.5%, rated 2.1/5. Provider C claims 92%, rated 2.8/5. Provider D claims 95%, rated 1.3/5. FST: 4.9/5 on Google — no gap to explain. Use the range ("they claim 92-98% satisfied; their participants publicly rate them 1.3 to 2.8") rather than inventing fresher numbers.
+- "Industry-wide, roughly 1 in 3 outplacement seats go completely unused. The provider gets paid regardless."
+- "Most outplacement contracts contain no outcome metrics — no placement rate, no time-to-placement, no salary comparison. The buyer has no idea if it worked."
+- "We have 4.9 stars on public platforms we cannot edit, we publish measurable client progress (LinkedIn SSI deltas, visibility growth), and we don't leave until your person lands." Then ask: "Which of those will your current provider commit to?"
+
+=== HONEST OUTCOME METRICS — what FST actually measures. Use ONLY these; never invent placement rates, days-to-placement averages, or salary-increase percentages ===
+FST is a coaching firm, not a staffing agency. We don't sell placement-rate statistics — legacy vendors quote rates nobody audits. We sell a system and stay until it works. An executive search at 45+ can honestly take many months; the differentiator is what measurably changes while they search, and that we're still there when it ends:
+- UNTIL PLACED: unlimited coaching with no 30/90-day clock. The engagement ends when they land, not when the hours run out.
+- LINKEDIN SSI SCORES (measured per client): clients arrive in the 20s-30s and move to the high 60s-low 70s — some into the 80s.
+- LINKEDIN VISIBILITY: 20,000-40,000 impressions/week within 3-5 weeks of following the system; exceptional cases reach 200,000.
+- INTERVIEW ADVANCEMENT: the 3-of-6 framework, tested with 40+ candidates — 8 out of 10 advance to the next round when executed. Clients see dramatic improvement in interview rates.
+- LANDING LEVEL: clients typically land AT their level, not below it. (Down-leveling rarely works anyway — they'd be dismissed as overqualified. Say this plainly; it's the honest market reality.)
+- TRACK RECORD: 100,000+ jobseekers over 20 years, 4.9/5 across 174 public Google reviews.
+When a prospect asks for a placement rate, the answer is: "Legacy vendors quote placement rates nobody audits — and their contracts contain no outcome metrics at all. We publish our public reviews and our clients' measurable progress, and we don't leave until your person lands. Ask your current provider which of those they'll put in writing."
+
+BUYER MAP — match the argument to the reader:
+- CHRO / VP People (fears Glassdoor collapse, board scrutiny): Argument 1, then 2.
+- General Counsel (fears release enforceability, litigation): Argument 4.
+- CFO (fears hidden costs, rehiring waste): Arguments 3 + 2.
+- CEO / Board (fears investor/ESG perception): workforce-transition quality as a disclosure and reputation metric.
+- Mid-market HR Director (wants to do right by people): lead with real testimonials, then "ask your current vendor for theirs."
+The warmest entry: the CHRO or HR Director who already lived through a post-layoff Glassdoor crater and doesn't want to explain it to the CEO twice.
+
+ONE-SENTENCE POSITIONING: "The only outplacement firm that serves the employee — and can prove it."
+
+=== REAL CLIENT QUOTES — verbatim from firstsourceteam.com, safe to use with attribution exactly as shown ===
+Short: "Eye-opening." — Jesse B. · "A game changer." — Jeremi R. · "Best advice I've received so far." — Roger R. · "I found my dream job with the DoD." — Terry C. · "Two days in, I got responses." — Mike P. · "Best training you can get online." — Evans S. · "Night and day." — Anonymous · "Best in class." — Scott B. · "Highly recommend for anyone feeling frustrated." — Jeremi R.
+B2B anchor quote (featured on the employer page): "Their commitment to my success is truly exceptional." — Cheryl Brown, from public Google reviews. Site framing to reuse: "Reviews like hers are what people write when the support is real. When your former employees write them, that is your employer brand being rebuilt at the exact moment it is most exposed, and it is the outcome you are actually buying."
+Longer: "GM called me back within two hours of submitting my resume to set up an interview! In less than two weeks, I landed a job offer with an increase in salary, a bonus, and a new company car every six months." — Scott
+"FirstSource Team is the reason I found the job that I wanted. It took me less than three months during the holidays and I found the job I really want, not just any job to pay the bills." — Connie
+"I have accepted a position that I learned about through FirstSource Team — Director of Sales and Business Development." — Dean
+NEVER invent, embellish, or paraphrase-then-quote client quotes. Use only these, verbatim, or none.`;
 
 // ============================================================
 // TOPIC CONTEXT DEFINITIONS
@@ -1565,7 +2210,13 @@ const TOPIC_CONTEXTS = {
   '30-Minute Rewrite': { title: 'The 30-Minute Rewrite Standard', body: 'A full resume rewrite for a specific position must be completable in 30 minutes or less. Not tweaked. Not keyword-sprinkled. Fully rewritten. For every application. If it takes longer, the candidate will never sustain the practice.', angle: 'Suggested angle: Most executives spend 3-4 hours on a resume. Our clients spend 30 minutes and get better results.' },
   'Age Discrimination': { title: 'Age Discrimination — The Truth', body: 'AARP data: ~95% of people 50+ face age discrimination at some point. But when your resume scores 28-32%, no human has ever seen you. You can\'t be age-discriminated against by someone who doesn\'t know you exist. Fix visibility first.', angle: 'Suggested angle: Name the thing everyone is afraid to say — then reframe it with agency.' },
   'Designed Retirement': { title: 'Designed Retirement (Financial — Compliance Required)', body: 'Floor (guaranteed income covering essential expenses) + Guard (institutional tactical management, 100% cash capability) + Growth Engine (stay appropriately aggressive). Safety of an 80-year-old with growth of a 30-year-old.', angle: 'Suggested angle: Most people have a 401(k) balance. That\'s not a plan. It\'s a hope.' },
-  'Workshop': { title: 'The Workshop Invitation', body: 'Free Wednesday 11am CT workshop via GoToWebinar. No pitch. No gimmick. Executives walk away with a framework they can execute immediately. 5.0 stars, 174 reviews, clients at IBM, Google, Boeing, DoD.', angle: 'Suggested angle: Drive to registration. One CTA. Make it feel like the obvious next step.' },
+  'Workshop': { title: 'The Workshop Invitation', body: 'Free Wednesday 11am CT workshop via GoToWebinar. No pitch. No gimmick. Executives walk away with a framework they can execute immediately. 4.9 stars, 174 reviews, clients at IBM, Google, Boeing, DoD.', angle: 'Suggested angle: Drive to registration. One CTA. Make it feel like the obvious next step.' },
+  'Broken Outplacement': { title: 'Outplacement Was Broken (B2B)', body: 'Legacy vendors charge $5,000-$11,000 per head for a few PDFs, five hours of coaching, and a career portal nobody logs into. Box-checking sold as a severance line item.', angle: 'Suggested angle: "If you\'re going to pay for outplacement, pay for a program that leaves your people better off than you left them."' },
+  'Credibility Delta': { title: 'The Credibility Delta (B2B)', body: 'The four largest providers claim 92-98.5% satisfaction in their brochures; participants publicly rate them 1.3-2.8/5 (Trustpilot/Yelp, June 2026). FST: 4.9/5 on Google — no gap to explain. "Both numbers are real. Only one of them is told to your face."', angle: 'Suggested angle: Put the two numbers side by side and let the gap do the work. Close with: ask your current vendor for their public rating.' },
+  'Factory Floor': { title: 'Factory Floor Origin Story', body: 'Founded 2006 helping people land when the Ford Twin Cities plant closed. Twenty years, 100,000+ placements, still family owned and independent. "Outplacement is not a line of business we bolted onto a staffing empire. It is the business."', angle: 'Suggested angle: Contrast where FST started (a factory floor, workers who needed jobs) with where the incumbents live (procurement portals). Origin is the trust argument.' },
+  'Positive Decline Refunds': { title: 'Positive Decline Refunds (B2B)', body: 'If a participant declines services, the employer gets a refund. You never pay for empty seats. No legacy firm offers this — empty seats ARE their margin.', angle: 'Suggested angle: One question for HR: "What percentage of the outplacement seats you bought last time were actually used?"' },
+  'Built for the Participant': { title: 'Built for the Participant (B2B)', body: 'Every decision optimized for the person going through the layoff, not the person signing the invoice. How former employees talk about you after a RIF is your employer brand — and it outlives the severance check.', angle: 'Suggested angle: Glassdoor reviews get written in the 90 days after a layoff. What experience are you funding for that window?' },
+  'MSAs Live in 24 Hours': { title: 'No MSAs — Live in 24 Hours (B2B)', body: 'Published pricing, self-service one-click checkout, three tiers (Essentials, Extended, Enterprise) or build-your-own. Live within 24 hours vs 2-4 weeks of legacy onboarding.', angle: 'Suggested angle: A RIF doesn\'t wait for procurement. Speed is the underrated differentiator.' },
 };
 
 function showTopicContext(typeId, topicValue) {
@@ -1598,6 +2249,9 @@ document.addEventListener('DOMContentLoaded', () => {
   
   const sTheme = document.getElementById('s-theme');
   if (sTheme) sTheme.addEventListener('change', () => showTopicContext('s', sTheme.value));
+
+  const aAngle = document.getElementById('a-angle');
+  if (aAngle) aAngle.addEventListener('change', () => showTopicContext('a', aAngle.value));
 });
 
 // ============================================================
@@ -1657,7 +2311,7 @@ function renderSections(typeId, text) {
   if (container) container.style.display = 'flex';
   if (rawOutput) rawOutput.value = text;
   
-  const type = typeId === 'v' ? 'video' : typeId === 's' ? 'social' : typeId === 'e' ? 'email' : 'visual';
+  const type = typeId === 'v' ? 'video' : typeId === 's' ? 'social' : typeId === 'e' ? 'email' : typeId === 'a' ? 'ads' : 'visual';
   const sections = parseIntoSections(text, type);
   
   container.innerHTML = sections.map((sec, i) => `
@@ -1973,7 +2627,7 @@ async function regenSection(typeId, idx, label) {
 // BRIEF GENERATION
 // ============================================================
 async function generateBrief(type) {
-  const typeId = type === 'video' ? 'v' : type === 'social' ? 's' : type === 'email' ? 'e' : 'vis';
+  const typeId = type === 'video' ? 'v' : type === 'social' ? 's' : type === 'email' ? 'e' : type === 'ads' ? 'a' : 'vis';
   const btnId = typeId + '-btn';
   const btn = document.getElementById(btnId);
 
@@ -2081,7 +2735,7 @@ CONTENT RULES:
 - Open with a direct observation, uncomfortable truth, or counterintuitive claim — never a question, never a greeting
 - Use specific numbers: "ATS average match is 35%" not "your resume may not be optimized"
 - Reference frameworks by name when relevant
-- Voice: John Schrup, 19-year veteran. Blunt. Credible. Not inspirational. Not corporate.
+- Voice: John Schrup, 20-year veteran. Blunt. Credible. Not inspirational. Not corporate.
 - NEVER: "game-changing", "excited to share", "innovative", "empower", "journey", "passionate about"
 
 Format each post:
@@ -2117,7 +2771,7 @@ REQUIREMENTS:
 - Subject: specific and direct. Never a question. Never clickbait.
 - Preview text: 40-90 chars, extends the subject naturally
 - Opening: no warm-up, no "I hope this finds you well". Start with the real thing.
-- Voice: John Schrup. Blunt. Credible. 19-year veteran. Not a marketer.
+- Voice: John Schrup. Blunt. Credible. 20-year veteran. Not a marketer.
 - Single CTA only
 - No filler sentences
 - FST emails drive to workshop registration only
@@ -2133,6 +2787,58 @@ SUBJECT LINE: [subject]
 PREVIEW TEXT: [preview]
 ---
 [Full email body]`;
+  }
+
+  else if (type === 'ads') {
+    const brand = document.getElementById('a-brand').value;
+    const platform = document.getElementById('a-platform').value;
+    const angle = document.getElementById('a-angle').value;
+    const audience = document.getElementById('a-audience').value;
+
+    const adPlatformRules = platform.startsWith('LinkedIn Sponsored')
+      ? `PLATFORM: LinkedIn Sponsored Content. Headline max 70 characters. Intro text: the first 150 characters show before "see more" — front-load the hook; keep total under 400. Description max 100 characters. CTA button from LinkedIn's set (Learn More, Register, Download, Request Demo). Targeting by job title, function, seniority, and company size IS allowed and precise — use it.`
+      : platform.startsWith('LinkedIn Message')
+      ? `PLATFORM: LinkedIn Message Ads. Subject max 60 characters. Body under 500 characters, written like a short personal note from John — not an ad. Single CTA link. Sender: John Schrup, President, FirstSource Team.`
+      : platform.startsWith('Meta')
+      ? `PLATFORM: Meta (Facebook + Instagram). Primary text: the first 125 characters are visible — front-load. Headline max 40 characters. Description max 30 characters. IMPORTANT: employment-related ads on Meta fall under the Special Ad Category — age, gender, and zip targeting are disabled; audiences must stay broad. The creative must self-select the audience: speak so directly to the buyer that everyone else scrolls past.`
+      : platform.startsWith('Google')
+      ? `PLATFORM: Google Search. Provide 8-10 headlines (max 30 characters EACH) and 4 descriptions (max 90 characters each) for a responsive search ad, plus a keyword theme list (exact/phrase suggestions) and 5-8 negative keywords. Search intent IS the targeting — match the mindset of the query.`
+      : `PLATFORM: YouTube pre-roll, 15-30 seconds. Script with the hook in the first 5 seconds (before the skip button), direct camera, text overlays, end card with CTA. Include a companion banner headline and description.`;
+
+    prompt = `Generate a complete paid advertising campaign brief.
+
+BRAND: ${brand}
+PLATFORM: ${platform}
+CAMPAIGN ANGLE: ${angle}
+TARGET AUDIENCE: ${audience}
+
+${adPlatformRules}
+
+RULES:
+- Ad copy in John's voice: direct observation, specific numbers, zero marketing speak. NEVER "game-changing", "excited to share", "innovative", "empower", "unlock".
+- Use only facts and statistics from your system prompt. Never invent numbers, testimonials, or outcomes.
+- One CTA per variant. B2C drives to workshop registration; B2B drives to a conversation or the employer page.
+- Quote real client reviews only verbatim, with attribution exactly as given in the system prompt.
+
+THE BRIEF MUST INCLUDE THESE LABELED SECTIONS:
+
+CAMPAIGN CONCEPT
+The single idea, why it stops this exact audience, and what the ad must make them feel and do.
+
+AD VARIANTS
+4 distinct variants. For each: headline (within the character limit), primary/body text (within limits), CTA button, and one-line visual direction. Vary the angle of attack across variants, not just the wording.
+
+TARGETING
+Specific, platform-appropriate targeting: titles, company sizes, intent signals, keyword themes, or audience notes. Flag any special-category constraints.
+
+LANDING PAGE AND TRACKING
+Where each click goes, what the page must say to match the ad's promise, and a UTM naming suggestion.
+
+TEST PLAN
+What launches first, the one metric that decides the winner, and when to kill or scale (frame in weeks; do not invent benchmark numbers).
+
+COMPLIANCE NOTES
+Anything in these variants needing review before spend: employment-ad category rules, financial claims, outcome promises.`;
   }
 
   else if (type === 'visual') {
@@ -2182,7 +2888,7 @@ Text, placement, and what it drives to.`;
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         system: SYSTEM_PROMPT,
-        max_tokens: type === 'video' ? 3000 : type === 'social' ? 2000 : type === 'email' ? 1500 : 2000,
+        max_tokens: type === 'video' ? 3000 : type === 'ads' ? 2500 : type === 'social' ? 2000 : type === 'email' ? 1500 : 2000,
         messages: [{ role: 'user', content: prompt }]
       })
     });
@@ -2296,11 +3002,12 @@ async function sendToTracker(outputId, type) {
   if (btn) { btn.textContent = 'Saving…'; btn.disabled = true; }
   const typeMap = {
     'video':'Video / Reel', 'v-output':'Video / Reel',
-    'social':'Social Post', 's-output':'Social Post', 
+    'social':'Social Post', 's-output':'Social Post',
     'email':'Email', 'e-output':'Email',
-    'visual':'Still / Carousel', 'vis-output':'Still / Carousel'
+    'visual':'Still / Carousel', 'vis-output':'Still / Carousel',
+    'ads':'Ad Campaign', 'a-output':'Ad Campaign'
   };
-  const typeClean = type.replace('-output',''); const brandEl = document.getElementById(typeClean === 'video' ? 'v-brand' : typeClean === 'social' ? 's-brand' : typeClean === 'email' ? 'e-brand' : 'vis-brand');
+  const typeClean = type.replace('-output',''); const brandEl = document.getElementById(typeClean === 'video' ? 'v-brand' : typeClean === 'social' ? 's-brand' : typeClean === 'email' ? 'e-brand' : typeClean === 'ads' ? 'a-brand' : 'vis-brand');
   const asset = {
     title: `Generated ${typeMap[type]} — ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'})}`,
     type: typeMap[type],
@@ -2334,7 +3041,8 @@ function renderAssets(filter) {
       <div><span class="agent-chip">${a.brand}</span></div>
       <div class="asset-meta">${a.owner}</div>
       <div>${statusBadge(a.status)}</div>
-      <div onclick="event.stopPropagation()" style="display:flex;align-items:center;justify-content:center">
+      <div onclick="event.stopPropagation()" style="display:flex;align-items:center;justify-content:center;gap:2px">
+        ${a.status === 'approved' ? `<button onclick="openScheduleModal('${a.id}')" title="Schedule / publish via Blotato" style="background:none;border:none;cursor:pointer;color:var(--blue);font-size:16px;padding:4px 6px;border-radius:4px;line-height:1">📤</button>` : ''}
         <button onclick="deleteAsset('${a.id}')" title="Delete" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:18px;padding:4px 6px;border-radius:4px;line-height:1" onmouseover="this.style.color='var(--danger)'" onmouseout="this.style.color='var(--muted)'">🗑</button>
       </div>
     </div>
@@ -2446,6 +3154,710 @@ function renderDashboard() {
       <span style="color:var(--ink)">${k}</span>
       <span style="font-weight:600;color:var(--navy)">${v}</span>
     </div>`).join('');
+}
+
+// ============================================================
+// ENGINE 1 — OUTREACH: WORKSHOP INVITES
+// ============================================================
+const openProspectPanels = new Set();
+
+async function loadProspects() {
+  if (!db) return;
+  const { data, error } = await db.from('prospects').select('*').order('created_at', { ascending: false });
+  if (!error && data) prospects = data;
+}
+
+function parseCsv(text) {
+  const rows = []; let row = [], field = '', inQ = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQ) {
+      if (c === '"') { if (text[i + 1] === '"') { field += '"'; i++; } else inQ = false; }
+      else field += c;
+    }
+    else if (c === '"') inQ = true;
+    else if (c === ',') { row.push(field); field = ''; }
+    else if (c === '\n' || c === '\r') {
+      if (c === '\r' && text[i + 1] === '\n') i++;
+      row.push(field); field = '';
+      if (row.length > 1 || row[0].trim() !== '') rows.push(row);
+      row = [];
+    }
+    else field += c;
+  }
+  if (field !== '' || row.length) { row.push(field); if (row.length > 1 || row[0].trim() !== '') rows.push(row); }
+  return rows;
+}
+
+async function importProspects() {
+  const input = document.getElementById('csv-input');
+  const status = document.getElementById('import-status');
+  const btn = document.getElementById('import-btn');
+  if (!input.value.trim()) { status.textContent = 'Paste the CSV first.'; return; }
+  if (!db) { status.textContent = 'Database not connected — reload the page.'; return; }
+  btn.classList.add('loading'); btn.disabled = true;
+  try {
+    const rows = parseCsv(input.value.trim());
+    if (rows.length < 2) { status.textContent = 'Need a header row plus at least one prospect row.'; return; }
+    const header = rows[0].map(h => h.trim().toLowerCase());
+    const col = name => header.indexOf(name);
+    const get = (r, name) => { const i = col(name); return i >= 0 ? (r[i] || '').trim() : ''; };
+    if (col('name') < 0) { status.textContent = 'CSV must have a "name" column.'; return; }
+
+    await loadProspects();
+    const existing = new Set(prospects.map(p => ((p.name || '') + '|' + (p.company || '')).toLowerCase()));
+    const toInsert = []; let skipped = 0;
+    for (const r of rows.slice(1)) {
+      const name = get(r, 'name');
+      if (!name) continue;
+      const company = get(r, 'company');
+      if (existing.has((name + '|' + company).toLowerCase())) { skipped++; continue; }
+      existing.add((name + '|' + company).toLowerCase());
+      const dd = get(r, 'displacement_date');
+      toInsert.push({
+        lead_id: get(r, 'lead_id') || null,
+        source: get(r, 'source') || null,
+        name,
+        email: get(r, 'email') || null,
+        company: company || null,
+        title: get(r, 'title') || null,
+        location: get(r, 'location') || null,
+        displacement_date: /^\d{4}-\d{2}-\d{2}$/.test(dd) ? dd : null,
+        linkedin_signals: get(r, 'linkedin_signals') || null,
+        readiness_signals: get(r, 'readiness_signals') || null,
+        content_recommendation: get(r, 'content_recommendation') || null,
+        notes: get(r, 'notes') || null,
+        status: 'new'
+      });
+    }
+    if (toInsert.length) {
+      const { error } = await db.from('prospects').insert(toInsert);
+      if (error) { console.error('[FST] prospect insert error:', error); status.textContent = 'Insert failed — check console.'; return; }
+    }
+    status.textContent = `Imported ${toInsert.length} new prospect${toInsert.length === 1 ? '' : 's'}, skipped ${skipped} duplicate${skipped === 1 ? '' : 's'}.`;
+    input.value = '';
+    await loadProspects();
+    renderProspects(currentProspectFilter);
+  } finally {
+    btn.classList.remove('loading'); btn.disabled = false;
+  }
+}
+
+function outreachStats() {
+  const count = s => prospects.filter(p => p.status === s).length;
+  const el = document.getElementById('outreach-stats');
+  el.innerHTML = `
+    <div class="stat-card"><div class="stat-label">New — need an invite</div><div class="stat-value" style="color:var(--blue)">${count('new')}</div><div class="stat-sub">generate + send today</div></div>
+    <div class="stat-card"><div class="stat-label">Invited, awaiting reply</div><div class="stat-value" style="color:var(--warn)">${count('invited')}</div><div class="stat-sub">follow up at 3–5 days</div></div>
+    <div class="stat-card"><div class="stat-label">Registered for workshop</div><div class="stat-value" style="color:var(--success)">${count('registered') + count('attended') + count('converted')}</div><div class="stat-sub">including attended + converted</div></div>`;
+}
+
+function filterProspects(f) {
+  currentProspectFilter = f;
+  document.querySelectorAll('#page-outreach .tab-btn').forEach(b => b.classList.remove('active'));
+  if (event && event.target) event.target.classList.add('active');
+  renderProspects(f);
+}
+
+const PROSPECT_STATUSES = ['new', 'invited', 'replied', 'registered', 'attended', 'converted', 'dead'];
+
+function renderProspects(filter) {
+  outreachStats();
+  const rowsEl = document.getElementById('prospect-rows');
+  const filtered = filter === 'all' ? prospects : prospects.filter(p => p.status === filter);
+  if (!filtered.length) {
+    rowsEl.innerHTML = `<div class="empty"><div class="empty-icon">📥</div><div class="empty-title">No prospects here</div><div>Paste today's CSV above to import the daily batch.</div></div>`;
+    return;
+  }
+  rowsEl.innerHTML = filtered.map(p => {
+    const meta = [p.displacement_date ? 'Displaced ' + p.displacement_date : '', p.source || ''].filter(Boolean).join(' · ');
+    const panelOpen = openProspectPanels.has(p.id);
+    return `
+    <div class="prospect-row">
+      <div>
+        <div class="asset-title">${escapeHtml(p.name)}</div>
+        <div class="asset-meta">${escapeHtml([p.title, p.company].filter(Boolean).join(' · '))}${p.location ? ' · ' + escapeHtml(p.location) : ''}</div>
+        ${meta ? `<div class="signal-note">${escapeHtml(meta)}</div>` : ''}
+      </div>
+      <div class="signal-note" title="${escapeHtml(p.linkedin_signals || '')}">${escapeHtml((p.readiness_signals || p.linkedin_signals || '').slice(0, 90))}</div>
+      <div><select onchange="updateProspectStatus('${p.id}', this.value)">${PROSPECT_STATUSES.map(s => `<option value="${s}" ${p.status === s ? 'selected' : ''}>${s.charAt(0).toUpperCase() + s.slice(1)}</option>`).join('')}</select></div>
+      <div style="display:flex;gap:6px;justify-content:flex-end">
+        <button class="btn btn-sm ${p.invite_message ? 'btn-secondary' : 'btn-primary'}" id="gen-btn-${p.id}" onclick="${p.invite_message ? `toggleProspectPanel('${p.id}')` : `generateInvite('${p.id}')`}">${p.invite_message ? (panelOpen ? 'Hide invite' : 'View invite') : 'Generate invite'}</button>
+      </div>
+    </div>
+    <div class="prospect-panel" id="p-panel-${p.id}" style="display:${panelOpen ? 'block' : 'none'}">${p.invite_message ? renderInviteBlocks(p) : ''}</div>`;
+  }).join('');
+}
+
+function renderInviteBlocks(p) {
+  const parts = extractLabeled(p.invite_message, ['CONNECTION NOTE', 'FOLLOW-UP MESSAGE']);
+  const note = parts['CONNECTION NOTE'] || '';
+  const msg = parts['FOLLOW-UP MESSAGE'] || p.invite_message;
+  return `
+    ${note ? `<div class="msg-block">
+      <div class="msg-block-header"><span>Connection note · ${note.length}/280 chars${note.length > 280 ? ' ⚠ OVER LIMIT' : ''}</span><button class="copy-btn" onclick="copyText(this, ${JSON.stringify(note).replace(/"/g, '&quot;')})">Copy</button></div>
+      <div class="msg-block-body">${escapeHtml(note)}</div>
+    </div>` : ''}
+    <div class="msg-block">
+      <div class="msg-block-header"><span>Follow-up message (after accept)</span><button class="copy-btn" onclick="copyText(this, ${JSON.stringify(msg).replace(/"/g, '&quot;')})">Copy</button></div>
+      <div class="msg-block-body">${escapeHtml(msg)}</div>
+    </div>
+    <div class="flex-center gap-8">
+      ${p.status === 'new' ? `<button class="btn btn-primary btn-sm" onclick="updateProspectStatus('${p.id}', 'invited')">Mark invited</button>` : ''}
+      <button class="btn btn-secondary btn-sm" onclick="generateInvite('${p.id}')">↻ Regenerate</button>
+      ${p.linkedin_signals ? `<span class="signal-note" style="margin-top:0">Signals: ${escapeHtml(p.linkedin_signals.slice(0, 120))}</span>` : ''}
+    </div>`;
+}
+
+function toggleProspectPanel(id) {
+  if (openProspectPanels.has(id)) openProspectPanels.delete(id); else openProspectPanels.add(id);
+  renderProspects(currentProspectFilter);
+}
+
+async function updateProspectStatus(id, status) {
+  const p = prospects.find(x => x.id === id);
+  if (!p || !db) return;
+  const updates = { status };
+  const now = new Date().toISOString();
+  if (status === 'invited' && !p.invited_at) updates.invited_at = now;
+  if (status === 'replied' && !p.replied_at) updates.replied_at = now;
+  if ((status === 'registered' || status === 'attended') && !p.registered_at) updates.registered_at = now;
+  await db.from('prospects').update(updates).eq('id', id);
+  Object.assign(p, updates);
+  renderProspects(currentProspectFilter);
+}
+
+const OUTREACH_RULES = `You write LinkedIn outreach for John Schrup inviting displaced executives to the free Wednesday 11am CT workshop.
+
+HARD RULES:
+- Write as John, a human who came across their profile. NEVER reveal or imply layoff feeds, monitoring, or data tools. "I noticed you updated your headline" and anything like it is banned.
+- Peer to peer. No flattery, no pity, no pitch, no exclamation points.
+- Never promise outcomes.
+
+OUTPUT EXACTLY THESE TWO LABELED SECTIONS:
+
+CONNECTION NOTE
+The LinkedIn connection request note. HARD LIMIT 280 characters including spaces. Light common ground only (their industry, the market for senior operators right now). No CTA. Do not mention the workshop yet.
+
+FOLLOW-UP MESSAGE
+Sent after they accept. 60-110 words, John's voice. Acknowledge the market reality for someone at their level without pity. Give one specific, useful insight from the methodology that fits their situation. Then one CTA only: the free Wednesday 11am CT workshop — offer to send the registration link if they want it. Do not paste links. Never "hope you're well."`;
+
+async function generateInvite(id) {
+  const p = prospects.find(x => x.id === id);
+  if (!p) return;
+  const btn = document.getElementById('gen-btn-' + id);
+  if (btn) { btn.disabled = true; btn.textContent = 'Generating…'; }
+  const prompt = `${OUTREACH_RULES}
+
+PROSPECT:
+Name: ${p.name}
+Title: ${p.title || 'senior executive'}
+Company: ${p.company || 'unknown'}${p.displacement_date ? ' (role eliminated around ' + p.displacement_date + ')' : ''}
+Location: ${p.location || 'unknown'}
+Situation signals (context for YOU only — never referenced directly): ${p.linkedin_signals || 'none'} | ${p.readiness_signals || ''}
+Recommended angle: ${p.content_recommendation || 'consultative, market-intelligence first'}`;
+  try {
+    const res = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system: SYSTEM_PROMPT, max_tokens: 700, messages: [{ role: 'user', content: prompt }] })
+    });
+    const data = await res.json();
+    const text = data.content?.[0]?.text;
+    if (!text) throw new Error('empty');
+    await db.from('prospects').update({ invite_message: text }).eq('id', id);
+    p.invite_message = text;
+    openProspectPanels.add(id);
+    renderProspects(currentProspectFilter);
+  } catch (err) {
+    console.error('[FST] invite generation failed:', err);
+    if (btn) { btn.disabled = false; btn.textContent = 'Generate invite'; }
+    alert('Generation failed — try again.');
+  }
+}
+
+// ============================================================
+// ENGINE 2 — B2B PIPELINE: OUTPLACEMENT
+// ============================================================
+const openB2bPanels = new Set();
+const b2bDraft = {}; // account_id -> { step, subject, body }
+
+async function loadB2b() {
+  if (!db) return;
+  const { data, error } = await db.from('b2b_accounts').select('*').order('created_at', { ascending: false });
+  if (!error && data) b2bAccounts = data;
+}
+
+function showAddAccount() { document.getElementById('add-account-form').style.display = 'block'; }
+function hideAddAccount() { document.getElementById('add-account-form').style.display = 'none'; }
+
+async function addB2bAccount() {
+  const v = id => document.getElementById(id).value.trim();
+  const company = v('b2b-company');
+  const trigger = v('b2b-trigger');
+  if (!company || !trigger) { alert('Company and trigger event are required — the trigger is the whole play.'); return; }
+  const td = v('b2b-trigger-date');
+  const account = {
+    company,
+    company_size: v('b2b-size'),
+    trigger_event: trigger,
+    trigger_date: /^\d{4}-\d{2}-\d{2}$/.test(td) ? td : null,
+    trigger_source: v('b2b-source'),
+    contact_name: v('b2b-contact') || null,
+    contact_title: v('b2b-contact-title') || null,
+    contact_email: v('b2b-contact-email') || null,
+    contact_linkedin: v('b2b-contact-li') || null,
+    notes: v('b2b-notes') || null,
+    status: 'target',
+    touches: 0
+  };
+  const { error } = await db.from('b2b_accounts').insert([account]);
+  if (error) { console.error('[FST] b2b insert error:', error); alert('Save failed — check console.'); return; }
+  ['b2b-company', 'b2b-trigger', 'b2b-trigger-date', 'b2b-contact', 'b2b-contact-title', 'b2b-contact-email', 'b2b-contact-li', 'b2b-notes'].forEach(id => document.getElementById(id).value = '');
+  hideAddAccount();
+  await loadB2b();
+  renderB2b(currentB2bFilter);
+}
+
+function b2bStats() {
+  const count = s => b2bAccounts.filter(a => a.status === s).length;
+  const active = b2bAccounts.filter(a => !['won', 'lost'].includes(a.status)).length;
+  document.getElementById('b2b-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-label">Active accounts</div><div class="stat-value" style="color:var(--blue)">${active}</div><div class="stat-sub">${count('target')} untouched targets</div></div>
+    <div class="stat-card"><div class="stat-label">In sequence</div><div class="stat-value" style="color:var(--warn)">${count('contacted') + count('followup')}</div><div class="stat-sub">contacted + follow-up</div></div>
+    <div class="stat-card"><div class="stat-label">Conversations + proposals</div><div class="stat-value" style="color:var(--success)">${count('conversation') + count('proposal')}</div><div class="stat-sub">${count('won')} won · ${count('lost')} lost</div></div>`;
+}
+
+function filterB2b(f) {
+  currentB2bFilter = f;
+  document.querySelectorAll('#page-b2b .tab-btn').forEach(b => b.classList.remove('active'));
+  if (event && event.target) event.target.classList.add('active');
+  renderB2b(f);
+}
+
+const B2B_STATUSES = ['target', 'contacted', 'followup', 'conversation', 'proposal', 'won', 'lost'];
+const B2B_STATUS_LABELS = { target: 'Target', contacted: 'Contacted', followup: 'Follow-up', conversation: 'Conversation', proposal: 'Proposal', won: 'Won', lost: 'Lost' };
+
+function renderB2b(filter) {
+  b2bStats();
+  const rowsEl = document.getElementById('b2b-rows');
+  const filtered = filter === 'all' ? b2bAccounts : b2bAccounts.filter(a => a.status === filter);
+  if (!filtered.length) {
+    rowsEl.innerHTML = `<div class="empty"><div class="empty-icon">🏢</div><div class="empty-title">No accounts here</div><div>Add a target account from this week's WARN filings or layoffs.fyi events.</div></div>`;
+    return;
+  }
+  rowsEl.innerHTML = filtered.map(a => {
+    const panelOpen = openB2bPanels.has(a.id);
+    const lastTouch = a.last_touch_at ? new Date(a.last_touch_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'never';
+    const nextStep = (a.touches || 0) + 1;
+    return `
+    <div class="prospect-row">
+      <div>
+        <div class="asset-title">${escapeHtml(a.company)}</div>
+        <div class="asset-meta">${escapeHtml(a.trigger_event || '')}${a.trigger_date ? ' · ' + a.trigger_date : ''}</div>
+        <div class="signal-note">${escapeHtml([a.company_size, a.trigger_source].filter(Boolean).join(' · '))}</div>
+      </div>
+      <div>
+        <div style="font-size:13px">${escapeHtml([a.contact_name, a.contact_title].filter(Boolean).join(' — ') || 'No contact yet')}</div>
+        <div class="signal-note">Touches: ${a.touches || 0} · Last: ${lastTouch}${a.contact_linkedin ? ` · <a href="${escapeHtml(a.contact_linkedin)}" target="_blank" style="color:var(--blue)">LinkedIn</a>` : ''}</div>
+      </div>
+      <div><select onchange="updateB2bStatus('${a.id}', this.value)">${B2B_STATUSES.map(s => `<option value="${s}" ${a.status === s ? 'selected' : ''}>${B2B_STATUS_LABELS[s]}</option>`).join('')}</select></div>
+      <div style="display:flex;gap:6px;justify-content:flex-end">
+        <button class="btn btn-sm btn-primary" id="b2b-gen-${a.id}" onclick="generateB2bEmail('${a.id}')">✉ Touch #${nextStep}</button>
+      </div>
+    </div>
+    <div class="prospect-panel" id="b2b-panel-${a.id}" style="display:${panelOpen ? 'block' : 'none'}">${b2bDraft[a.id] ? renderB2bDraft(a) : ''}</div>`;
+  }).join('');
+}
+
+function renderB2bDraft(a) {
+  const d = b2bDraft[a.id];
+  if (!d) return '';
+  return `
+    <div class="msg-block">
+      <div class="msg-block-header"><span>Subject — touch #${d.step}</span><button class="copy-btn" onclick="copyText(this, ${JSON.stringify(d.subject).replace(/"/g, '&quot;')})">Copy</button></div>
+      <div class="msg-block-body">${escapeHtml(d.subject)}</div>
+    </div>
+    <div class="msg-block">
+      <div class="msg-block-header"><span>Email body</span><button class="copy-btn" onclick="copyText(this, ${JSON.stringify(d.body).replace(/"/g, '&quot;')})">Copy</button></div>
+      <div class="msg-block-body">${escapeHtml(d.body)}</div>
+    </div>
+    <div class="flex-center gap-8">
+      <button class="btn btn-primary btn-sm" onclick="logB2bTouch('${a.id}')">Sent it — log touch #${d.step}</button>
+      <button class="btn btn-secondary btn-sm" onclick="generateB2bEmail('${a.id}')">↻ Regenerate</button>
+    </div>`;
+}
+
+function b2bStepGuide(step) {
+  if (step === 1) return `TOUCH 1 — COLD. Under 100 words. Line 1 is a specific observation about their trigger event — factual, not gloating, never "I hope this finds you well." Match the entry door to the trigger: active layoff/WARN → speed and the hardest-day framing; contract renewal → "what did your people rate it? Not the vendor's survey — the public reviews"; new CHRO/people leader → "the easiest line item to upgrade — switching takes days, not quarters"; no program → "set it up before the day you need it." One sentence on what FST is: outplacement built for the participant, AI-powered positioning plus unlimited live coaching until placed, at a fraction of legacy cost. Optionally weave in AT MOST ONE product fact: live within 24 hours / no MSAs or procurement / you never pay for empty seats. Small ask: 15 minutes this week. Subject line: specific and direct, references their situation, no clickbait, no question marks.`;
+  if (step === 2) return `TOUCH 2 — FOLLOW-UP (4-5 business days later). Different angle from touch 1: use the buyer-map argument that fits the contact's role (Glassdoor for CHRO, legal consideration for GC, boomerang/survivor costs for CFO). If role unknown, use the Credibility Delta: the big providers claim 92-98% satisfaction in their brochures while their participants publicly rate them 1.3-2.8 out of 5; FST rates 4.9/5 on Google — no gap to explain, nobody else is accountable for outcomes. Or lead with the until-placed guarantee: incumbents sell 30-90 days of access paid regardless of outcome; FST coaches until placement. Under 90 words. Same small ask: 15 minutes.`;
+  if (step === 3) return `TOUCH 3 — CONCRETE OFFER. Offer one of: a 20-minute walkthrough of exactly what their affected employees would experience, or a small pilot cohort for this reduction. Make the risk-reversal explicit: Positive Decline Refunds mean they never pay for participants who decline services — no empty seats. Published pricing, self-service checkout, live within 24 hours vs 2-4 weeks for legacy vendors; live participant dashboard and exportable audit logs for HR and legal. Under 90 words — pick the two or three of these facts that fit, not all of them.`;
+  return `TOUCH ${step} — BREAKUP. 2-3 sentences. Close the loop with grace — you're clearly covered for this reduction. Door stays open for the next one; reductions rarely happen once. No guilt, no last pitch.`;
+}
+
+async function generateB2bEmail(id) {
+  const a = b2bAccounts.find(x => x.id === id);
+  if (!a) return;
+  const step = (a.touches || 0) + 1;
+  const btn = document.getElementById('b2b-gen-' + id);
+  if (btn) { btn.disabled = true; btn.textContent = 'Writing…'; }
+  const prompt = `Write touch #${step} of the Outplacement Enterprise B2B sequence for this target account.
+
+ACCOUNT:
+Company: ${a.company} (${a.company_size || 'mid-market'})
+Trigger event: ${a.trigger_event}${a.trigger_date ? ' — ' + a.trigger_date : ''} (source: ${a.trigger_source || 'public'})
+Contact: ${a.contact_name || 'the HR leader'}${a.contact_title ? ', ' + a.contact_title : ''}
+Notes: ${a.notes || 'none'}
+
+${b2bStepGuide(step)}
+
+BUYER MAP: pick the sales argument that matches the contact's title using the B2B SALES PLAYBOOK buyer map — CHRO/VP People → Glassdoor then survivor syndrome; General Counsel/Legal → legal consideration (ADEA/OWBPA); CFO/Finance → boomerang rehires + survivor productivity costs; HR Director → do-right-by-people + real testimonials. If the title is unknown, default to the CHRO arguments.
+
+COMPLIANCE: never quote a specific price, never promise placement rates or outcomes, never invent statistics beyond those in the playbook.
+
+OUTPUT EXACTLY THESE TWO LABELED SECTIONS:
+
+SUBJECT LINE
+[the subject]
+
+EMAIL BODY
+[the full email, signed John Schrup, First Source Team]`;
+  try {
+    const res = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ system: SYSTEM_PROMPT, max_tokens: 700, messages: [{ role: 'user', content: prompt }] })
+    });
+    const data = await res.json();
+    const text = data.content?.[0]?.text;
+    if (!text) throw new Error('empty');
+    const parts = extractLabeled(text, ['SUBJECT LINE', 'EMAIL BODY']);
+    b2bDraft[id] = { step, subject: parts['SUBJECT LINE'] || '(no subject)', body: parts['EMAIL BODY'] || text };
+    openB2bPanels.add(id);
+    renderB2b(currentB2bFilter);
+  } catch (err) {
+    console.error('[FST] b2b generation failed:', err);
+    alert('Generation failed — try again.');
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = `✉ Touch #${step}`; }
+  }
+}
+
+async function logB2bTouch(id) {
+  const a = b2bAccounts.find(x => x.id === id);
+  const d = b2bDraft[id];
+  if (!a || !d || !db) return;
+  await db.from('b2b_touches').insert([{ account_id: id, step: d.step, subject: d.subject, body: d.body }]);
+  const updates = { touches: (a.touches || 0) + 1, last_touch_at: new Date().toISOString() };
+  if (a.status === 'target') updates.status = 'contacted';
+  else if (a.status === 'contacted') updates.status = 'followup';
+  await db.from('b2b_accounts').update(updates).eq('id', id);
+  Object.assign(a, updates);
+  delete b2bDraft[id];
+  openB2bPanels.delete(id);
+  renderB2b(currentB2bFilter);
+}
+
+async function updateB2bStatus(id, status) {
+  const a = b2bAccounts.find(x => x.id === id);
+  if (!a || !db) return;
+  await db.from('b2b_accounts').update({ status }).eq('id', id);
+  a.status = status;
+  renderB2b(currentB2bFilter);
+}
+
+// ============================================================
+// PUBLISHING — BLOTATO
+// ============================================================
+async function loadPublishTargets() {
+  if (!db) return;
+  const { data, error } = await db.from('publish_targets').select('*').order('created_at', { ascending: false });
+  if (!error && data) publishTargets = data;
+}
+
+async function openScheduleModal(assetId) {
+  const asset = assets.find(a => String(a.id) === String(assetId));
+  if (!asset) return;
+  scheduleAssetId = assetId;
+  await loadPublishTargets();
+  document.getElementById('sm-title').textContent = 'Schedule: ' + asset.title;
+  document.getElementById('sm-text').value = asset.content || '';
+  document.getElementById('sm-yttitle').value = asset.title || '';
+  document.getElementById('sm-media').value = '';
+  document.getElementById('sm-time').value = '';
+  document.getElementById('sm-status').textContent = '';
+  document.getElementById('schedule-modal').style.display = 'flex';
+  smPlatformChanged();
+}
+
+function closeScheduleModal() {
+  document.getElementById('schedule-modal').style.display = 'none';
+  scheduleAssetId = null;
+}
+
+function smPlatformChanged() {
+  const platform = document.getElementById('sm-platform').value;
+  const pageField = document.getElementById('sm-pageid-field');
+  const pageLabel = document.getElementById('sm-pageid-label');
+  const ytField = document.getElementById('sm-yttitle-field');
+  pageField.style.display = (platform === 'facebook' || platform === 'linkedin') ? 'block' : 'none';
+  pageLabel.textContent = platform === 'facebook' ? 'Facebook Page ID (required)' : 'LinkedIn Company Page ID (blank = personal profile)';
+  ytField.style.display = platform === 'youtube' ? 'block' : 'none';
+  const dl = document.getElementById('sm-account-list');
+  dl.innerHTML = publishTargets.filter(t => t.platform === platform).map(t => `<option value="${escapeHtml(t.account_id)}">${escapeHtml(t.label || t.platform)}</option>`).join('');
+  const saved = publishTargets.find(t => t.platform === platform);
+  if (saved) {
+    document.getElementById('sm-account').value = saved.account_id;
+    if (saved.page_id) document.getElementById('sm-pageid').value = saved.page_id;
+  }
+}
+
+function buildBlotatoTarget(platform, pageId, ytTitle) {
+  const t = { targetType: platform };
+  if (platform === 'facebook') t.pageId = pageId;
+  if (platform === 'linkedin' && pageId) t.pageId = pageId;
+  if (platform === 'tiktok') Object.assign(t, { privacyLevel: 'PUBLIC_TO_EVERYONE', disabledComments: false, disabledDuet: false, disabledStitch: false, isBrandedContent: false, isYourBrand: true, isAiGenerated: false });
+  if (platform === 'youtube') Object.assign(t, { title: ytTitle || 'First Source Team', privacyStatus: 'public', shouldNotifySubscribers: true });
+  return t;
+}
+
+async function submitSchedule() {
+  const status = document.getElementById('sm-status');
+  const btn = document.getElementById('sm-submit');
+  const platform = document.getElementById('sm-platform').value;
+  const accountId = document.getElementById('sm-account').value.trim();
+  const pageId = document.getElementById('sm-pageid').value.trim();
+  const text = document.getElementById('sm-text').value.trim();
+  const mediaRaw = document.getElementById('sm-media').value.trim();
+  const timeVal = document.getElementById('sm-time').value;
+
+  if (!accountId) { status.textContent = 'Blotato account ID is required — find it in the Blotato dashboard under Accounts.'; return; }
+  if (!text) { status.textContent = 'Post text is empty.'; return; }
+  if (platform === 'facebook' && !pageId) { status.textContent = 'Facebook requires a Page ID.'; return; }
+
+  const mediaUrls = mediaRaw ? mediaRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
+  const payload = {
+    post: {
+      accountId,
+      content: { text, mediaUrls, platform },
+      target: buildBlotatoTarget(platform, pageId, document.getElementById('sm-yttitle').value.trim())
+    }
+  };
+  let scheduledIso = null;
+  if (timeVal) {
+    scheduledIso = new Date(timeVal).toISOString();
+    payload.scheduledTime = scheduledIso;
+  }
+
+  btn.classList.add('loading'); btn.disabled = true;
+  status.textContent = 'Sending to Blotato…';
+  try {
+    const res = await fetch('/api/blotato', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ payload })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      console.error('[FST] Blotato error:', data);
+      status.textContent = 'Blotato rejected it: ' + (typeof data.error === 'string' ? data.error : JSON.stringify(data.error)).slice(0, 200);
+      return;
+    }
+    await db.from('published_posts').insert([{
+      asset_id: scheduleAssetId,
+      platform,
+      target_label: accountId,
+      content: text,
+      media_urls: mediaRaw || null,
+      scheduled_time: scheduledIso,
+      blotato_submission_id: data.postSubmissionId || null,
+      status: scheduledIso ? 'scheduled' : 'published'
+    }]);
+    if (document.getElementById('sm-save-target').checked && !publishTargets.some(t => t.platform === platform && t.account_id === accountId)) {
+      await db.from('publish_targets').insert([{ platform, account_id: accountId, page_id: pageId || null, label: platform + ' · ' + accountId }]);
+    }
+    status.textContent = scheduledIso ? '✓ Scheduled.' : '✓ Published.';
+    setTimeout(closeScheduleModal, 1200);
+  } catch (err) {
+    console.error('[FST] Blotato submit failed:', err);
+    status.textContent = 'Network error — try again.';
+  } finally {
+    btn.classList.remove('loading'); btn.disabled = false;
+  }
+}
+
+// ============================================================
+// SCOREBOARD
+// ============================================================
+function weekStartDate() {
+  const d = new Date();
+  const day = (d.getDay() + 6) % 7; // Monday = 0
+  d.setHours(0, 0, 0, 0);
+  d.setDate(d.getDate() - day);
+  return d;
+}
+function ymdLocal(d) {
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+async function renderScoreboard() {
+  if (!db) return;
+  const ws = weekStartDate();
+  const iso = ws.toISOString();
+  try {
+    const [inv, rep, reg, touches] = await Promise.all([
+      db.from('prospects').select('id', { count: 'exact', head: true }).gte('invited_at', iso),
+      db.from('prospects').select('id', { count: 'exact', head: true }).gte('replied_at', iso),
+      db.from('prospects').select('id', { count: 'exact', head: true }).gte('registered_at', iso),
+      db.from('b2b_touches').select('id', { count: 'exact', head: true }).gte('created_at', iso),
+    ]);
+    document.getElementById('score-auto').innerHTML = `
+      <div class="stat-card"><div class="stat-label">Invites sent this week</div><div class="stat-value">${inv.count || 0}</div><div class="stat-sub">${rep.count || 0} replies · ${reg.count || 0} registered (tracked)</div></div>
+      <div class="stat-card"><div class="stat-label">B2B touches this week</div><div class="stat-value">${touches.count || 0}</div><div class="stat-sub">cold + follow-ups logged</div></div>
+      <div class="stat-card"><div class="stat-label">Week of</div><div class="stat-value" style="font-size:22px;padding-top:8px">${ws.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div><div class="stat-sub">Monday start</div></div>`;
+
+    const { data: current } = await db.from('weekly_metrics').select('*').eq('week_start', ymdLocal(ws)).maybeSingle();
+    if (current) {
+      document.getElementById('score-registrations').value = current.registrations ?? '';
+      document.getElementById('score-attendees').value = current.attendees ?? '';
+      document.getElementById('score-conversations').value = current.b2b_conversations ?? '';
+    }
+
+    const { data: history } = await db.from('weekly_metrics').select('*').order('week_start', { ascending: false }).limit(8);
+    const hEl = document.getElementById('score-history');
+    if (!history || !history.length) {
+      hEl.innerHTML = '<div style="color:var(--muted);font-size:13px">No weeks saved yet. The habit is the machine — save every Monday.</div>';
+    } else {
+      hEl.innerHTML = `<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--muted);padding:6px 0;border-bottom:1px solid var(--border)"><span>Week</span><span>Registrations</span><span>Attendees</span><span>B2B convos</span></div>` +
+        history.map(h => `<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)"><span>${h.week_start}</span><span>${h.registrations ?? '—'}</span><span>${h.attendees ?? '—'}</span><span>${h.b2b_conversations ?? '—'}</span></div>`).join('');
+    }
+  } catch (err) {
+    console.error('[FST] scoreboard error:', err);
+  }
+}
+
+async function saveWeeklyMetrics() {
+  if (!db) return;
+  const statusEl = document.getElementById('score-save-status');
+  const num = id => { const v = document.getElementById(id).value; return v === '' ? null : parseInt(v, 10); };
+  const { error } = await db.from('weekly_metrics').upsert({
+    week_start: ymdLocal(weekStartDate()),
+    registrations: num('score-registrations'),
+    attendees: num('score-attendees'),
+    b2b_conversations: num('score-conversations')
+  }, { onConflict: 'week_start' });
+  statusEl.textContent = error ? 'Save failed — check console.' : '✓ Saved.';
+  if (error) console.error('[FST] metrics save error:', error);
+  else { setTimeout(() => statusEl.textContent = '', 2000); renderScoreboard(); }
+}
+
+async function renderUpcomingPosts() {
+  if (!db) return;
+  const el = document.getElementById('upcoming-posts');
+  const { data } = await db.from('published_posts').select('*').order('created_at', { ascending: false }).limit(10);
+  if (!data || !data.length) {
+    el.innerHTML = '<div class="empty" style="padding:24px"><div>Nothing scheduled yet. Approve an asset in the Tracker, then hit 📤 to schedule it.</div></div>';
+    return;
+  }
+  el.innerHTML = data.map(p => `
+    <div style="display:grid;grid-template-columns:110px 1fr 170px 90px;gap:12px;align-items:center;padding:12px 20px;border-bottom:1px solid var(--border);font-size:13px">
+      <span class="agent-chip">${escapeHtml(p.platform || '')}</span>
+      <span style="color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml((p.content || '').slice(0, 90))}</span>
+      <span style="color:var(--muted)">${p.scheduled_time ? new Date(p.scheduled_time).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : 'immediately'}</span>
+      ${statusBadge(p.status === 'published' ? 'approved' : 'pending').replace('Approved', 'Published').replace('Pending', 'Scheduled')}
+    </div>`).join('');
+}
+
+// ============================================================
+// COST OF TRANSITION CALCULATOR
+// ============================================================
+let lastCalcSummary = '';
+
+function runCalc() {
+  const n = id => { const v = parseFloat(document.getElementById(id).value); return isNaN(v) || v < 0 ? 0 : v; };
+  const laidOff = n('calc-laidoff');
+  const salary = n('calc-salary');
+  const remaining = n('calc-remaining');
+  const perHead = n('calc-perhead');
+  const el = document.getElementById('calc-results');
+  if (!laidOff && !remaining) {
+    el.innerHTML = '<div class="output-placeholder">Enter the numbers on the left — results update live.</div>';
+    lastCalcSummary = '';
+    return;
+  }
+  const money = x => '$' + Math.round(x).toLocaleString('en-US');
+  const survivorLoss = remaining * 500 * 12;
+  const rehires = laidOff > 0 ? Math.max(1, Math.round(laidOff * 0.05)) : 0;
+  const rehireCost = salary > 0 ? rehires * (salary * 0.05 + salary * 0.20) : 0;
+  const unusedWaste = perHead > 0 && laidOff > 0 ? laidOff * perHead * (1 / 3) : 0;
+  const total = survivorLoss + rehireCost + unusedWaste;
+
+  const rows = [];
+  if (remaining > 0) rows.push({ label: 'Survivor productivity loss (12 months)', value: money(survivorLoss), sub: `${remaining.toLocaleString('en-US')} remaining employees × $500/month × 12 — the layoff keeps running inside the building` });
+  if (rehires > 0) rows.push({ label: `Boomerang rehire exposure (~${rehires} rehire${rehires === 1 ? '' : 's'})`, value: salary > 0 ? money(rehireCost) : 'add avg salary', sub: '~5% are rehired within 6-10 months, at a ~5% salary premium plus ~20% recruiting and ramp cost' });
+  if (unusedWaste > 0) rows.push({ label: 'Legacy outplacement seats paid but never used', value: money(unusedWaste), sub: `~1 in 3 seats go unused — ${laidOff.toLocaleString('en-US')} seats × ${money(perHead)} × 33%. With FST those seats are refunded automatically.` });
+
+  el.innerHTML = rows.map(r => `
+    <div style="padding:12px 0;border-bottom:1px solid var(--border)">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px">
+        <span style="font-weight:600;color:var(--navy)">${r.label}</span>
+        <span style="font-family:'DM Serif Display',serif;font-size:24px;color:var(--danger);white-space:nowrap">${r.value}</span>
+      </div>
+      <div class="signal-note">${r.sub}</div>
+    </div>`).join('') + `
+    <div style="padding:16px 0 4px;display:flex;justify-content:space-between;align-items:baseline;gap:12px">
+      <span style="font-weight:700;color:var(--navy);font-size:16px">Estimated 12-month exposure</span>
+      <span style="font-family:'DM Serif Display',serif;font-size:32px;color:var(--danger)">${money(total)}</span>
+    </div>
+    <div class="signal-note" style="margin-top:10px">Not included: the Glassdoor drag — 86% of candidates check employer reviews before applying, and post-layoff ratings stay depressed for a year or more, raising cost-per-hire on every future role. None of this counts severance itself.</div>`;
+
+  lastCalcSummary = `The cost of getting this transition wrong — ${laidOff.toLocaleString('en-US')} affected employees` + (remaining ? `, ${remaining.toLocaleString('en-US')} remaining` : '') + `:
+
+` + rows.map(r => `- ${r.label}: ${r.value} — ${r.sub}`).join('\n') + `
+- Estimated 12-month exposure: ${money(total)}
+- Not counted: the Glassdoor effect. 86% of candidates check employer reviews before applying; post-layoff ratings stay depressed for a year or more, raising cost-per-hire on every future role.
+
+Basis: published research figures — ~$500/month productivity loss per remaining worker, ~5% boomerang rehire rate at a ~5% premium plus recruiting/ramp, ~1 in 3 legacy outplacement seats paid but unused.`;
+}
+
+function copyCalcSummary(btn) {
+  if (!lastCalcSummary) { btn.textContent = 'Run it first'; setTimeout(() => btn.textContent = 'Copy summary', 1500); return; }
+  navigator.clipboard.writeText(lastCalcSummary).then(() => {
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy summary', 1500);
+  });
+}
+
+// ============================================================
+// SHARED HELPERS
+// ============================================================
+function extractLabeled(text, labels) {
+  const out = {};
+  let current = null;
+  for (const rawLine of text.split('\n')) {
+    const line = rawLine.trim();
+    const upper = line.replace(/[:*#]+$/, '').replace(/^[*#]+/, '').trim().toUpperCase();
+    const hit = labels.find(l => upper === l || upper.startsWith(l + ':'));
+    if (hit) {
+      current = hit;
+      out[current] = [];
+      const rest = line.slice(line.toUpperCase().indexOf(hit) + hit.length).replace(/^[:\s]+/, '');
+      if (rest) out[current].push(rest);
+    } else if (current) {
+      out[current].push(rawLine);
+    }
+  }
+  const res = {};
+  for (const k in out) res[k] = out[k].join('\n').trim();
+  return res;
+}
+
+function copyText(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    const old = btn.textContent;
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = old, 1500);
+  });
 }
 
 // ============================================================

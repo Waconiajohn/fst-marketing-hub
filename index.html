@@ -2308,8 +2308,8 @@ const TOPIC_CONTEXTS = {
   'blacklist': { title: 'Fear: Auto-Apply / Blacklist (answered)', body: 'The biggest and most legitimate fear: recruiters quietly blacklist candidates who spray auto-applications. CareerIQ never auto-submits — it prepares, you review, you apply yourself on the real site clicking Submit with your own hand. You cannot be blacklisted for applications you personally chose to send.', angle: 'Suggested angle: Name the fear out loud (a friend warned me some tools get you blacklisted), validate it, then show the manual-apply mechanism. Honesty is the persuasion.' },
   'AI garbage': { title: 'Fear: Generic AI Garbage (answered)', body: 'Built from your Career Vault — your real, confirmed evidence, not a template and not invention. No invented metrics, no fake titles, never makes you sound like someone else. The goal is to sound MORE like you, told more clearly. Truth survives the interview; fabrication does not.', angle: 'Suggested angle: "I went in expecting AI slop." Then the reveal — it sounded like me, because it was built from my real work.' },
   'ATS detect': { title: 'Fear: ATS Detects AI (answered)', body: 'Nothing to detect but your own experience in the role\'s language. CareerIQ surfaces and sharpens what is already true and maps it to what the role asks. An ATS scans for real, relevant qualifications in the right words — exactly what a Vault-grounded resume delivers.', angle: 'Suggested angle: Defuse the myth calmly. The ATS is not an AI detector; it is a keyword-and-relevance matcher, and real evidence in the right language is what wins.' },
-  'losing control': { title: 'Fear: Losing Control (answered)', body: 'Control is the design, not an afterthought. You OK every application, outreach message, recruiter introduction, and payment. CareerIQ does the overnight preparation so you spend energy on decisions, not busywork. A prepared collaborator, not an autopilot.', angle: 'Suggested angle: Reframe automation anxiety — the machine does the prep, you make every call that matters.' },
-  'too complex': { title: 'Fear: Too Complex / Not For Me (answered)', body: 'That is exactly why the Career Concierge exists — it walks you through every step so you never have to guess what to do next. CareerIQ was built specifically for experienced professionals 45-65, out of 20 years of coaching people in exactly this situation.', angle: 'Suggested angle: Speak to the 55-year-old who is not a "tech person." The Concierge removes the learning curve; the product was made for them, not despite them.' },
+  'take control away': { title: 'Fear: Losing Control (answered)', body: 'Control is the design, not an afterthought. You OK every application, outreach message, recruiter introduction, and payment. CareerIQ does the overnight preparation so you spend energy on decisions, not busywork. A prepared collaborator, not an autopilot.', angle: 'Suggested angle: Reframe automation anxiety — the machine does the prep, you make every call that matters.' },
+  'not technical': { title: 'Fear: Too Complex / Not For Me (answered)', body: 'That is exactly why the Career Concierge exists — it walks you through every step so you never have to guess what to do next. CareerIQ was built specifically for experienced professionals 45-65, out of 20 years of coaching people in exactly this situation.', angle: 'Suggested angle: Speak to the 55-year-old who is not a "tech person." The Concierge removes the learning curve; the product was made for them, not despite them.' },
   'Positive Decline Refunds': { title: 'Positive Decline Refunds (B2B)', body: 'If a participant declines services, the employer gets a refund. You never pay for empty seats. No legacy firm offers this — empty seats ARE their margin.', angle: 'Suggested angle: One question for HR: "What percentage of the outplacement seats you bought last time were actually used?"' },
   'Built for the Participant': { title: 'Built for the Participant (B2B)', body: 'Every decision optimized for the person going through the layoff, not the person signing the invoice. How former employees talk about you after a RIF is your employer brand — and it outlives the severance check.', angle: 'Suggested angle: Glassdoor reviews get written in the 90 days after a layoff. What experience are you funding for that window?' },
   'MSAs Live in 24 Hours': { title: 'No MSAs — Live in 24 Hours (B2B)', body: 'Published pricing, self-service one-click checkout, three tiers (Essentials, Extended, Enterprise) or build-your-own. Live within 24 hours vs 2-4 weeks of legacy onboarding.', angle: 'Suggested angle: A RIF doesn\'t wait for procurement. Speed is the underrated differentiator.' },
@@ -2319,15 +2319,26 @@ function showTopicContext(typeId, topicValue) {
   const ctx = document.getElementById(typeId + '-context');
   if (!ctx) return;
   
-  // Find matching context by checking if topic value contains a key
-  let matched = null;
-  for (const [key, val] of Object.entries(TOPIC_CONTEXTS)) {
-    if (topicValue.toLowerCase().includes(key.toLowerCase().replace(/[()]/g, '').split(' ')[0])) {
-      matched = val;
-      break;
+  // Match the selected topic to a context card.
+  // 1) Prefer an exact whole-phrase key match anywhere in the value; the longest
+  //    (most specific) key wins. 2) Only if nothing matches, fall back to a first-word
+  //    match against the topic LABEL (the text before the "—"/"("), never the description
+  //    body — so a common word like "resume" inside the body can't hijack the card.
+  const val = (topicValue || '').toLowerCase();
+  const label = val.split('—')[0].split('(')[0];
+  let matched = null, bestLen = 0;
+  for (const [key, cfg] of Object.entries(TOPIC_CONTEXTS)) {
+    const needle = key.toLowerCase();
+    if (val.includes(needle) && needle.length > bestLen) { matched = cfg; bestLen = needle.length; }
+  }
+  if (!matched) {
+    bestLen = 0;
+    for (const [key, cfg] of Object.entries(TOPIC_CONTEXTS)) {
+      const fw = key.toLowerCase().replace(/[()]/g, '').split(' ')[0];
+      if (fw.length >= 4 && label.includes(fw) && key.length > bestLen) { matched = cfg; bestLen = key.length; }
     }
   }
-  
+
   if (matched) {
     document.getElementById(typeId + '-context-title').textContent = matched.title;
     document.getElementById(typeId + '-context-body').textContent = matched.body;

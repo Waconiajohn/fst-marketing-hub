@@ -33,6 +33,10 @@ export default async function handler(req, res) {
         max_tokens: Math.min(max_tokens || 1500, 4000),
         system,
         messages,
+        // This proxy generates marketing copy — extended reasoning adds cost and
+        // latency and, on a small max_tokens budget, can consume the whole budget
+        // before any text is produced. Disable it so the full budget is output.
+        thinking: { type: 'disabled' },
       }),
     });
 
@@ -40,6 +44,13 @@ export default async function handler(req, res) {
 
     if (!response.ok) {
       return res.status(response.status).json({ error: data });
+    }
+
+    // Safety net: if the model still returns a leading `thinking` block, keep only
+    // the text blocks so clients that read content[0].text get the actual answer.
+    if (data && Array.isArray(data.content)) {
+      const textBlocks = data.content.filter((b) => b.type === 'text');
+      if (textBlocks.length) data.content = textBlocks;
     }
 
     return res.status(200).json(data);

@@ -775,6 +775,7 @@
     <button onclick="showPage('tracker')">Asset Tracker</button>
     <button onclick="showPage('approvals')">Approvals</button>
     <button onclick="showPage('dashboard')">Dashboard</button>
+    <button onclick="showPage('guide')">Guide</button>
   </nav>
 </header>
 
@@ -791,7 +792,7 @@
       <button class="tab-btn active" onclick="switchTab('briefs', 'video')">Video / Reel</button>
       <button class="tab-btn" onclick="switchTab('briefs', 'social')">Social Post</button>
       <button class="tab-btn" onclick="switchTab('briefs', 'email')">Email</button>
-      <button class="tab-btn" onclick="switchTab('briefs', 'visual')">Still / Carousel</button>
+      <button class="tab-btn" onclick="switchTab('briefs', 'visual')">Infographic / Still</button>
       <button class="tab-btn" onclick="switchTab('briefs', 'ads')">Ad Campaign</button>
     </div>
 
@@ -1272,16 +1273,28 @@
             <div class="field">
               <label>Asset type</label>
               <select id="vis-type">
-                <option value="carousel (5-7 slides)">Carousel (5–7 slides)</option>
-                <option value="single still / quote card">Single still / quote card</option>
-                <option value="LinkedIn header banner">LinkedIn header banner</option>
-                <option value="workshop registration graphic">Workshop registration graphic</option>
-                <option value="infographic">Infographic</option>
+                <optgroup label="— Infographics —">
+                  <option value="infographic: single big-stat card (one dominant number that stops the scroll)">Big-stat card (one number)</option>
+                  <option value="infographic: side-by-side comparison (this vs that — e.g. the Credibility Delta, 8 vs 100, applying vs getting hired)">Comparison / vs.</option>
+                  <option value="infographic: numbered process or framework (steps or pillars laid out visually)">Process / framework steps</option>
+                  <option value="infographic: data story (2-4 connected stats that build one argument down the page)">Data story (2–4 stats)</option>
+                  <option value="infographic: myth vs. reality (the false belief, then the number that kills it)">Myth vs. reality</option>
+                </optgroup>
+                <optgroup label="— Other visuals —">
+                  <option value="carousel (5-7 slides)">Carousel (5–7 slides)</option>
+                  <option value="single still / quote card">Single still / quote card</option>
+                  <option value="LinkedIn header banner">LinkedIn header banner</option>
+                  <option value="workshop registration graphic">Workshop registration graphic</option>
+                </optgroup>
               </select>
             </div>
             <div class="field">
               <label>Theme / message</label>
               <input type="text" id="vis-theme" placeholder='e.g. "80% of jobs are never posted" stat visual'>
+            </div>
+            <div class="field">
+              <label>Data point(s) <span style="font-weight:400;color:var(--muted)">— optional; the number(s) to feature</span></label>
+              <input type="text" id="vis-data" placeholder='e.g. 35% ATS match vs 90% needed  ·  or leave blank to pull from the approved stats'>
             </div>
             <div class="field">
               <label>Destination platform</label>
@@ -1850,6 +1863,103 @@
     </div>
   </div>
 
+  <!-- ==================== GUIDE / MANUAL ==================== -->
+  <div class="page" id="page-guide">
+    <div class="page-header">
+      <div class="page-title">Guide</div>
+      <div class="page-sub">What every part of this tool does, and how the two of you run it.</div>
+    </div>
+
+    <div class="card card-pad section">
+      <div class="section-title">The big picture — one tool, two engines</div>
+      <div style="font-size:14px;line-height:1.8;color:var(--ink)">
+        This hub exists to do two jobs and measure both:
+        <div style="margin:12px 0 4px"><b style="color:var(--blue)">Engine 1 — Fill the workshop (B2C).</b> Get executives 45–65 to register for the free Wednesday 11am CT workshop. Runs on content (Brief Generator → Approvals → publish) and one-to-one Outreach.</div>
+        <div style="margin:4px 0 12px"><b style="color:var(--blue)">Engine 2 — Open outplacement conversations (B2B).</b> Get HR/Legal/Finance buyers at companies doing layoffs into a conversation. Runs on the B2B Pipeline desk and the Calculator as a proof asset.</div>
+        Everything you make flows the same way: <b>create → approve → publish → measure.</b> The Dashboard is where you check whether it's working.
+      </div>
+    </div>
+
+    <div class="card card-pad section">
+      <div class="section-title">The weekly rhythm — who does what</div>
+      <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:14px">
+        <thead><tr style="text-align:left;color:var(--muted)">
+          <th style="padding:8px 12px 8px 0;border-bottom:1px solid var(--border,#e5e2dc)">When</th>
+          <th style="padding:8px 12px;border-bottom:1px solid var(--border,#e5e2dc)">Who</th>
+          <th style="padding:8px 0 8px 12px;border-bottom:1px solid var(--border,#e5e2dc)">What</th>
+        </tr></thead>
+        <tbody style="color:var(--ink)">
+          <tr><td style="padding:10px 12px 10px 0;vertical-align:top;white-space:nowrap"><b>Daily</b></td><td style="padding:10px 12px;vertical-align:top;white-space:nowrap">Outbound</td><td style="padding:10px 0 10px 12px">Paste the day's prospect CSV into <b>Outreach</b>, verify each on Sales Navigator, generate the invite, send it, mark Invited. Follow up at 3–5 days.</td></tr>
+          <tr><td style="padding:10px 12px 10px 0;vertical-align:top"><b>Monday</b></td><td style="padding:10px 12px;vertical-align:top">Outbound</td><td style="padding:10px 0 10px 12px">Add the week's layoff triggers as <b>B2B Pipeline</b> target accounts; send Touch #1 to 2–3 contacts per company.</td></tr>
+          <tr><td style="padding:10px 12px 10px 0;vertical-align:top">Tue–Thu</td><td style="padding:10px 12px;vertical-align:top">Content</td><td style="padding:10px 0 10px 12px">Turn the last workshop into clips/posts in the <b>Brief Generator</b> → send to <b>Approvals</b> → publish the week via the 📤 schedule button.</td></tr>
+          <tr><td style="padding:10px 12px 10px 0;vertical-align:top">Wed 11am CT</td><td style="padding:10px 12px;vertical-align:top">John</td><td style="padding:10px 0 10px 12px">Run the workshop. Record it — it's next week's content.</td></tr>
+          <tr><td style="padding:10px 0 10px 0;vertical-align:top">Monday (15 min)</td><td style="padding:10px 12px;vertical-align:top">Everyone</td><td style="padding:10px 0 10px 12px">Open the <b>Dashboard</b>, enter workshop + B2B numbers, save. If a number hasn't moved in 3 weeks, change the play.</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
+    <div class="card card-pad section">
+      <div class="section-title">Brief Generator — where content gets made</div>
+      <div style="font-size:14px;line-height:1.8;color:var(--ink)">
+        Pick a tab for the format, fill the dropdowns, click Generate. The AI writes a production-ready brief you hand to whoever's executing. Five tabs:
+        <ul style="margin:10px 0 10px 18px;padding:0">
+          <li style="margin-bottom:5px"><b>Video / Reel</b> — scripts + shot direction for TikTok, Reels, Shorts, LinkedIn, YouTube.</li>
+          <li style="margin-bottom:5px"><b>Social Post</b> — one to a full week of posts for LinkedIn, Instagram, TikTok, Facebook.</li>
+          <li style="margin-bottom:5px"><b>Email</b> — invites, reminders, cold B2B, onboarding, upgrade, win-back.</li>
+          <li style="margin-bottom:5px"><b>Infographic / Still</b> — data-driven graphics (big-stat card, comparison, process, data story, myth-vs-reality) plus carousels and quote cards. It builds the piece around one real, approved number and gives you step-by-step Canva instructions.</li>
+          <li><b>Ad Campaign</b> — paid briefs with 4 variants, targeting, and a test plan. <b>Pick the Brand first</b> — the Angle and Audience lists change to match. B2B brand = corporate buyers; FST / CareerIQ = consumer audiences.</li>
+        </ul>
+        <b style="color:var(--blue)">Two controls worth knowing:</b>
+        <div style="margin:6px 0 4px"><b>Register</b> (Video + Social) sets the feel — Aggressive (blunt, names the hard truth), Educational (teach the mechanism), Story-driven (a real moment), or Balanced.</div>
+        <div style="margin:4px 0 4px"><b>The hint card</b> on the right explains the angle you picked and suggests how to play it. The <b>AI Assistant</b> button lets you push the draft further ("make the hook more aggressive," "add a stat," "cut the third paragraph").</div>
+        Every draft is written to clear a built-in quality bar: a real hook, one idea, only true numbers, John's voice, no marketing filler. When one still misses, use the AI Assistant to fix it or regenerate — and if a whole topic keeps producing weak briefs, tell me and I'll fix the topic.
+      </div>
+    </div>
+
+    <div class="grid-2 section">
+      <div class="card card-pad">
+        <div class="section-title">Outreach <span style="font-weight:400;color:var(--muted)">— Engine 1</span></div>
+        <div style="font-size:14px;line-height:1.8;color:var(--ink)">The one-to-one desk for filling the workshop. Paste the daily prospect CSV; it imports and de-dupes into your list. For each Tier-1 prospect, generate a personalized LinkedIn invite (a connection note + a follow-up), send it yourself, and move them along the funnel: new → invited → replied → registered → attended. The generated notes never mention how the prospect was found.</div>
+      </div>
+      <div class="card card-pad">
+        <div class="section-title">B2B Pipeline <span style="font-weight:400;color:var(--muted)">— Engine 2</span></div>
+        <div style="font-size:14px;line-height:1.8;color:var(--ink)">The desk for outplacement conversations. Add target accounts (companies with a layoff trigger — WARN filings, layoffs.fyi, a renewal window, a new CHRO). It generates a 4-step sequence (cold → follow-up → concrete offer → break-up), picking the argument that fits the contact's title. Log each touch and move accounts: target → contacted → conversation → won.</div>
+      </div>
+    </div>
+
+    <div class="grid-2 section">
+      <div class="card card-pad">
+        <div class="section-title">Calculator</div>
+        <div style="font-size:14px;line-height:1.8;color:var(--ink)">A B2B proof asset. Enter a company's layoff numbers and it shows the 12-month hidden cost of a bad transition — survivor productivity loss, boomerang rehiring, and unused-seat waste — with a copy-for-email summary. The same page holds the printable <b>Outcome Report Card</b>: FST's true, defensible metrics on one sheet (print to PDF to leave behind). Use both in B2B conversations.</div>
+      </div>
+      <div class="card card-pad">
+        <div class="section-title">Asset Tracker</div>
+        <div style="font-size:14px;line-height:1.8;color:var(--ink)">Every brief you save lands here — filter by brand, type, or status. This is the shared record of what's been made and where each piece stands. "+ Add to Tracker" on a generated brief drops it in.</div>
+      </div>
+    </div>
+
+    <div class="grid-2 section">
+      <div class="card card-pad">
+        <div class="section-title">Approvals</div>
+        <div style="font-size:14px;line-height:1.8;color:var(--ink)">The gate before anything goes public. John or Ian reviews each pending piece and approves or sends it back. <b>Financial and pension content must be reviewed here before it publishes.</b> Once approved, the 📤 button schedules it to Blotato.</div>
+      </div>
+      <div class="card card-pad">
+        <div class="section-title">Dashboard</div>
+        <div style="font-size:14px;line-height:1.8;color:var(--ink)">The honest weekly scoreboard. Asset counts, what's pending, the auto-counts from Outreach and B2B, plus the workshop and conversation numbers you enter each Monday. Scheduled Blotato posts show here too. This is where you decide what's working and what to change.</div>
+      </div>
+    </div>
+
+    <div class="card card-pad section">
+      <div class="section-title">One-time setup</div>
+      <div style="font-size:14px;line-height:1.8;color:var(--ink)">
+        <div>• <b>Blotato publishing:</b> add <code>BLOTATO_API_KEY</code> in Vercel → Settings → Environment Variables. The first time you schedule to a platform, paste its account ID and tick "Remember" — it autofills after that.</div>
+        <div>• <b>Keep it private:</b> this app has no login and prospect names live in it. Turn on Vercel Deployment Protection (Settings → Deployment Protection → Password) — two minutes, worth it.</div>
+      </div>
+    </div>
+  </div>
+
   <!-- ==================== SCHEDULE MODAL (Blotato) ==================== -->
   <div class="modal-overlay" id="schedule-modal" style="display:none">
     <div class="modal">
@@ -1971,7 +2081,7 @@ async function showPage(page) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.header-nav button').forEach(b => b.classList.remove('active'));
   document.getElementById('page-' + page).classList.add('active');
-  document.querySelectorAll('.header-nav button')[['briefs','outreach','b2b','calc','tracker','approvals','dashboard'].indexOf(page)].classList.add('active');
+  document.querySelectorAll('.header-nav button')[['briefs','outreach','b2b','calc','tracker','approvals','dashboard','guide'].indexOf(page)].classList.add('active');
   currentPage = page;
   await loadAssets();
   if (page === 'tracker') renderAssets('all');
@@ -3048,35 +3158,51 @@ Anything in these variants needing review before spend: employment-ad category r
     const brand = document.getElementById('vis-brand').value;
     const assetType = document.getElementById('vis-type').value;
     const theme = document.getElementById('vis-theme').value;
+    const dataPoint = (document.getElementById('vis-data') || {}).value || '';
     const dest = document.getElementById('vis-dest').value;
     const notes = '';
+    const isInfographic = assetType.startsWith('infographic');
+
+    const infographicGuide = isInfographic
+      ? `THIS IS AN INFOGRAPHIC. The job is to make ONE argument visually so a person understands it in three seconds and remembers the number for a week. Rules:
+- ONE dominant number or contrast owns the design. It is the biggest thing on the canvas — huge type, high contrast. Everything else supports it.
+- Every number must come from the approved stats in your system prompt (or the DATA POINTS the user gave). Never invent or estimate a figure for a graphic — a wrong number on an infographic is the most damaging kind.
+- Real information hierarchy: dominant stat → the one-line "so what" → minimal supporting context. No paragraphs. A good infographic has very few words.
+- Pick the right visual form for the data: a single big number for one stat; two contrasting blocks or a simple bar for a comparison; a numbered vertical flow for a process; stacked "stat + caption" rows for a data story; a struck-through myth above the real number for myth-vs-reality.
+- Make it genuinely striking, not a template. Bold, confident, editorial. Deep brand colors and strong type carry it. NO pastel fills, no cutesy clip-art, no stock "business people shaking hands." Data, type, and one sharp visual idea.
+`
+      : '';
 
     prompt = `Write a complete visual production brief for a ${assetType} for ${brand}, destined for ${dest}.
 
 THEME/MESSAGE: ${theme || 'Select from brand frameworks — the broken system, 1% Insight, Benchmark Candidate, or workshop invitation'}
+DATA POINT(S) TO FEATURE: ${dataPoint || 'None specified — choose the single strongest, approved stat that fits the theme'}
 NOTES: ${notes || 'None — generate a complete brief based on the asset type and brand selected'}
 
 BRAND COLORS: Blue #1f40cb, Navy #12212f, Off-white #f0ede8
-
+${infographicGuide}
 THE BRIEF MUST INCLUDE THESE LABELED SECTIONS:
 
 CONCEPT
-What this visual communicates and exactly why it stops this audience.
+What this visual communicates and exactly why it stops this audience. For an infographic, name the ONE number or contrast the whole piece is built around.
 
 HEADLINE
 Exact primary copy. Direct and specific. John's voice.
 
 SUPPORTING COPY
-Subheadline, body text, or caption if applicable.
+Subheadline, body text, or caption if applicable. Keep it minimal for infographics.
+
+DATA + LABELS
+${isInfographic ? 'Every figure shown, written exactly as it should appear, each with its source noted (which approved stat it comes from). The dominant number called out explicitly.' : 'Any numbers or callouts used, written exactly as they should appear.'}
 
 VISUAL DIRECTION
-Layout, imagery style, color usage. Specific enough that a designer can execute without a briefing call.
+Layout, information hierarchy, chart/visual form, imagery style, color usage. Specific enough that a designer can execute without a briefing call. For infographics: state what is the biggest element and how the eye should travel down the canvas.
 
 SLIDE BREAKDOWN
-For carousels: each slide numbered with its own headline, copy, and visual direction.
+For carousels only: each slide numbered with its own headline, copy, and visual direction. (Skip for single infographics.)
 
 CANVA INSTRUCTIONS
-Step-by-step guidance for building this in Canva — template type, color application, font choices, element placement.
+Step-by-step guidance for building this in Canva — template type, exact color application, font choices and sizes, element placement, and how to make the dominant number dominate.
 
 SIZE SPECS
 Exact dimensions for the destination platform.

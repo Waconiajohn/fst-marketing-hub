@@ -29,7 +29,9 @@ Vercel → Project → Settings → Environment Variables:
 |----------|-------|
 | `ANTHROPIC_API_KEY` | already set (brief generation) |
 | `SUPABASE_URL` / `SUPABASE_ANON_KEY` | already set |
-| `BLOTATO_API_KEY` | **new** — Blotato dashboard → Settings → API |
+| `BLOTATO_API_KEY` | Blotato dashboard → Settings → API |
+| `APP_PASSWORD` | **new** — the shared team login password (see Security note) |
+| `SUPABASE_JWT_SECRET` | **new** — Supabase → Project Settings → API → JWT Secret (see Security note) |
 
 Blotato account IDs: Blotato dashboard → Accounts → copy the numeric ID per connected platform. First time you schedule, paste the ID and tick "Remember this account" — it autofills after that.
 
@@ -44,4 +46,20 @@ Database: tables (`prospects`, `b2b_accounts`, `b2b_touches`, `publish_targets`,
 
 ## Security note
 
-This app has no login and the Supabase tables use open policies — anyone with the URL can read/write. Keep the URL private, or turn on Vercel Deployment Protection (Settings → Deployment Protection → Password) — 2 minutes, worth it now that prospect names live here.
+The app is gated by a shared team password (a login screen, not Vercel Deployment
+Protection — that costs $150/mo on Pro and doesn't fix the database anyway).
+
+How it works: `/api/login` checks the password and mints a short-lived token that
+is also a valid Supabase `authenticated` JWT. `/api/config`, `/api/generate`, and
+`/api/blotato` reject any request without it, and the Supabase tables are locked to
+the `authenticated` role (`db-lock-rls.sql`) — so the public anon key alone can no
+longer read or write prospect data. The token lasts 8 hours, then you log in again.
+
+Required Vercel environment variables (Settings → Environment Variables):
+
+| Variable | Value |
+|----------|-------|
+| `APP_PASSWORD` | the shared team password |
+| `SUPABASE_JWT_SECRET` | Supabase → Project Settings → API → **JWT Secret** (must be this project's real secret — that's what makes the minted token valid) |
+
+If you ever rotate the Supabase JWT secret, update this variable too, or logins stop working.

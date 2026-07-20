@@ -1,7 +1,10 @@
 -- Reference schema for the marketing engine tables (applied 2026-07-07
 -- to Supabase project fst-marketing-hub as migration marketing_engine_tables).
--- All tables use the same open RLS policy as marketing_assets ("Allow all operations")
--- because the app authenticates with the anon key. Internal tool — keep the URL private.
+--
+-- RLS: these tables are now restricted to the `authenticated` role (see
+-- db-lock-rls.sql, applied 2026-07-19). The browser gets an `authenticated`
+-- JWT only after logging in with the shared team password (api/login.js), so
+-- the public anon key alone can no longer read or write them.
 
 create table if not exists public.prospects (
   id uuid primary key default gen_random_uuid(),

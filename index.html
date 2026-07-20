@@ -762,6 +762,25 @@
 </head>
 <body>
 
+<!-- Login gate — opaque overlay shown until the shared password is entered.
+     Covers the whole app so nothing flashes before auth. -->
+<div id="login-gate" style="position:fixed; inset:0; z-index:9999; background:#12212f; display:flex; align-items:center; justify-content:center; font-family:inherit;">
+  <div style="background:#f0ede8; border-radius:12px; padding:32px 28px; width:320px; max-width:90vw; box-shadow:0 12px 40px rgba(0,0,0,0.35);">
+    <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px;">
+      <div style="width:10px; height:10px; border-radius:50%; background:#1f40cb;"></div>
+      <div style="font-weight:700; color:#0f1923; font-size:17px;">FST Marketing Hub</div>
+    </div>
+    <div style="color:#6b7a8a; font-size:13px; margin-bottom:20px;">Enter the team password to continue.</div>
+    <form id="login-form" onsubmit="submitLogin(event)">
+      <input id="login-password" type="password" autocomplete="current-password" placeholder="Team password"
+        style="width:100%; box-sizing:border-box; padding:11px 12px; border:1px solid #d4d0c8; border-radius:8px; font-size:14px; margin-bottom:12px;" autofocus />
+      <button id="login-submit" type="submit"
+        style="width:100%; padding:11px; background:#1f40cb; color:#fff; border:none; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer;">Log in</button>
+    </form>
+    <div id="login-error" style="color:#9b1f1f; font-size:13px; margin-top:12px; min-height:18px;"></div>
+  </div>
+</div>
+
 <header>
   <div class="logo">
     <div class="logo-dot"></div>
@@ -2056,17 +2075,95 @@ let currentB2bFilter = 'all';
 let scheduleAssetId = null;
 
 // ============================================================
+// AUTH GATE
+// ============================================================
+// A single token does double duty: it's the HttpOnly-cookie credential the API
+// routes check, AND (returned here to the page) a Supabase `authenticated` JWT
+// we hand to supabase-js so RLS can be locked to authenticated users only.
+let authToken = null;
+
+function tokenExpMs(t) {
+  try {
+    const p = JSON.parse(atob(t.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+    return (p.exp || 0) * 1000;
+  } catch { return 0; }
+}
+
+function showGate(message) {
+  authToken = null;
+  try { sessionStorage.removeItem('fst_token'); } catch {}
+  const gate = document.getElementById('login-gate');
+  if (gate) gate.style.display = 'flex';
+  const err = document.getElementById('login-error');
+  if (err) err.textContent = message || '';
+  const pw = document.getElementById('login-password');
+  if (pw) { pw.value = ''; pw.focus(); }
+}
+
+function hideGate() {
+  const gate = document.getElementById('login-gate');
+  if (gate) gate.style.display = 'none';
+}
+
+async function submitLogin(evt) {
+  evt.preventDefault();
+  const btn = document.getElementById('login-submit');
+  const err = document.getElementById('login-error');
+  const password = document.getElementById('login-password').value;
+  err.textContent = '';
+  btn.disabled = true; btn.textContent = 'Checking…';
+  try {
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) { err.textContent = data.error || 'Login failed.'; return; }
+    authToken = data.token;
+    try { sessionStorage.setItem('fst_token', authToken); } catch {}
+    hideGate();
+    await initSupabase();
+  } catch {
+    err.textContent = 'Network error — try again.';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Log in';
+  }
+}
+
+// Entry point (called when supabase-js finishes loading).
+function boot() {
+  let saved = null;
+  try { saved = sessionStorage.getItem('fst_token'); } catch {}
+  if (saved && tokenExpMs(saved) > Date.now() + 5000) {
+    authToken = saved;
+    hideGate();
+    initSupabase();
+  } else {
+    showGate('');
+  }
+}
+
+// ============================================================
 // INIT SUPABASE
 // ============================================================
 async function initSupabase() {
   try {
     console.log('[FST] Fetching config...');
-    const res = await fetch('/api/config');
+    const res = await fetch('/api/config', {
+      headers: { Authorization: 'Bearer ' + authToken },
+    });
+    if (res.status === 401) { showGate('Session expired — please log in again.'); return; }
     if (!res.ok) { console.error('[FST] Config fetch failed:', res.status); return; }
     const cfg = await res.json();
     console.log('[FST] Config received. URL present:', !!cfg.supabaseUrl, 'Key present:', !!cfg.supabaseKey);
     if (!cfg.supabaseUrl || !cfg.supabaseKey) { console.error('[FST] Missing Supabase credentials'); return; }
-    db = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseKey);
+    // Pass the minted JWT as the Authorization bearer so PostgREST sees the
+    // `authenticated` role. The anon key stays as the required `apikey` header.
+    db = window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseKey, {
+      global: { headers: { Authorization: 'Bearer ' + authToken } },
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
     console.log('[FST] Supabase client created:', !!db);
     await loadAssets();
     renderDashboard();
@@ -4350,6 +4447,6 @@ function copyOutput(id) {
 
 // Init on DOMContentLoaded after all scripts have run
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" onload="initSupabase()"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" onload="boot()"></script>
 </body>
 </html>
